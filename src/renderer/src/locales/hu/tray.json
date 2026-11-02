@@ -1,0 +1,12 @@
+{
+  "trayTooltip": "Kudu",
+  "openKudu": "Kudu megnyitása",
+  "quit": "Kilépés",
+  "scheduledTaskNotificationTitle": "Kudu - Ütemezett feladat",
+  "scheduledTaskNotificationBody": "\"{{name}}\" futtatása...",
+  "scanCompleteNotificationTitle": "Kudu - Vizsgálat befejezve",
+  "scanCompleteNotificationBody": "{{itemCount}} tisztítható elem található ({{sizeMB}} MB).",
+  "scheduledScanName": "Ütemezett vizsgálat",
+  "rendererStartupFailureTitle": "A Kudu nem tudott elindulni",
+  "rendererStartupFailureMessage": "A Kudu nem tudta elindítani a felületét, és be kell zárnia. A probléma jelentésekor mellékelje az alább megadott naplófájlt."
+}
