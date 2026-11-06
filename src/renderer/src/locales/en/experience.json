@@ -18,7 +18,10 @@
     "recoveryDescription": "Find restore options for supported system changes.",
     "reviewFirst": "Open a tool to review its options before making changes.",
     "advancedPrompt": "Want graphs and system details? Switch to Advanced",
-    "cloud": { "pro": "Cloud Pro", "basic": "Cloud Basic" },
+    "cloud": {
+      "pro": "Cloud Pro",
+      "basic": "Cloud Basic"
+    },
     "goals": {
       "space": {
         "title": "I need more space",
@@ -253,5 +256,198 @@
     "description": "Complete snapshots on this page, for the same folder and volume.",
     "empty": "Capture at least two complete snapshots to see the trend.",
     "size": "Folder size"
+  },
+  "smartCare": {
+    "name": "Smart Care",
+    "eyebrow": "HakTrak Local Core",
+    "title": "Welcome to Fabric Cleaner",
+    "description": "Run a unified scan to clean system junk, neutralize threats, and optimize performance.",
+    "scan": "Scan",
+    "scanning": "Scanning",
+    "rescan": "Scan again",
+    "clean": "Clean",
+    "progressLabel": "Smart Care scan progress",
+    "scanningEyebrow": "Smart Care scan",
+    "scanningDescription": "{{done}} of {{total}} checks complete. Nothing is changed until you choose Clean.",
+    "steps": {
+      "junk": "Looking for system junk…",
+      "protection": "Checking the local protection engine…",
+      "performance": "Reviewing startup items…",
+      "applications": "Checking for app updates…",
+      "storage": "Measuring your storage…"
+    },
+    "resultsEyebrow": "Smart Care summary",
+    "resultsTitle": "Here's what Smart Care found",
+    "reviewDetails": "Review details",
+    "unavailable": "Not available",
+    "status": {
+      "good": "All good",
+      "attention": "Worth a look",
+      "alert": "Needs attention"
+    },
+    "tiles": {
+      "junk": {
+        "title": "System Junk",
+        "detail_one": "{{count}} item ready to clean",
+        "detail_other": "{{count}} items ready to clean"
+      },
+      "protection": {
+        "title": "Protection",
+        "ready": "Local Engine Ready",
+        "preparing": "Engine preparing",
+        "threats_one": "{{count}} active threat",
+        "threats_other": "{{count}} active threats",
+        "privacy_one": "YARA-X on this device · {{count}} privacy setting to review",
+        "privacy_other": "YARA-X on this device · {{count}} privacy settings to review",
+        "privacyUnknown": "YARA-X on this device · privacy status unavailable"
+      },
+      "performance": {
+        "title": "Performance",
+        "value_one": "{{count}} heavy startup item",
+        "value_other": "{{count}} heavy startup items",
+        "detail_one": "{{count}} app starts with your computer",
+        "detail_other": "{{count}} apps start with your computer"
+      },
+      "applications": {
+        "title": "Applications",
+        "value_one": "{{count}} update available",
+        "value_other": "{{count}} updates available",
+        "detail": "Updates, uninstaller and leftovers"
+      },
+      "storage": {
+        "title": "Storage & Clutter",
+        "value": "{{free}} free",
+        "detail": "{{drive}} · {{total}} total",
+        "link": "Find large files",
+        "meter": "Used space on the system drive"
+      }
+    },
+    "cleanHint": "Clean removes {{size}} of junk you can review first.",
+    "nothingToClean": "No junk to clean right now.",
+    "cleanPartial": "Some items couldn't be cleaned. Open Cleanup for details.",
+    "confirmCleanTitle": "Clean system junk?",
+    "confirmCleanDescription_one": "Fabric Cleaner will remove {{count}} item ({{size}}). Excluded categories stay untouched.",
+    "confirmCleanDescription_other": "Fabric Cleaner will remove {{count}} items ({{size}}). Excluded categories stay untouched.",
+    "emptyTrash": "Empty Trash",
+    "trashProtected": "Recycle Bin protection is on in Preferences.",
+    "confirmTrashTitle": "Empty the Trash?",
+    "confirmTrashDescription": "Everything in the Recycle Bin / Trash will be permanently deleted.",
+    "trashEmptied": "Trash emptied · {{size}} freed",
+    "trashFailed": "Couldn't empty the Trash.",
+    "doneEyebrow": "Smart Care complete",
+    "doneTitle": "{{size}} cleaned",
+    "doneDescription_one": "{{count}} file removed. Run Smart Care again any time.",
+    "doneDescription_other": "{{count}} files removed. Run Smart Care again any time.",
+    "posture": {
+      "label": "System posture",
+      "cpu": "CPU",
+      "ram": "RAM",
+      "disk": "Disk",
+      "local": "Local Core Active"
+    }
+  },
+  "stages": {
+    "cleanup": {
+      "eyebrow": "Cleanup",
+      "title": "Clear out system junk",
+      "description": "Find caches, logs and leftovers that pile up over time. You review every category before anything is removed.",
+      "features": {
+        "caches": {
+          "title": "Caches & temporary files",
+          "description": "System, browser and app caches that are safe to rebuild."
+        },
+        "leftovers": {
+          "title": "Logs, dumps & leftovers",
+          "description": "Crash reports, old update files and orphaned entries."
+        },
+        "trash": {
+          "title": "Trash & Recycle Bin",
+          "description": "Included only when Recycle Bin protection is off."
+        }
+      },
+      "action": "Scan",
+      "footnote": "Nothing is deleted until you review the results and choose Clean."
+    },
+    "malware": {
+      "eyebrow": "Protection",
+      "title": "Neutralize threats on this device",
+      "description": "Scan files with Fabric Cleaner's local engines. Everything runs on this computer; no files leave it.",
+      "features": {
+        "engine": {
+          "title": "YARA-X local engine",
+          "description": "Signature rules checked entirely on this device."
+        },
+        "quarantine": {
+          "title": "Quarantine first",
+          "description": "Detections are isolated so you can restore a false positive."
+        },
+        "privacy": {
+          "title": "Privacy Shield",
+          "description": "Review telemetry and tracking settings next."
+        }
+      },
+      "action": "Scan"
+    },
+    "threatMonitor": {
+      "eyebrow": "Protection",
+      "title": "Watch network activity locally",
+      "description": "Match live connections and DNS lookups against a blocklist you import. Matching happens on this device.",
+      "features": {
+        "blocklist": {
+          "title": "Your own blocklist",
+          "description": "Import domains, IPs and CIDR ranges from a file."
+        },
+        "connections": {
+          "title": "Connections & DNS",
+          "description": "Flags traffic that matches the blocklist as it happens."
+        },
+        "local": {
+          "title": "Stays on this device",
+          "description": "No cloud lookups. Threat Intelligence APIs stay optional."
+        }
+      },
+      "import": "Import Blocklist",
+      "start": "Start"
+    },
+    "services": {
+      "eyebrow": "Performance",
+      "title": "Tune background services",
+      "description": "See which services start with your computer and which ones you can safely set to manual.",
+      "features": {
+        "startup": {
+          "title": "Startup impact",
+          "description": "Spot services and apps that slow down boot."
+        },
+        "safe": {
+          "title": "Safe recommendations",
+          "description": "Only services known to be safe to change are suggested."
+        },
+        "restore": {
+          "title": "Reversible changes",
+          "description": "Every change can be restored from Recovery."
+        }
+      },
+      "action": "Scan"
+    },
+    "disk": {
+      "eyebrow": "Space Lens",
+      "title": "See what's taking up space",
+      "description": "Map a drive into folders and file types so the biggest items stand out.",
+      "features": {
+        "map": {
+          "title": "Storage map",
+          "description": "Browse folders sorted by the space they use."
+        },
+        "types": {
+          "title": "File types",
+          "description": "Videos, archives, installers and more at a glance."
+        },
+        "clutter": {
+          "title": "Large & duplicate files",
+          "description": "Jump to clutter tools from the Space Lens menu."
+        }
+      },
+      "action": "Analyze"
+    }
   }
 }

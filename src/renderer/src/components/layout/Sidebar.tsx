@@ -48,6 +48,9 @@ import { useDriverStore } from '@/stores/driver-store'
 import { useGameModeStore } from '@/stores/game-mode-store'
 import { usePlatform } from '@/hooks/usePlatform'
 import { useSettingsStore } from '@/stores/settings-store'
+import { NavGlyph } from '@/components/brand/GlassArt'
+import type { StageModule } from './modules'
+import logoSrc from '@/assets/logo.svg'
 
 interface SubItemDef {
   icon: LucideIcon
@@ -60,6 +63,7 @@ interface SubItemDef {
 
 interface NavItemDef {
   icon: LucideIcon
+  module: StageModule
   labelKey?: string
   label?: string
   path: string
@@ -72,24 +76,31 @@ interface NavGroup {
   items: NavItemDef[]
 }
 
+// The seven pillars of the dock. Each pillar opens its tools underneath.
 const navGroups: NavGroup[] = [
   {
     items: [
-      { icon: LayoutDashboard, labelKey: 'dashboard', label: 'Home', path: '/' },
+      {
+        icon: LayoutDashboard,
+        module: 'smartcare',
+        labelKey: 'smartCare',
+        label: 'Smart Care',
+        path: '/'
+      },
       {
         icon: Sparkles,
-        labelKey: 'cleaner',
-        label: 'Clean up',
+        module: 'cleanup',
+        labelKey: 'cleanupPillar',
+        label: 'Cleanup',
         path: '/cleaner',
         children: [
           {
             icon: Sparkles,
-            labelKey: 'cleaner:pageTitle',
-            label: 'System Cleaner',
+            labelKey: 'systemJunk',
+            label: 'System Junk',
             path: '/cleaner'
           },
           { icon: Database, labelKey: 'registry:pageTitle', label: 'Registry', path: '/registry' },
-          { icon: Zap, labelKey: 'startup:pageTitle', label: 'Startup', path: '/startup' },
           { icon: Wifi, labelKey: 'network:pageTitle', label: 'Network', path: '/network' },
           {
             icon: CalendarClock,
@@ -101,6 +112,7 @@ const navGroups: NavGroup[] = [
       },
       {
         icon: Shield,
+        module: 'protection',
         labelKey: 'securityHeading',
         label: 'Protection',
         path: '/malware',
@@ -128,6 +140,7 @@ const navGroups: NavGroup[] = [
       },
       {
         icon: Activity,
+        module: 'performance',
         labelKey: 'performance',
         label: 'Performance',
         path: '/performance',
@@ -138,26 +151,42 @@ const navGroups: NavGroup[] = [
             label: 'Live Performance',
             path: '/performance'
           },
+          { icon: Zap, labelKey: 'startup:pageTitle', label: 'Startup', path: '/startup' },
           {
             icon: Server,
             labelKey: 'hardening:serviceManager.pageTitle',
             label: 'Services',
             path: '/services'
           },
+          {
+            icon: Eraser,
+            labelKey: 'disk:maintenanceTitle',
+            label: 'Disk Maintenance',
+            path: '/disk-maintenance'
+          },
+          {
+            icon: Wrench,
+            labelKey: 'disk:repairTitle',
+            label: 'Windows Repair',
+            path: '/disk-repair'
+          },
           { icon: Gamepad2, labelKey: 'gameMode', label: 'Game Mode', path: '/game-mode' }
         ]
-      }
-    ]
-  },
-  {
-    headingKey: 'maintainHeading',
-    items: [
+      },
       {
         icon: Package,
-        labelKey: 'software',
-        label: 'Software',
+        module: 'applications',
+        labelKey: 'applications',
+        label: 'Applications',
         path: '/software',
         children: [
+          {
+            icon: Trash2,
+            labelKey: 'uninstaller:pageTitle',
+            label: 'Uninstaller',
+            path: '/uninstaller'
+          },
+          { icon: Package, labelKey: 'appSpace:pageTitle', label: 'App Space', path: '/app-space' },
           {
             icon: Download,
             labelKey: 'updates:softwareUpdater.pageTitle',
@@ -169,12 +198,6 @@ const navGroups: NavGroup[] = [
             labelKey: 'updates:driverManager.pageTitle',
             label: 'Driver Updates',
             path: '/drivers'
-          },
-          {
-            icon: Trash2,
-            labelKey: 'uninstaller:pageTitle',
-            label: 'Uninstaller',
-            path: '/uninstaller'
           },
           {
             icon: PackageMinus,
@@ -192,8 +215,9 @@ const navGroups: NavGroup[] = [
       },
       {
         icon: HardDrive,
-        labelKey: 'diskTools',
-        label: 'Storage',
+        module: 'spacelens',
+        labelKey: 'spaceLens',
+        label: 'Space Lens & Clutter',
         path: '/disk',
         children: [
           {
@@ -203,7 +227,6 @@ const navGroups: NavGroup[] = [
             path: '/disk',
             section: 'storageOverview'
           },
-          { icon: Package, labelKey: 'appSpace:pageTitle', label: 'App Space', path: '/app-space' },
           {
             icon: History,
             labelKey: 'disk:storage.title',
@@ -212,9 +235,9 @@ const navGroups: NavGroup[] = [
           },
           {
             icon: FileUp,
-            labelKey: 'downloads:pageTitle',
-            label: 'Downloads Review',
-            path: '/downloads',
+            labelKey: 'largeFiles:pageTitle',
+            label: 'Large File Finder',
+            path: '/large-files',
             section: 'storageFileCleanup'
           },
           {
@@ -225,9 +248,9 @@ const navGroups: NavGroup[] = [
           },
           {
             icon: FileUp,
-            labelKey: 'largeFiles:pageTitle',
-            label: 'Large File Finder',
-            path: '/large-files'
+            labelKey: 'downloads:pageTitle',
+            label: 'Downloads Review',
+            path: '/downloads'
           },
           {
             icon: FolderX,
@@ -240,24 +263,12 @@ const navGroups: NavGroup[] = [
             labelKey: 'fileShredder:pageTitle',
             label: 'File Shredder',
             path: '/file-shredder'
-          },
-          {
-            icon: Wrench,
-            labelKey: 'disk:repairTitle',
-            label: 'Windows Repair',
-            path: '/disk-repair',
-            section: 'storageDiskCare'
-          },
-          {
-            icon: Eraser,
-            labelKey: 'disk:maintenanceTitle',
-            label: 'Disk Maintenance',
-            path: '/disk-maintenance'
           }
         ]
       },
       {
         icon: History,
+        module: 'activity',
         labelKey: 'activityAndRecovery',
         label: 'Activity & Recovery',
         path: '/history',
@@ -282,6 +293,7 @@ function useBottomNavItems(): NavItemDef[] {
   return [
     {
       icon: Settings,
+      module: 'preferences',
       labelKey: 'settings',
       label: 'Preferences',
       path: '/settings',
@@ -407,14 +419,17 @@ export function Sidebar() {
   }
 
   return (
-    <div
-      className="fc-sidebar flex h-full w-[214px] shrink-0 flex-col"
-      style={{
-        background: 'var(--sidebar-bg)',
-        borderRight: '1px solid var(--border-medium)'
-      }}
-    >
-      {/* Logo — doubles as drag region */}
+    <div className="fc-sidebar flex shrink-0 flex-col">
+      <div className="dock-brand">
+        <span className="dock-brand-emblem" aria-hidden="true">
+          <img src={logoSrc} alt="" width={34} height={34} className="fc-emblem" />
+        </span>
+        <span className="dock-brand-text">
+          <span className="dock-brand-name block">Fabric Cleaner</span>
+          <span className="dock-brand-sub block">HAKTRAK NETWORKS</span>
+        </span>
+      </div>
+      <div className="dock-divider" aria-hidden="true" />
       {/* Nav items */}
       <nav
         className="min-h-0 flex-1 overflow-y-auto px-3 pb-2 pt-4"
@@ -582,38 +597,18 @@ function NavItem({
         onClick={handleClick}
         aria-current={isActive && !hasChildren ? 'page' : undefined}
         aria-expanded={hasChildren ? !!submenuOpen : undefined}
+        data-nav-module={item.module}
         className={cn(
-          'calm-nav-item group relative flex w-full items-center gap-3 rounded-[14px] px-3.5 py-2.5 text-[12px] font-semibold transition-all duration-200'
+          'calm-nav-item group relative flex w-full items-center gap-3 font-semibold',
+          isActive && 'is-active'
         )}
-        style={
-          isActive
-            ? {
-                background: 'var(--nav-active-bg)',
-                color: 'var(--nav-active-fg)',
-                boxShadow: '0 6px 18px rgba(11,40,31,.12)'
-              }
-            : { color: 'var(--nav-inactive-fg)' }
-        }
+        style={isActive ? undefined : { color: 'var(--nav-inactive-fg)' }}
       >
-        {isActive && (
-          <div
-            className="absolute left-0 top-1/2 h-4 w-[3px] -translate-y-1/2 rounded-r-full"
-            style={{
-              background: 'var(--accent)',
-              boxShadow: 'none'
-            }}
-          />
-        )}
-        <item.icon
-          className={cn(
-            'h-[17px] w-[17px] shrink-0 transition-colors duration-200',
-            isActive ? '' : 'group-hover:text-zinc-400'
-          )}
-          style={{ color: isActive ? 'var(--nav-active-fg)' : 'var(--nav-icon-fg)' }}
-          strokeWidth={isActive ? 2 : 1.8}
-          aria-hidden="true"
-        />
-        <span className="flex-1 text-left">{itemLabel}</span>
+        {isActive && <span className="nav-pill-indicator" aria-hidden="true" />}
+        <span className="nav-glyph" aria-hidden="true">
+          <NavGlyph module={item.module} />
+        </span>
+        <span className="flex-1 text-start">{itemLabel}</span>
         {(badge || (badgeCount != null && badgeCount > 0)) && (
           <span
             className="flex h-[16px] min-w-[16px] items-center justify-center rounded-full px-1 text-[9px] font-bold leading-none"
@@ -644,6 +639,7 @@ function NavItem({
       {hasChildren && submenuOpen && !isCompact && (
         <div
           className="sidebar-submenu animate-fade-in"
+          data-nav-module={item.module}
           role="group"
           aria-label={`${itemLabel} tools`}
         >

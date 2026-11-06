@@ -15,7 +15,8 @@ import {
   Server,
   Gamepad2,
   MemoryStick,
-  AlertTriangle
+  AlertTriangle,
+  ShieldCheck
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
@@ -45,7 +46,7 @@ import { useMalwareStore } from '@/stores/malware-store'
 import type { DriveInfo, ScanResult, CleanResult } from '@shared/types'
 import { CleanerType } from '@shared/enums'
 import { usePlatform } from '@/hooks/usePlatform'
-import { SimpleDashboard } from '@/components/dashboard/SimpleDashboard'
+import { SmartCare } from '@/components/dashboard/SmartCare'
 
 type OneClickPhase = 'idle' | 'scanning' | 'cleaning' | 'done'
 
@@ -132,32 +133,83 @@ export function DashboardPage() {
     }
   }
   return (
-    <div className="dashboard-view">
+    <div className="dashboard-view" data-view={view}>
       <div className="dashboard-view-toolbar">
-        <span>{t('simple.home')}</span>
-        <div
-          className="dashboard-view-switch"
-          role="group"
-          aria-label={t('simple.viewLabel')}
-          aria-busy={saving}
-        >
-          {(['simple', 'advanced'] as const).map((mode) => (
-            <button
-              key={mode}
-              aria-pressed={view === mode}
-              disabled={saving || busy}
-              onClick={() => void changeView(mode)}
-            >
-              {t(`simple.${mode}Mode`)}
-            </button>
-          ))}
+        <span className="dashboard-view-title">
+          {view === 'simple' ? t('smartCare.name') : t('simple.home')}
+        </span>
+        <div className="dashboard-view-tools">
+          <SystemPosturePill />
+          <div
+            className="dashboard-view-switch"
+            role="group"
+            aria-label={t('simple.viewLabel')}
+            aria-busy={saving}
+          >
+            {(['simple', 'advanced'] as const).map((mode) => (
+              <button
+                key={mode}
+                aria-pressed={view === mode}
+                disabled={saving || busy}
+                onClick={() => void changeView(mode)}
+              >
+                {t(`simple.${mode}Mode`)}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
       {view === 'simple' ? (
-        <SimpleDashboard onAdvanced={() => void changeView('advanced')} switching={saving} />
+        <SmartCare onBusyChange={setBusy} />
       ) : (
         <AdvancedDashboard onBusyChange={setBusy} />
       )}
+    </div>
+  )
+}
+
+/** Live CPU / RAM / system-drive readings plus the local-engine badge. */
+function SystemPosturePill() {
+  const { t } = useTranslation('experience')
+  const { current } = useQuickTelemetry()
+  const [disk, setDisk] = useState<number | null>(null)
+  useEffect(() => {
+    let alive = true
+    window.fabric
+      ?.diskDrives?.()
+      .then((drives) => {
+        const drive = drives.find((d) => d.isSystem) ?? drives[0]
+        if (alive && drive && drive.totalSize > 0)
+          setDisk(Math.round((drive.usedSpace / drive.totalSize) * 100))
+      })
+      .catch(() => {})
+    return () => {
+      alive = false
+    }
+  }, [])
+  const reading = (value: number | null | undefined) =>
+    value == null ? '—' : `${Math.round(value)}%`
+  return (
+    <div className="system-posture" role="group" aria-label={t('smartCare.posture.label')}>
+      <span className="system-posture-metric">
+        <Cpu size={12} strokeWidth={2} aria-hidden="true" />
+        <span>{t('smartCare.posture.cpu')}</span>
+        <b>{reading(current?.cpuPercent)}</b>
+      </span>
+      <span className="system-posture-metric">
+        <MemoryStick size={12} strokeWidth={2} aria-hidden="true" />
+        <span>{t('smartCare.posture.ram')}</span>
+        <b>{reading(current?.memPercent)}</b>
+      </span>
+      <span className="system-posture-metric">
+        <HardDrive size={12} strokeWidth={2} aria-hidden="true" />
+        <span>{t('smartCare.posture.disk')}</span>
+        <b>{reading(disk)}</b>
+      </span>
+      <span className="system-posture-shield">
+        <ShieldCheck size={13} strokeWidth={2} aria-hidden="true" />
+        {t('smartCare.posture.local')}
+      </span>
     </div>
   )
 }

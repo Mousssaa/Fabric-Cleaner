@@ -4,6 +4,7 @@ import { Radar, ShieldCheck, Globe, Wifi, Clock, FileUp, Play, Square, Trash2 } 
 import { toast } from 'sonner'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { EmptyState } from '@/components/shared/EmptyState'
+import { ModuleStage } from '@/components/shared/ModuleStage'
 import { useThreatMonitorStore } from '@/stores/threat-monitor-store'
 import type { FlaggedConnection, FlaggedDnsEntry, LocalThreatMonitorStatus } from '@shared/types'
 
@@ -17,6 +18,7 @@ function formatTime(iso: string): string {
 
 export function ThreatMonitorPage() {
   const { t } = useTranslation('threatMonitor')
+  const { t: tx } = useTranslation('experience')
   const snapshot = useThreatMonitorStore((s) => s.snapshot)
   const loaded = useThreatMonitorStore((s) => s.loaded)
   const load = useThreatMonitorStore((s) => s.load)
@@ -133,12 +135,48 @@ export function ThreatMonitorPage() {
     return (
       <div className="p-8">
         <PageHeader title={t('pageTitle')} description={t('pageDescription')} />
-        {controls}
-        <EmptyState
-          icon={Radar}
-          title={status.blocklist ? t('local.readyTitle') : t('inactive.title')}
-          description={status.blocklist ? t('local.readyDescription') : t('inactive.description')}
+        <ModuleStage
+          eyebrow={tx('stages.threatMonitor.eyebrow')}
+          title={status.blocklist ? t('local.readyTitle') : tx('stages.threatMonitor.title')}
+          description={
+            status.blocklist ? t('local.readyDescription') : tx('stages.threatMonitor.description')
+          }
+          features={[
+            {
+              icon: FileUp,
+              title: tx('stages.threatMonitor.features.blocklist.title'),
+              description: tx('stages.threatMonitor.features.blocklist.description')
+            },
+            {
+              icon: Radar,
+              title: tx('stages.threatMonitor.features.connections.title'),
+              description: tx('stages.threatMonitor.features.connections.description')
+            },
+            {
+              icon: ShieldCheck,
+              title: tx('stages.threatMonitor.features.local.title'),
+              description: tx('stages.threatMonitor.features.local.description')
+            }
+          ]}
+          action={
+            status.running
+              ? undefined
+              : status.blocklist
+                ? {
+                    label: tx('stages.threatMonitor.start'),
+                    onClick: () => void setEnabled(true),
+                    disabled: busy,
+                    busy
+                  }
+                : {
+                    label: tx('stages.threatMonitor.import'),
+                    onClick: () => void importBlocklist(),
+                    disabled: busy,
+                    busy
+                  }
+          }
         />
+        {controls}
       </div>
     )
   }

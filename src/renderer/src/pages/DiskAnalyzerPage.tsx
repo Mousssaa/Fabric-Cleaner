@@ -1,9 +1,19 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { HardDrive, ArrowUp, Folder, File, RefreshCw, FileType2 } from 'lucide-react'
+import {
+  HardDrive,
+  ArrowUp,
+  Folder,
+  File,
+  RefreshCw,
+  FileType2,
+  FolderTree,
+  CopyCheck
+} from 'lucide-react'
 import { toast } from 'sonner'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { EmptyState } from '@/components/shared/EmptyState'
+import { ModuleStage } from '@/components/shared/ModuleStage'
 import { ErrorAlert } from '@/components/shared/ErrorAlert'
 import { DiskActivity } from '@/components/shared/DiskActivity'
 import { cn, formatBytes } from '@/lib/utils'
@@ -146,6 +156,7 @@ function layoutTreemap(
 
 export function DiskAnalyzerPage() {
   const { t } = useTranslation('disk')
+  const { t: tx } = useTranslation('experience')
   const { platform } = usePlatform()
   const isWin = platform === 'win32'
   const drives = useDiskStore((s) => s.drives)
@@ -341,10 +352,32 @@ export function DiskAnalyzerPage() {
       </div>
 
       {!data && !analyzing && !drivesLoading && !error && (
-        <EmptyState
-          icon={HardDrive}
-          title={t('emptyStateTitle')}
-          description={t('emptyStateDescription')}
+        <ModuleStage
+          eyebrow={tx('stages.disk.eyebrow')}
+          title={tx('stages.disk.title')}
+          description={tx('stages.disk.description')}
+          features={[
+            {
+              icon: FolderTree,
+              title: tx('stages.disk.features.map.title'),
+              description: tx('stages.disk.features.map.description')
+            },
+            {
+              icon: FileType2,
+              title: tx('stages.disk.features.types.title'),
+              description: tx('stages.disk.features.types.description')
+            },
+            {
+              icon: CopyCheck,
+              title: tx('stages.disk.features.clutter.title'),
+              description: tx('stages.disk.features.clutter.description')
+            }
+          ]}
+          action={{
+            label: tx('stages.disk.action'),
+            onClick: () => void handleAnalyze(),
+            disabled: drivesLoading || analyzing || fileTypesLoading || !selectedDrive
+          }}
         />
       )}
 

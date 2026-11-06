@@ -29,5 +29,10 @@
   "gameMode": "وضع الألعاب",
   "firewallAudit": "تدقيق جدار الحماية",
   "mainNavigation": "التنقل الرئيسي",
-  "badgeNew": "جديد"
+  "badgeNew": "جديد",
+  "smartCare": "العناية الذكية",
+  "cleanupPillar": "التنظيف",
+  "systemJunk": "ملفات النظام غير الضرورية",
+  "applications": "التطبيقات",
+  "spaceLens": "عدسة المساحة والفوضى"
 }
