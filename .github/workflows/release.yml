@@ -1,9 +1,7 @@
 name: Release - Publish
 
+# Fabric Cleaner: releases are manual only. Pushing a tag never publishes.
 on:
-  push:
-    tags:
-      - 'v*'
   workflow_dispatch:
     inputs:
       tag:
@@ -19,11 +17,11 @@ permissions:
   contents: read
 
 env:
-  RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+  RELEASE_TAG: ${{ inputs.tag }}
 
 # A newer run must never interrupt signing or publication of this tag.
 concurrency:
-  group: release-${{ inputs.tag || github.ref_name }}
+  group: release-${{ inputs.tag }}
   cancel-in-progress: false
 
 jobs:
@@ -31,13 +29,13 @@ jobs:
     name: Validate Release
     uses: ./.github/workflows/ci.yml
     with:
-      ref: ${{ inputs.tag || github.sha }}
+      ref: ${{ inputs.tag }}
 
   package-smoke:
     name: Verify Packaging
     uses: ./.github/workflows/package-smoke.yml
     with:
-      ref: ${{ inputs.tag || github.sha }}
+      ref: ${{ inputs.tag }}
 
   create-release:
     name: Prepare Draft Release
@@ -52,7 +50,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
-          ref: ${{ inputs.tag || github.sha }}
+          ref: ${{ inputs.tag }}
           fetch-depth: 0
 
       - name: Setup Node.js
@@ -77,16 +75,12 @@ jobs:
         include:
           - os: windows-latest
             build-args: --win
-          - os: windows-11-arm
-            build-args: --win --config electron-builder.arm64.yml
           - os: macos-latest
             build-args: --mac
           # Explicit targets prevent the config's target.arch lists from adding
           # the other architecture despite --x64/--arm64. Keep builds native.
           - os: ubuntu-latest
             build-args: --linux AppImage deb --x64
-          - os: ubuntu-24.04-arm
-            build-args: --linux AppImage deb --arm64
 
     runs-on: ${{ matrix.os }}
     timeout-minutes: 45
@@ -96,7 +90,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
-          ref: ${{ inputs.tag || github.sha }}
+          ref: ${{ inputs.tag }}
           fetch-depth: 0
 
       - name: Setup Node.js
@@ -137,7 +131,7 @@ jobs:
               -c.win.azureSignOptions.endpoint="https://eus.codesigning.azure.net" \
               -c.win.azureSignOptions.codeSigningAccountName="kudu-signing" \
               -c.win.azureSignOptions.certificateProfileName="kudu-sign" \
-              -c.win.azureSignOptions.publisherName="Advent Development, Inc."
+              -c.win.azureSignOptions.publisherName="HakTrak Networks"
           else
             npx electron-builder ${{ matrix.build-args }} --publish never
           fi
@@ -206,19 +200,3 @@ jobs:
           TAG_NAME: ${{ env.RELEASE_TAG }}
         run: node scripts/publish-release.js release-artifacts
 
-  distribute:
-    name: Distribute Published Release
-    needs: publish-release
-    # Reused builds are intentionally skipped; do not let that transitive skip
-    # suppress distribution after publication has succeeded.
-    if: ${{ !cancelled() && needs.publish-release.result == 'success' }}
-    permissions:
-      contents: write
-    uses: ./.github/workflows/distribute-release.yml
-    with:
-      tag: ${{ inputs.tag || github.ref_name }}
-    secrets:
-      WEB_DEPLOY_HOOK: ${{ secrets.WEB_DEPLOY_HOOK }}
-      CHOCOLATEY_API_KEY: ${{ secrets.CHOCOLATEY_API_KEY }}
-      VIRUSTOTAL_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY }}
-      WINGET_GH_TOKEN: ${{ secrets.WINGET_GH_TOKEN }}
