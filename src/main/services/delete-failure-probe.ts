@@ -66,7 +66,7 @@ export async function probeWindowsDeleteFailures(
   const uniquePaths = [...new Set(paths)].slice(0, MAX_PROBED_PATHS)
   if (uniquePaths.length === 0) return new Map()
 
-  const tempDir = await mkdtemp(join(tmpdir(), 'kudu-delete-probe-'))
+  const tempDir = await mkdtemp(join(tmpdir(), 'fc-delete-probe-'))
   const pathFile = join(tempDir, 'paths.json')
   try {
     await writeFile(pathFile, JSON.stringify(uniquePaths), 'utf8')

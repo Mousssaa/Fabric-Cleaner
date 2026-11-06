@@ -27,7 +27,7 @@ function loadAppIds(platform) {
 }
 
 function main() {
-  console.log('\n📊 Kudu — Cross-Platform Parity Report\n')
+  console.log('\n📊 Fabric Cleaner — Cross-Platform Parity Report\n')
 
   const platformApps = {}
   for (const p of PLATFORMS) {

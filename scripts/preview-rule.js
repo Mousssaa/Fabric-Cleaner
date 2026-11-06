@@ -335,7 +335,7 @@ function main() {
 
   const vars = resolveVars()
 
-  console.log(`\n🔎 Kudu — Rule Preview: ${app.name} (${app.id})\n`)
+  console.log(`\n🔎 Fabric Cleaner — Rule Preview: ${app.name} (${app.id})\n`)
   console.log(`  Source:  ${currentPlatform}/${app._source}`)
   if (app.minAgeDays) console.log(`  minAgeDays: ${app.minAgeDays}`)
   if (app.childSubdir) console.log(`  childSubdir: ${app.childSubdir}`)

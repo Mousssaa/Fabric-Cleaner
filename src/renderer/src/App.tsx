@@ -30,17 +30,13 @@ import { ThreatMonitorPage } from './pages/ThreatMonitorPage'
 import { PrivacyShieldPage } from './pages/PrivacyShieldPage'
 import { HistoryPage } from './pages/HistoryPage'
 import { RecoveryPage } from './pages/RecoveryPage'
-import { PerformanceDiagnosticsPage } from './pages/PerformanceDiagnosticsPage'
 import { PerformanceMonitorPage } from './pages/PerformanceMonitorPage'
 import { UninstallerPage } from './pages/UninstallerPage'
 import { ServiceManagerPage } from './pages/ServiceManagerPage'
 import { FirewallAuditPage } from './pages/FirewallAuditPage'
 import { SchedulesPage } from './pages/SchedulesPage'
 import { GameModePage } from './pages/GameModePage'
-import { CveScannerPage } from './pages/CveScannerPage'
 import { AboutPage } from './pages/AboutPage'
-import { CloudPage } from './pages/CloudPage'
-import { BreachMonitorPage } from './pages/BreachMonitorPage'
 import { Onboarding } from './components/Onboarding'
 import { useStatsStore } from './stores/stats-store'
 import { useHistoryStore } from './stores/history-store'
@@ -65,7 +61,7 @@ export function App() {
     const apply = (mode: 'dark' | 'light') => {
       root.classList.remove('dark', 'light')
       root.classList.add(mode)
-      window.kudu?.windowSetChromeTheme?.(mode)
+      window.fabric?.windowSetChromeTheme?.(mode)
     }
     if (theme === 'system') {
       const mq = window.matchMedia('(prefers-color-scheme: dark)')
@@ -84,7 +80,7 @@ export function App() {
   }, [i18n.language])
 
   useEffect(() => {
-    const p = window.kudu?.onboardingGet?.()
+    const p = window.fabric?.onboardingGet?.()
     if (p) {
       p.then((done) => {
         setShowOnboarding(!done)
@@ -103,11 +99,11 @@ export function App() {
   const handleOnboardingComplete = async () => {
     setShowOnboarding(false)
     try {
-      await window.kudu?.onboardingSet?.(true)
+      await window.fabric?.onboardingSet?.(true)
     } catch (err) {
       // Swallowing this is what let the wizard come back on every launch with
       // nothing to go on (issue #269). The main process forwards renderer
-      // console errors into kudu.log.
+      // console errors into fabric-cleaner.log.
       console.error('[onboarding] failed to persist completion:', err)
     }
   }
@@ -178,17 +174,13 @@ export function App() {
             <Route path="/network" element={<NetworkCleanupPage />} />
             <Route path="/malware" element={<MalwareScannerPage />} />
             <Route path="/threat-monitor" element={<ThreatMonitorPage />} />
-            <Route path="/cve" element={<CveScannerPage />} />
             <Route path="/game-mode" element={<GameModePage />} />
-            <Route path="/performance-diagnostics" element={<PerformanceDiagnosticsPage />} />
             <Route path="/performance" element={<PerformanceMonitorPage />} />
             <Route path="/uninstaller" element={<UninstallerPage />} />
             <Route path="/history" element={<HistoryPage />} />
             <Route path="/recovery" element={<RecoveryPage />} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="/about" element={<AboutPage />} />
-            <Route path="/cloud" element={<CloudPage />} />
-            <Route path="/breach-monitor" element={<BreachMonitorPage />} />
             {/* Standalone pages */}
             <Route path="/privacy" element={<PrivacyShieldPage />} />
             <Route path="/services" element={<ServiceManagerPage />} />
@@ -243,7 +235,6 @@ const ROUTE_TITLES: Record<string, { key: string }> = {
   '/network': { key: 'network:pageTitle' },
   '/malware': { key: 'malware:pageTitle' },
   '/threat-monitor': { key: 'threatMonitor:pageTitle' },
-  '/cve': { key: 'cveScanner:pageTitle' },
   '/game-mode': { key: 'gameMode:pageTitle' },
   '/performance': { key: 'performance:pageTitle' },
   '/uninstaller': { key: 'uninstaller:pageTitle' },
@@ -257,9 +248,7 @@ const ROUTE_TITLES: Record<string, { key: string }> = {
   '/debloater': { key: 'hardening:debloater.pageTitle' },
   '/updates': { key: 'updates:softwareUpdater.pageTitle' },
   '/schedules': { key: 'schedules:pageTitle' },
-  '/drivers': { key: 'updates:driverManager.pageTitle' },
-  '/cloud': { key: 'cloud:pageTitle' },
-  '/breach-monitor': { key: 'breachMonitor:pageTitle' }
+  '/drivers': { key: 'updates:driverManager.pageTitle' }
 }
 
 function PageTitleUpdater() {
@@ -271,7 +260,7 @@ function PageTitleUpdater() {
     if (entry) {
       name = t(entry.key)
     }
-    document.title = name ? `${name} - Kudu` : 'Kudu'
+    document.title = name ? `${name} - Fabric Cleaner` : 'Fabric Cleaner'
   }, [location.pathname, t])
   return null
 }

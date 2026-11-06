@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { verifyReleaseRun } from './verify-release-run'
 
-const repo = 'AdventDevInc/kudu'
+const repo = 'AdventDevInc/fabric-cleaner'
 const tag = 'v3.0.0'
 const tagCommit = 'abc123'
 
@@ -46,7 +46,7 @@ describe('release artifact recovery source', () => {
   it.each([
     { event: 'pull_request' },
     { head_branch: 'feature' },
-    { head_repository: { full_name: 'fork/kudu' } },
+    { head_repository: { full_name: 'fork/fabric-cleaner' } },
     { repository: { full_name: 'different/repository' } },
     { path: '.github/workflows/ci.yml' },
     { status: 'in_progress' }

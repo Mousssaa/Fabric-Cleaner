@@ -30,15 +30,17 @@ import {
 } from './registry-backup-seal'
 
 // Does not exist, so the folder id comes from the resolved path.
-const DIR = 'C:\\Users\\me\\Documents\\Kudu Backups'
+const DIR = 'C:\\Users\\me\\Documents\\Fabric Cleaner Backups'
 const folderId = (dir: string) =>
   createHash('sha256').update(resolve(dir).toLowerCase(), 'utf8').digest('hex').slice(0, 32)
-const KEY = 'HKLM\\SOFTWARE\\Kudu\\RegistryBackupSeals\\' + folderId(DIR)
+const KEY = 'HKLM\\SOFTWARE\\Fabric Cleaner\\RegistryBackupSeals\\' + folderId(DIR)
 const NAME = 'registry-backup-targeted-2026-09-20T04-54-02-325Z.reg'
 const BYTES = Buffer.from('backup bytes')
 const HASH = createHash('sha256').update(BYTES).digest('hex')
 const queryOutput = (rows: string[]) =>
-  ['', 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Kudu\\RegistryBackupSeals', ...rows, ''].join('\r\n')
+  ['', 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Fabric Cleaner\\RegistryBackupSeals', ...rows, ''].join(
+    '\r\n'
+  )
 
 const platform = process.platform
 beforeEach(() => {
@@ -150,14 +152,14 @@ describe('removeSeal', () => {
 
 describe('sealKeyFor', () => {
   it('gives each backup folder its own key, however the path is spelled', async () => {
-    const root = mkdtempSync(join(tmpdir(), 'kudu-seal-dirs-'))
+    const root = mkdtempSync(join(tmpdir(), 'fc-seal-dirs-'))
     try {
       const a = join(root, 'A')
       const b = join(root, 'B')
       mkdirSync(a)
       mkdirSync(b)
       const keyA = await sealKeyFor(a)
-      expect(keyA).toMatch(/^HKLM\\SOFTWARE\\Kudu\\RegistryBackupSeals\\[0-9a-f]{32}$/)
+      expect(keyA).toMatch(/^HKLM\\SOFTWARE\\Fabric Cleaner\\RegistryBackupSeals\\[0-9a-f]{32}$/)
       expect(await sealKeyFor(b)).not.toBe(keyA)
       expect(await sealKeyFor(a.toUpperCase())).toBe(keyA)
       expect(await sealKeyFor(join(a, '.'))).toBe(keyA)
@@ -171,7 +173,7 @@ describe('sealKeyFor', () => {
     await sealBackup(other, NAME, BYTES)
     await removeSeal(DIR, NAME)
     const keys = mocks.native.mock.calls.map((c) => c[1][1])
-    expect(keys[0]).toBe('HKLM\\SOFTWARE\\Kudu\\RegistryBackupSeals\\' + folderId(other))
+    expect(keys[0]).toBe('HKLM\\SOFTWARE\\Fabric Cleaner\\RegistryBackupSeals\\' + folderId(other))
     expect(keys[1]).toBe(KEY)
     expect(keys[0]).not.toBe(keys[1])
   })
@@ -216,11 +218,11 @@ describe('removeSeals / sweepSeals', () => {
 describe('createPrivateTempDir', () => {
   it('creates a protected folder in the Windows temp folder and returns its path', async () => {
     mocks.tracked.mockImplementation(async (_tool: string, args: string[]) => {
-      const name = /'(kudu-reg-restore-[0-9a-f]{32})'/.exec(args.at(-1)!)![1]
+      const name = /'(fc-reg-restore-[0-9a-f]{32})'/.exec(args.at(-1)!)![1]
       return { stdout: `C:\\Windows\\Temp\\${name}`, stderr: '' }
     })
-    const path = await createPrivateTempDir('kudu-reg-restore-')
-    expect(path).toMatch(/^C:\\Windows\\Temp\\kudu-reg-restore-[0-9a-f]{32}$/)
+    const path = await createPrivateTempDir('fc-reg-restore-')
+    expect(path).toMatch(/^C:\\Windows\\Temp\\fc-reg-restore-[0-9a-f]{32}$/)
     const script = mocks.tracked.mock.calls[0][1].at(-1) as string
     expect(script).toContain("GetFolderPath('Windows')")
     expect(script).toContain('SetAccessRuleProtection($true,$false)')
@@ -231,7 +233,7 @@ describe('createPrivateTempDir', () => {
 
   it('refuses when not elevated, for odd prefixes, or when the result looks wrong', async () => {
     mocks.admin.mockReturnValue(false)
-    await expect(createPrivateTempDir('kudu-x-')).rejects.toThrow(/administrator/)
+    await expect(createPrivateTempDir('fc-x-')).rejects.toThrow(/administrator/)
     mocks.admin.mockReturnValue(true)
     await expect(createPrivateTempDir("x'; evil; '")).rejects.toThrow(/prefix/)
     expect(mocks.tracked).not.toHaveBeenCalled()
@@ -239,8 +241,8 @@ describe('createPrivateTempDir', () => {
       stdout: 'C:\\Users\\me\\AppData\\Local\\Temp\\x',
       stderr: ''
     })
-    await expect(createPrivateTempDir('kudu-x-')).rejects.toThrow(/private temp folder/)
+    await expect(createPrivateTempDir('fc-x-')).rejects.toThrow(/private temp folder/)
     mocks.tracked.mockRejectedValue(new Error('Temp folder grants access to S-1-5-32-545'))
-    await expect(createPrivateTempDir('kudu-x-')).rejects.toThrow(/grants access/)
+    await expect(createPrivateTempDir('fc-x-')).rejects.toThrow(/grants access/)
   })
 })

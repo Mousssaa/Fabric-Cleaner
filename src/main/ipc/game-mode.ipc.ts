@@ -41,7 +41,9 @@ const SERVICE_MAP: Record<string, string> = {
 // ── Snapshot persistence ─────────────────────────────────────
 
 function getSnapshotPath(): string {
-  const dir = app.isPackaged ? app.getPath('userData') : join(app.getPath('userData'), 'Kudu-Dev')
+  const dir = app.isPackaged
+    ? app.getPath('userData')
+    : join(app.getPath('userData'), 'Fabric-Cleaner-Dev')
   return join(dir, 'game-mode-snapshot.json')
 }
 

@@ -17,7 +17,6 @@
     "items": "vyčištěných položek",
     "cleanups": "dokončených čištění",
     "tagline": "Méně nepořádku. Více místa na to, na čem záleží.",
-    "footer": "Vyčištěno pomocí Kudu · Zdarma a open source",
     "privacy": "Vygenerováno lokálně. Zahrnuty jsou pouze souhrny a obecné kategorie — žádné cesty k souborům ani identifikátory počítače.",
     "save": "Uložit PNG",
     "copyImage": "Kopírovat obrázek",
@@ -26,12 +25,12 @@
     "copied": "Zkopírováno do schránky",
     "exportError": "Obrázek se nepodařilo exportovat. Zkuste místo sdílení nebo kopírování použít Uložit PNG.",
     "copyError": "Popisek se nepodařilo zkopírovat. Zkontrolujte prosím oprávnění ke schránce.",
-    "caption": "Pomocí Kudu jsem uvolnil(a) {{space}} a vyčistil(a) {{items}} položek. Zdarma a open source. Sdílejte své výsledky a pomozte Kudu růst pro nás všechny. https://usekudu.com",
-    "communityTitle": "Pomozte Kudu růst pro nás všechny.",
-    "communityDescription": "Sdílením svého vyčištění pomáháte více lidem objevit Kudu a rozvíjíte komunitu kolem bezplatného open-source čističe. Každé sdílení má význam.",
+    "caption": "Pomocí Fabric Cleaner jsem uvolnil(a) {{space}} a vyčistil(a) {{items}} položek. Zdarma a open source. Sdílejte své výsledky a pomozte Fabric Cleaner růst pro nás všechny. https://github.com/Mousssaa/Fabric-Cleaner",
+    "communityTitle": "Pomozte Fabric Cleaner růst pro nás všechny.",
+    "communityDescription": "Sdílením svého vyčištění pomáháte více lidem objevit Fabric Cleaner a rozvíjíte komunitu kolem bezplatného open-source čističe. Každé sdílení má význam.",
     "platforms": "Sdílet na platformu",
     "openPlatform": "Sdílet na {{platform}} (otevře se v prohlížeči)",
-    "postTitle": "Pomocí Kudu, bezplatného open-source čističe, jsem uvolnil(a) {{space}}",
+    "postTitle": "Pomocí Fabric Cleaner, bezplatného open-source čističe, jsem uvolnil(a) {{space}}",
     "discord": "Kopírovat pro Discord",
     "discordCopied": "Karta a popisek byly zkopírovány. Vložte je do chatu nebo kanálu na Discord.",
     "destinations": "Tlačítka platforem otevřou koncept nebo obrazovku sdílení. Vložte kartu pomocí Kopírovat obrázek nebo připojte uložený PNG a pak příspěvek zveřejněte, až budete připraveni.",
@@ -77,6 +76,5 @@
   "close": "Zavřít",
   "dismiss": "Zavřít",
   "skipToMainContent": "Přejít k hlavnímu obsahu",
-  "windowTitlebar": "Záhlaví okna Kudu",
-  "checkingCloudConnection": "Kontrola připojení ke Kudu Cloud…"
+  "windowTitlebar": "Záhlaví okna Fabric Cleaner"
 }

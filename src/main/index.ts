@@ -11,6 +11,12 @@ import { execNativeUtf8, killAllChildren } from './services/exec-utf8'
 import { IPC } from '../shared/channels'
 import { t } from './i18n'
 import { registerCleanerIpc } from './ipc'
+import { stopThreatMonitor } from './ipc/threat-monitor.ipc'
+import {
+  installIpcSenderGuard,
+  isTrustedRendererUrl,
+  resolveTrustedRendererUrl
+} from './security/ipc-guard'
 import { getSettings } from './services/settings-store'
 import {
   loadWindowState,
@@ -32,14 +38,12 @@ import {
 import { initAutoUpdater } from './services/auto-updater'
 import { attachRendererDiagnostics } from './services/renderer-diagnostics'
 import { attachCopyContextMenu } from './services/copy-context-menu'
-import { cloudAgent } from './services/cloud-agent'
 import {
   shouldDisableGpu,
   applyGpuFallbackSwitches,
   registerGpuCrashRecovery
 } from './services/gpu-fallback'
 import { runCli } from './cli'
-import { runDaemon } from './daemon'
 import { createWindowsTrayIcon } from './tray-icon'
 import { isAdmin } from './services/elevation'
 import { skipPortableStartup } from './services/portable'
@@ -53,12 +57,12 @@ import { skipPortableStartup } from './services/portable'
 app.disableHardwareAcceleration()
 
 // ─── Headless mode flags ─────────────────────────────────────
-// When running without a GUI (daemon or CLI), disable sandbox
+// When running without a GUI (CLI), disable sandbox
 // so Electron works on headless Linux servers without X11/Wayland.
 // IMPORTANT: Clear DISPLAY before Chromium initializes — otherwise the
 // native layer picks the X11 ozone backend before app.commandLine
 // switches are processed, and crashes if no X server is running.
-if (process.argv.includes('--daemon') || process.argv.includes('--cli')) {
+if (process.argv.includes('--cli')) {
   delete process.env.DISPLAY
   delete process.env.WAYLAND_DISPLAY
   app.commandLine.appendSwitch('no-sandbox')
@@ -67,11 +71,11 @@ if (process.argv.includes('--daemon') || process.argv.includes('--cli')) {
 
 // ─── Data directory override ────────────────────────────────
 // When relaunched as root (macOS/Linux), the elevated process receives
-// --kudu-data-dir=<path> so it reads/writes the original user's config
+// --fc-data-dir=<path> so it reads/writes the original user's config
 // instead of /var/root/... or /root/...
-const dataDirFlag = process.argv.find((a) => a.startsWith('--kudu-data-dir='))
+const dataDirFlag = process.argv.find((a) => a.startsWith('--fc-data-dir='))
 if (dataDirFlag) {
-  const dir = dataDirFlag.slice('--kudu-data-dir='.length)
+  const dir = dataDirFlag.slice('--fc-data-dir='.length)
   if (dir && require('path').isAbsolute(dir)) {
     app.setPath('userData', dir)
   }
@@ -110,20 +114,25 @@ if (isRoot) {
   }
 }
 
-// ─── CLI / Daemon mode ───────────────────────────────────────
+// ─── CLI mode ────────────────────────────────────────────────
 // If --cli is passed, run headless and exit — no GUI, no tray.
-// If --daemon is passed, run headless cloud agent and stay alive.
 if (process.argv.includes('--cli')) {
   app.whenReady().then(() => runCli())
-} else if (process.argv.includes('--daemon')) {
-  app.whenReady().then(() => runDaemon())
 } else {
   initGui()
 }
 
 function initGui(): void {
+  // Every IPC handler registered from here on only answers the app's own
+  // top-level renderer document (see security/ipc-guard.ts).
+  const trustedRendererUrl = resolveTrustedRendererUrl(
+    process.env['ELECTRON_RENDERER_URL'],
+    join(__dirname, '../renderer')
+  )
+  installIpcSenderGuard(trustedRendererUrl)
+
   // Prevent multiple instances — if another is already running, focus it and quit this one
-  // Development previews can run alongside an installed Kudu copy. Packaged
+  // Development previews can run alongside an installed Fabric Cleaner copy. Packaged
   // builds keep the normal single-instance guarantee.
   const gotLock = app.isPackaged ? app.requestSingleInstanceLock() : true
   if (!gotLock) {
@@ -187,15 +196,14 @@ function initGui(): void {
     return nativeImage.createFromPath(iconPath).resize({ width: 16, height: 16 })
   }
 
-  const TASK_NAME = 'KuduStartup'
+  const TASK_NAME = 'FabricCleanerStartup'
   /** The only arguments the startup task is allowed to carry — verified after registration. */
   const TASK_ARGUMENTS = '--startup'
 
   async function applyAutoLaunchWin32(enabled: boolean): Promise<void> {
-    // Use Task Scheduler with RunLevel HighestAvailable so the app starts
-    // elevated at logon. The HKCU Run key is NOT a viable fallback because
-    // the exe manifest is requireAdministrator — Windows silently skips
-    // Run-key entries for executables with an admin manifest.
+    // Least privilege: the startup task runs with RunLevel LeastPrivilege, so
+    // the app never starts elevated at logon. Privileged actions ask for UAC
+    // through the elevation relaunch flow when the user requests them.
     const exePath = app.getPath('exe')
 
     if (enabled) {
@@ -222,7 +230,7 @@ function initGui(): void {
         '  <Principals>',
         '    <Principal id="Author">',
         '      <LogonType>InteractiveToken</LogonType>',
-        '      <RunLevel>HighestAvailable</RunLevel>',
+        '      <RunLevel>LeastPrivilege</RunLevel>',
         '    </Principal>',
         '  </Principals>',
         '  <Settings>',
@@ -243,13 +251,12 @@ function initGui(): void {
 
       // The XML lands in %LOCALAPPDATA%\Temp, which any process running as this
       // user can write \u2014 including a non-elevated one. Since schtasks reads it
-      // back elevated and the task carries RunLevel HighestAvailable, a swap
-      // between our write and its read would register an attacker's command as a
-      // logon-triggered admin task. A random name denies the attacker a path to
+      // back and registers a logon-triggered task, a swap between our write and
+      // its read would register an attacker's command to run at every logon. A random name denies the attacker a path to
       // camp on, and the post-registration check below is what actually settles
       // it: whatever ends up registered has to be the command we asked for.
       const { writeFile, unlink, mkdtemp, rmdir } = await import('fs/promises')
-      const tmpDir = await mkdtemp(join(app.getPath('temp'), 'kudu-task-'))
+      const tmpDir = await mkdtemp(join(app.getPath('temp'), 'fc-task-'))
       const tmpPath = join(tmpDir, `${randomUUID()}.xml`)
       await writeFile(tmpPath, '\uFEFF' + xml, 'utf-16le')
 
@@ -311,9 +318,9 @@ function initGui(): void {
   /**
    * Is the registered task definition exactly the one we asked for?
    *
-   * Task Scheduler runs the whole <Actions> block at HighestAvailable, so
+   * Task Scheduler runs the whole <Actions> block at every logon, so
    * matching the command alone is not enough. Arguments decide what that command
-   * does — `--inspect-brk` would turn our own binary into arbitrary elevated code
+   * does — `--inspect-brk` would turn our own binary into arbitrary code
    * execution — and a definition may carry action types other than Exec
    * (ComHandler, SendEmail, ShowMessage) that run without naming a command at
    * all. So this requires precisely one Exec action, the expected command, the
@@ -539,6 +546,12 @@ function initGui(): void {
       }
     })
 
+    // Navigation guard: the window may only ever show the bundled renderer.
+    mainWindow.webContents.on('will-navigate', (event, url) => {
+      if (!isTrustedRendererUrl(url, trustedRendererUrl)) event.preventDefault()
+    })
+    mainWindow.webContents.on('will-attach-webview', (event) => event.preventDefault())
+
     mainWindow.webContents.setWindowOpenHandler((details) => {
       // Only allow opening HTTPS URLs externally
       try {
@@ -646,11 +659,6 @@ function initGui(): void {
     startScheduler(() => mainWindow)
     startStorageHistory()
 
-    // Start cloud agent if linked
-    if (settings.cloud.apiKey) {
-      cloudAgent.start()
-    }
-
     // Listen for settings changes to update auto-launch and tray
     ipcMain.handle(IPC.SETTINGS_APPLY_STARTUP, async (_event, enabled: boolean) => {
       await applyAutoLaunch(enabled)
@@ -665,7 +673,7 @@ function initGui(): void {
     })
 
     // Rebuild tray menu when language changes so labels update immediately
-    app.on('kudu:language-changed' as any, () => {
+    app.on('fabric-cleaner:language-changed' as any, () => {
       rebuildTrayMenu()
     })
 
@@ -751,7 +759,7 @@ function initGui(): void {
     isQuitting = true
     stopScheduler()
     stopStorageHistory()
-    cloudAgent.stop()
+    stopThreatMonitor()
     // Kill any active child processes (reg.exe, cmd.exe, etc.) to prevent orphans
     killAllChildren()
   })

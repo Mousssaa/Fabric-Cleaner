@@ -145,12 +145,6 @@ export const pageExperiences: Record<string, PageExperience> = {
     family: 'protection',
     steps: ['checkConnection', 'reviewActivity', 'inspectAlerts']
   },
-  '/cve': {
-    key: 'cve',
-    icon: Shield,
-    family: 'protection',
-    steps: ['refreshFindings', 'prioritizeSeverity', 'updateApps']
-  },
   '/game-mode': {
     key: 'gameMode',
     icon: Gamepad2,

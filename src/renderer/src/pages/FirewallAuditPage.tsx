@@ -87,7 +87,7 @@ export function FirewallAuditPage() {
   const isBusy = scanning || applying
 
   useEffect(() => {
-    const cleanup = window.kudu?.onFirewallProgress?.((data: FirewallScanProgress) => {
+    const cleanup = window.fabric?.onFirewallProgress?.((data: FirewallScanProgress) => {
       useFirewallStore.getState().setScanProgress(data)
     })
     return () => {
@@ -105,7 +105,7 @@ export function FirewallAuditPage() {
     store.setTruncated(false)
 
     try {
-      const result = await window.kudu.firewallScan()
+      const result = await window.fabric.firewallScan()
       const s = useFirewallStore.getState()
       s.setRules(result.rules)
       s.setTruncated(!!result.truncated)
@@ -138,7 +138,7 @@ export function FirewallAuditPage() {
       store.setError(null)
 
       try {
-        const result = await window.kudu.firewallApply(
+        const result = await window.fabric.firewallApply(
           selected.map((r) => ({ name: r.name, action }))
         )
         useFirewallStore.getState().setApplyResult(result)

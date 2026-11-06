@@ -48,7 +48,7 @@ export function useBackgroundScans(): void {
 
     void (async () => {
       try {
-        const result = await window.kudu.softwareUpdateCheck()
+        const result = await window.fabric.softwareUpdateCheck()
         const s = useUpdaterStore.getState()
         s.setApps(result.apps)
         s.setUpToDate(result.upToDate)
@@ -75,7 +75,7 @@ export function useBackgroundScans(): void {
       if (store.hasScanned || store.updateScanning) return
       store.setUpdateScanning(true)
       try {
-        const result = await window.kudu.driverUpdateScan()
+        const result = await window.fabric.driverUpdateScan()
         useDriverStore.getState().setUpdates(result.updates)
         useDriverStore.getState().setIgnoredUpdates(result.ignoredUpdates ?? [])
       } catch {

@@ -7,7 +7,7 @@ import {
   deleteRegistryKey,
   scanLeftoversForProgram
 } from '../services/program-uninstaller'
-import { deletionTouchesExclusions, safeDelete } from '../services/file-utils'
+import { deletionTouchesExclusions, disposeCleanupPath } from '../services/file-utils'
 import { getSettings } from '../services/settings-store'
 import { getSharedComponentKind, type UninstallOptions } from '../../shared/uninstall-policy'
 import type {
@@ -137,7 +137,7 @@ export function registerProgramUninstallerIpc(getWindow: WindowGetter): void {
         // Leftovers are removed without a review step, so anything the user
         // excluded — the folder itself or something inside it — is kept.
         if (await deletionTouchesExclusions(item.path, exclusions)) continue
-        const result = await safeDelete(item.path)
+        const result = await disposeCleanupPath(item.path)
         if (result.success) {
           cleaned++
           cleanedSize += item.size
@@ -231,7 +231,7 @@ export function registerProgramUninstallerIpc(getWindow: WindowGetter): void {
         // Leftovers are removed without a review step, so anything the user
         // excluded — the folder itself or something inside it — is kept.
         if (await deletionTouchesExclusions(item.path, exclusions)) continue
-        const result = await safeDelete(item.path)
+        const result = await disposeCleanupPath(item.path)
         if (result.success) {
           cleaned++
           cleanedSize += item.size

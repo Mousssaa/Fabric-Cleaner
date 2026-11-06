@@ -17,7 +17,6 @@
     "items": "elemente curățate",
     "cleanups": "curățări finalizate",
     "tagline": "Mai puțină dezordine. Mai mult spațiu pentru ce contează.",
-    "footer": "Curățat cu Kudu · Gratuit și open-source",
     "privacy": "Generat local. Sunt incluse doar totalurile și categoriile generale — fără căi de fișiere sau identificatori ai computerului.",
     "save": "Salvează PNG",
     "copyImage": "Copiază imaginea",
@@ -26,12 +25,12 @@
     "copied": "Copiat în clipboard",
     "exportError": "Imaginea nu a putut fi exportată. Încercați Salvează PNG în loc să partajați sau să copiați.",
     "copyError": "Descrierea nu a putut fi copiată. Verificați permisiunile pentru clipboard.",
-    "caption": "Am recuperat {{space}} și am curățat {{items}} elemente cu Kudu. Gratuit și open-source. Partajează-ți rezultatele și ajută Kudu să crească pentru noi toți. https://usekudu.com",
-    "communityTitle": "Ajută Kudu să crească, pentru noi toți.",
-    "communityDescription": "Partajând curățarea ta, ajuți mai mulți oameni să descopere Kudu și susții comunitatea din spatele unui utilitar de curățare gratuit și open-source. Fiecare partajare contează.",
+    "caption": "Am recuperat {{space}} și am curățat {{items}} elemente cu Fabric Cleaner. Gratuit și open-source. Partajează-ți rezultatele și ajută Fabric Cleaner să crească pentru noi toți. https://github.com/Mousssaa/Fabric-Cleaner",
+    "communityTitle": "Ajută Fabric Cleaner să crească, pentru noi toți.",
+    "communityDescription": "Partajând curățarea ta, ajuți mai mulți oameni să descopere Fabric Cleaner și susții comunitatea din spatele unui utilitar de curățare gratuit și open-source. Fiecare partajare contează.",
     "platforms": "Partajează pe o platformă",
     "openPlatform": "Partajează pe {{platform}} (se deschide în browser)",
-    "postTitle": "Am recuperat {{space}} cu Kudu, un utilitar de curățare gratuit și open-source",
+    "postTitle": "Am recuperat {{space}} cu Fabric Cleaner, un utilitar de curățare gratuit și open-source",
     "discord": "Copiază pentru Discord",
     "discordCopied": "Cardul și descrierea au fost copiate. Lipește-le în chatul sau canalul tău Discord.",
     "destinations": "Butoanele platformelor deschid o schiță sau ecranul de partajare. Lipește cardul folosind Copiază imaginea sau atașează PNG-ul salvat, apoi publică atunci când ești gata.",
@@ -77,6 +76,5 @@
   "close": "Închide",
   "dismiss": "Închide",
   "skipToMainContent": "Sari la conținutul principal",
-  "windowTitlebar": "Bara de titlu a ferestrei Kudu",
-  "checkingCloudConnection": "Se verifică conexiunea Kudu Cloud…"
+  "windowTitlebar": "Bara de titlu a ferestrei Fabric Cleaner"
 }

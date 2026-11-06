@@ -1,12 +1,12 @@
 {
-  "trayTooltip": "Kudu",
-  "openKudu": "Άνοιγμα του Kudu",
+  "trayTooltip": "Fabric Cleaner",
+  "openKudu": "Άνοιγμα του Fabric Cleaner",
   "quit": "Έξοδος",
-  "scheduledTaskNotificationTitle": "Kudu - Προγραμματισμένη εργασία",
+  "scheduledTaskNotificationTitle": "Fabric Cleaner - Προγραμματισμένη εργασία",
   "scheduledTaskNotificationBody": "Εκτέλεση του \"{{name}}\"...",
-  "scanCompleteNotificationTitle": "Kudu - Η σάρωση ολοκληρώθηκε",
+  "scanCompleteNotificationTitle": "Fabric Cleaner - Η σάρωση ολοκληρώθηκε",
   "scanCompleteNotificationBody": "Βρέθηκαν {{itemCount}} στοιχεία ({{sizeMB}} MB) που μπορούν να καθαριστούν.",
   "scheduledScanName": "Προγραμματισμένη σάρωση",
-  "rendererStartupFailureTitle": "Δεν ήταν δυνατή η εκκίνηση του Kudu",
-  "rendererStartupFailureMessage": "Το Kudu δεν μπόρεσε να ξεκινήσει το περιβάλλον του και πρέπει να κλείσει. Συμπεριλάβετε το αρχείο καταγραφής που εμφανίζεται παρακάτω κατά την αναφορά του προβλήματος."
+  "rendererStartupFailureTitle": "Δεν ήταν δυνατή η εκκίνηση του Fabric Cleaner",
+  "rendererStartupFailureMessage": "Το Fabric Cleaner δεν μπόρεσε να ξεκινήσει το περιβάλλον του και πρέπει να κλείσει. Συμπεριλάβετε το αρχείο καταγραφής που εμφανίζεται παρακάτω κατά την αναφορά του προβλήματος."
 }

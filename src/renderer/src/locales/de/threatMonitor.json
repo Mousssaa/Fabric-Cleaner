@@ -1,30 +1,8 @@
 {
   "pageTitle": "Bedrohungsmonitor",
-  "pageDescription": "Echtzeitüberwachung von Netzwerkverbindungen anhand bekannter Bedrohungslisten.",
-  "checkingConnection": "Kudu Cloud-Verbindung wird überprüft…",
-  "cloudNotConfigured": {
-    "title": "Kudu Cloud Pro erforderlich",
-    "description": "Verbinden Sie dieses Gerät mit Kudu Cloud Pro, um die aktuelle Bedrohungs-Blacklist zu erhalten und verdächtige Netzwerkaktivitäten zu überwachen.",
-    "action": "Kudu Cloud anzeigen"
-  },
-  "connectionError": {
-    "title": "Cloud-Verbindung erfordert Aufmerksamkeit",
-    "description": "Für dieses Gerät ist ein Cloud-Schlüssel gespeichert, er ist jedoch nicht mehr autorisiert. Überprüfen Sie die Verbindung und verknüpfen Sie sie erneut.",
-    "action": "Cloud-Verbindung überprüfen"
-  },
-  "planRequired": {
-    "title": "Kudu Cloud Pro erforderlich",
-    "description": "Die Bedrohungsüberwachung ist eine Pro-Funktion. Aktualisieren Sie Ihren Cloud-Tarif, um auf diesem Gerät die Live-Bedrohungs-Blacklist zu erhalten.",
-    "action": "Cloud-Tarife anzeigen"
-  },
   "loading": "Wird geladen...",
-  "inactive": {
-    "title": "Bedrohungsmonitor inaktiv",
-    "description": "Cloud ist verbunden, aber es ist noch keine Bedrohungs-Blacklist verfügbar. Überprüfen Sie Ihren Pro-Tarif oder versuchen Sie es erneut, nachdem der Cloud-Agent die Verbindung wiederhergestellt hat.",
-    "action": "Cloud-Tarif überprüfen"
-  },
+  "inactive": {},
   "statusBar": {
-    "blacklistVersion": "Blacklist",
     "connectionsScanned": "Verbindungen überprüft {{time}}",
     "dnsScanned": "DNS überprüft {{time}}",
     "threatsDetected": "{{count}} Bedrohung erkannt",

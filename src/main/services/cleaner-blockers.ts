@@ -182,7 +182,7 @@ export function parseRestartManagerBlockers(
     const restartManagerName = typeof entry.name === 'string' ? entry.name : ''
     const normalized = normalizedProcessName(processName)
 
-    // Every packaged Kudu window/utility process uses the same executable.
+    // Every packaged Fabric Cleaner window/utility process uses the same executable.
     // It cannot be closed while this UI is asking the user what to close, so
     // omit it from the actionable list. In development, do not hide every
     // Electron process merely because the current host is electron.exe.
@@ -291,7 +291,7 @@ export async function collectBlockerCandidateFiles(
 export async function findWindowsFileBlockers(paths: string[]): Promise<CleanerBlocker[]> {
   if (paths.length === 0) return []
 
-  const tempDir = await mkdtemp(join(tmpdir(), 'kudu-blockers-'))
+  const tempDir = await mkdtemp(join(tmpdir(), 'fc-blockers-'))
   const pathFile = join(tempDir, 'paths.json')
   try {
     await writeFile(pathFile, JSON.stringify(paths), 'utf8')

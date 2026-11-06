@@ -1,6 +1,8 @@
-appId: com.kudu.app
-productName: Kudu
-copyright: Copyright © 2024-2026 Kudu Contributors
+appId: com.haktrak.fabric-cleaner
+productName: Fabric Cleaner
+# Fabric Cleaner is built on Kudu (MIT, Copyright (c) 2026 Advent Development Inc).
+# The upstream notice is kept in LICENSE and shipped with every build.
+copyright: Copyright © 2026 HakTrak Networks. Portions Copyright © 2026 Advent Development Inc.
 
 directories:
   buildResources: resources
@@ -25,6 +27,13 @@ extraResources:
     to: icons
     filter:
       - "**/*"
+  # Bundled local YARA-X rule pack (no rules are ever downloaded).
+  - from: resources/yara-rules
+    to: yara-rules
+    filter:
+      - "**/*.yar"
+  - from: LICENSE
+    to: LICENSE.txt
 
 win:
   target:
@@ -35,26 +44,24 @@ win:
       arch:
         - x64
   icon: resources/icon.ico
-  requestedExecutionLevel: requireAdministrator
+  # Least privilege: the app runs as the invoking user. Privileged features
+  # request elevation on demand (UAC) through the elevation relaunch flow.
+  requestedExecutionLevel: asInvoker
 
 nsis:
   oneClick: true
-  # Must stay in sync with win.requestedExecutionLevel above.
-  # requestedExecutionLevel only patches the manifest of Kudu.exe — it has no
-  # effect on the installer. Left per-user (the default), the installer compiles
-  # with `RequestExecutionLevel user`, so it never elevates and then drops an
-  # admin-manifested exe into the user-writable %LOCALAPPDATA%\Programs. Going
-  # per-machine makes the installer request elevation up front, installs to
-  # Program Files, and marks isAdminRightsRequired in the update metadata.
+  # Per-machine install into Program Files (not user-writable), so the binary
+  # cannot be swapped by an unprivileged process. The installer elevates once;
+  # the installed app itself runs asInvoker.
   perMachine: true
   allowToChangeInstallationDirectory: false
   deleteAppDataOnUninstall: false
-  shortcutName: Kudu
-  artifactName: Kudu-Setup-${version}.${ext}
+  shortcutName: Fabric Cleaner
+  artifactName: Fabric-Cleaner-Setup-${version}.${ext}
 
 portable:
-  artifactName: Kudu-Portable-${version}.${ext}
-  requestExecutionLevel: admin
+  artifactName: Fabric-Cleaner-Portable-${version}.${ext}
+  requestExecutionLevel: user
 
 mac:
   target:
@@ -72,7 +79,7 @@ mac:
   entitlements: resources/entitlements.mac.plist
   entitlementsInherit: resources/entitlements.mac.plist
   notarize: true
-  artifactName: Kudu-${version}-${arch}.${ext}
+  artifactName: Fabric-Cleaner-${version}-${arch}.${ext}
 
 linux:
   target:
@@ -91,10 +98,10 @@ linux:
 # A versioned basename makes doInstall delete the old file and write a new
 # name, leaving desktop/menu Exec= paths pointing at a missing binary.
 appImage:
-  artifactName: Kudu-${arch}.${ext}
+  artifactName: Fabric-Cleaner-${arch}.${ext}
 
 deb:
-  artifactName: Kudu-${version}-${arch}.${ext}
+  artifactName: Fabric-Cleaner-${version}-${arch}.${ext}
   depends:
     - libgtk-3-0
     - libnss3

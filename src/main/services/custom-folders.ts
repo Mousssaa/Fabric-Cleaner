@@ -101,7 +101,7 @@ export function assertCustomFolderPath(path: string, home = homedir()): void {
         : ['/usr', '/bin', '/sbin', '/etc', '/boot', '/dev', '/proc', '/sys', '/root']
   if (
     protectedRoots.some((root) => within(resolved, root) || within(root, resolved)) ||
-    /(^|[\\/])(\$recycle\.bin|system volume information|Kudu (Downloads|Custom Folder) Recovery-[^\\/]*)($|[\\/])/i.test(
+    /(^|[\\/])(\$recycle\.bin|system volume information|Fabric Cleaner (Downloads|Custom Folder) Recovery-[^\\/]*)($|[\\/])/i.test(
       resolved
     )
   )
@@ -264,8 +264,8 @@ export class CustomFolders {
             const path = join(directory.path, entry.name)
             try {
               if (
-                entry.name.startsWith('Kudu Downloads Recovery-') ||
-                entry.name.startsWith('Kudu Custom Folder Recovery-')
+                entry.name.startsWith('Fabric Cleaner Downloads Recovery-') ||
+                entry.name.startsWith('Fabric Cleaner Custom Folder Recovery-')
               ) {
                 result.skipped++
                 continue
@@ -370,7 +370,7 @@ export class CustomFolders {
                   )
                 },
                 undefined,
-                'Kudu Custom Folder Recovery-'
+                'Fabric Cleaner Custom Folder Recovery-'
               )
               claims.set(parent, claim)
             }

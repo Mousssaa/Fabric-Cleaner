@@ -17,7 +17,6 @@
     "items": "Elemente bereinigt",
     "cleanups": "Bereinigungen abgeschlossen",
     "tagline": "Weniger Ballast. Mehr Platz für das, was wichtig ist.",
-    "footer": "Bereinigt mit Kudu · Kostenlos & Open Source",
     "privacy": "Lokal erstellt. Es werden nur Summen und allgemeine Kategorien einbezogen — keine Dateipfade oder Computerkennungen.",
     "save": "PNG speichern",
     "copyImage": "Bild kopieren",
@@ -26,12 +25,12 @@
     "copied": "In die Zwischenablage kopiert",
     "exportError": "Das Bild konnte nicht exportiert werden. Versuchen Sie stattdessen „PNG speichern“ anstelle von Teilen oder Kopieren.",
     "copyError": "Die Beschriftung konnte nicht kopiert werden. Bitte prüfen Sie die Berechtigungen für die Zwischenablage.",
-    "caption": "Ich habe mit Kudu {{space}} freigegeben und {{items}} Elemente bereinigt. Kostenlos & Open Source. Teilen Sie Ihre Ergebnisse und helfen Sie dabei, Kudu für uns alle wachsen zu lassen. https://usekudu.com",
-    "communityTitle": "Helfen Sie mit, Kudu für uns alle wachsen zu lassen.",
-    "communityDescription": "Wenn Sie Ihre Bereinigung teilen, entdecken mehr Menschen Kudu und die Community hinter einem kostenlosen Open-Source-Cleaner wächst. Jedes Teilen macht einen Unterschied.",
+    "caption": "Ich habe mit Fabric Cleaner {{space}} freigegeben und {{items}} Elemente bereinigt. Kostenlos & Open Source. Teilen Sie Ihre Ergebnisse und helfen Sie dabei, Fabric Cleaner für uns alle wachsen zu lassen. https://github.com/Mousssaa/Fabric-Cleaner",
+    "communityTitle": "Helfen Sie mit, Fabric Cleaner für uns alle wachsen zu lassen.",
+    "communityDescription": "Wenn Sie Ihre Bereinigung teilen, entdecken mehr Menschen Fabric Cleaner und die Community hinter einem kostenlosen Open-Source-Cleaner wächst. Jedes Teilen macht einen Unterschied.",
     "platforms": "Auf einer Plattform teilen",
     "openPlatform": "Auf {{platform}} teilen (wird im Browser geöffnet)",
-    "postTitle": "Ich habe mit Kudu {{space}} freigegeben, einem kostenlosen Open-Source-Cleaner",
+    "postTitle": "Ich habe mit Fabric Cleaner {{space}} freigegeben, einem kostenlosen Open-Source-Cleaner",
     "discord": "Für Discord kopieren",
     "discordCopied": "Karte und Beschriftung kopiert. Fügen Sie sie in Ihren Discord-Chat oder -Kanal ein.",
     "destinations": "Die Plattform-Schaltflächen öffnen einen Entwurf oder einen Teilen-Bildschirm. Fügen Sie die Karte mit „Bild kopieren“ ein oder hängen Sie die gespeicherte PNG an und veröffentlichen Sie den Beitrag, wenn Sie bereit sind.",
@@ -77,6 +76,5 @@
   "close": "Schließen",
   "dismiss": "Verwerfen",
   "skipToMainContent": "Zum Hauptinhalt springen",
-  "windowTitlebar": "Kudu-Titelleiste",
-  "checkingCloudConnection": "Kudu Cloud-Verbindung wird überprüft…"
+  "windowTitlebar": "Fabric-Cleaner-Titelleiste"
 }

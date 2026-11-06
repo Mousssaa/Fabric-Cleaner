@@ -51,8 +51,8 @@ export function useCleanAppPrompt() {
       let blockers: CleanerBlocker[]
       try {
         ;[running, blockers] = await Promise.all([
-          window.kudu.runningBrowsers(),
-          window.kudu.cleanerBlockers(itemIds)
+          window.fabric.runningBrowsers(),
+          window.fabric.cleanerBlockers(itemIds)
         ])
       } catch {
         toast.error(t('browserDetectionFailed'))
@@ -69,8 +69,8 @@ export function useCleanAppPrompt() {
       })
       if (choice === null) return false
       try {
-        await window.kudu.cleanerPrepareClean(choice.filter((id) => !id.startsWith('app:')))
-        await window.kudu.cleanerCloseApps(
+        await window.fabric.cleanerPrepareClean(choice.filter((id) => !id.startsWith('app:')))
+        await window.fabric.cleanerCloseApps(
           choice.filter((id) => id.startsWith('app:')).map((id) => Number(id.slice(4)))
         )
       } catch {

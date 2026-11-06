@@ -5,7 +5,7 @@
   "scanning": "Se analizează...",
   "refresh": "Reîmprospătați analiza",
   "introTitle": "Aplicațiile dvs., cu spațiul explicat.",
-  "introDescription": "Comparați dimensiunile de instalare raportate cu fișierele pe care Kudu le poate oferi pentru examinare în vederea curățării. Identificați cele mai mari oportunități înainte de a curăța.",
+  "introDescription": "Comparați dimensiunile de instalare raportate cu fișierele pe care Fabric Cleaner le poate oferi pentru examinare în vederea curățării. Identificați cele mai mari oportunități înainte de a curăța.",
   "privacy": "Analiza rămâne pe acest dispozitiv. Nimic nu este eliminat în timpul analizei.",
   "installed": "Dimensiune instalată",
   "cache": "Fișiere care pot fi examinate",

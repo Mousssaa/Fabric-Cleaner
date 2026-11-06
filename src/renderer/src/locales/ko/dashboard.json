@@ -17,13 +17,6 @@
   "statusLastScan": "마지막 검사",
   "statusLastScanNever": "없음",
   "statusTotalScans": "총 검사 수",
-  "statusCloud": "클라우드",
-  "statusCloudConnected": "연결됨",
-  "statusCloudNotConnected": "연결되지 않음",
-  "cloudUpsellEyebrow": "선택 가능한 Cloud 업그레이드",
-  "cloudUpsellTitle": "강력한 Cloud 기능 4가지를 이용해 보세요",
-  "cloudUpsellDescription": "위협 모니터링, 취약점 검사, 유출 경고 및 원격 관리를 이용할 수 있습니다. 구독은 Kudu의 지속적인 오픈 소스 개발도 지원합니다.",
-  "cloudUpsellAction": "Kudu Cloud 살펴보기",
   "toolLabelCleaner": "정리",
   "toolLabelRegistry": "레지스트리",
   "toolLabelDrivers": "드라이버",
@@ -177,8 +170,5 @@
   "openStorageTools": "저장소 도구 열기 →",
   "gameModeActiveLabel": "게임 모드가 활성화되어 있습니다",
   "gameModeReadyLabel": "게임 모드가 준비되었습니다",
-  "gameModeFocusResources": "게임을 시작하기 전에 리소스를 집중하세요",
-  "cloudStatusConnected": "Kudu Cloud 연결됨",
-  "cloudStatusNeedsAttention": "Kudu Cloud에 주의가 필요합니다",
-  "cloudStatusConnect": "Kudu Cloud 연결"
+  "gameModeFocusResources": "게임을 시작하기 전에 리소스를 집중하세요"
 }

@@ -5,18 +5,21 @@ import type { ScanHistoryEntry } from '@shared/types'
 
 describe('cleanup share privacy projection', () => {
   it('encodes captions and titles without introducing extra query parameters', () => {
-    const caption = 'Recovered 2 GB & more #Kudu + friends? https://usekudu.com'
-    const title = 'Kudu & friends'
+    const caption =
+      'Recovered 2 GB & more #Fabric Cleaner + friends? https://github.com/Mousssaa/Fabric-Cleaner'
+    const title = 'Fabric Cleaner & friends'
     const links = cleanupShareLinks(caption, title)
     for (const platform of links) {
       const url = new URL(platform.url)
       expect(url.protocol).toBe('https:')
       if (platform.name === 'Reddit') {
         expect(url.searchParams.get('title')).toBe(title)
-        expect(url.searchParams.get('url')).toBe('https://usekudu.com')
+        expect(url.searchParams.get('url')).toBe('https://github.com/Mousssaa/Fabric-Cleaner')
       } else if (platform.name === 'Telegram') {
-        expect(url.searchParams.get('text')).toBe(caption.replace('https://usekudu.com', '').trim())
-        expect(url.searchParams.get('url')).toBe('https://usekudu.com')
+        expect(url.searchParams.get('text')).toBe(
+          caption.replace('https://github.com/Mousssaa/Fabric-Cleaner', '').trim()
+        )
+        expect(url.searchParams.get('url')).toBe('https://github.com/Mousssaa/Fabric-Cleaner')
       } else {
         expect(url.searchParams.get('text')).toBe(caption)
         expect([...url.searchParams.keys()]).toEqual(['text'])

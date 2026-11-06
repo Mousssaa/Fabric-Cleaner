@@ -162,11 +162,11 @@ export function ScheduleScope({
       return
     }
     const methods: Partial<Record<ScheduleTaskType, () => Promise<ScanResult[]>>> = {
-      'cleaner:system': () => window.kudu.systemScan(),
-      'cleaner:browsers': () => window.kudu.browserScan(),
-      'cleaner:apps': () => window.kudu.appScan(),
-      'cleaner:gaming': () => window.kudu.gamingScan(),
-      'cleaner:databases': () => window.kudu.databaseScan()
+      'cleaner:system': () => window.fabric.systemScan(),
+      'cleaner:browsers': () => window.fabric.browserScan(),
+      'cleaner:apps': () => window.fabric.appScan(),
+      'cleaner:gaming': () => window.fabric.gamingScan(),
+      'cleaner:databases': () => window.fabric.databaseScan()
     }
     const method = methods[task]
     if (!method) return

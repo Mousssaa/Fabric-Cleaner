@@ -1,4 +1,4 @@
-# Kudu Cleaner Rules Catalog
+# Fabric Cleaner Cleaner Rules Catalog
 
 > Auto-generated from the JSON rule files. Do not edit manually.
 >
@@ -110,7 +110,7 @@
 | JetBrains IDEs | ✅ | ✅ | ✅ |
 | Kodi | ✅ | ✅ | ✅ |
 | Krita | ✅ | ✅ | ✅ |
-| Kudu | ✅ | ❌ | ❌ |
+| Fabric Cleaner | ✅ | ❌ | ❌ |
 | Ledger Live | ✅ | ✅ | ✅ |
 | LibreOffice | ✅ | ✅ | ✅ |
 | Linear | ✅ | ✅ | ✅ |

@@ -9,7 +9,7 @@ import { computeArchToTargetNamesMap } from 'app-builder-lib/out/targets/targetF
 
 // Guards the packaging invariants that only show up once a user runs the
 // installer — nothing in the app's own code paths can catch a regression here.
-// See https://github.com/AdventDevInc/kudu/issues/264.
+// See https://github.com/AdventDevInc/kudu/issues/264 (upstream).
 
 const CONFIG_PATH = path.resolve(__dirname, '..', '..', 'electron-builder.yml')
 const CONFIG = readFileSync(CONFIG_PATH, 'utf-8')
@@ -33,42 +33,36 @@ function option(key: string, name: string): string | undefined {
 }
 
 describe('electron-builder.yml', () => {
-  it.each([
-    ['ubuntu-latest', Arch.x64],
-    ['ubuntu-24.04-arm', Arch.arm64]
-  ])('builds only native Linux release targets on %s', (runner, architecture) => {
-    const release = load(
-      readFileSync(path.resolve(__dirname, '../../.github/workflows/release.yml'), 'utf8')
-    ) as any
-    const job = release.jobs.build.strategy.matrix.include.find((job: any) => job.os === runner)
-    const args = configureBuildCommand(createYargs()).parseSync(job['build-args'].split(/\s+/))
-    const options = normalizeOptions(args)
-    // Exercise electron-builder's actual config fallback: architecture flags
-    // alone still expand the two architectures declared in electron-builder.yml.
-    const targets = computeArchToTargetNamesMap(
-      options.targets!.get(Platform.LINUX)!,
-      { platformSpecificBuildOptions: (load(CONFIG) as any).linux } as any,
-      Platform.LINUX
-    )
-    expect([...targets]).toEqual([[architecture, ['AppImage', 'deb']]])
-  })
-
-  it('requests admin for the app executable', () => {
-    // Kudu edits HKLM, system directories and other machine-wide state, so the
-    // manifest asks for elevation rather than re-launching at runtime.
-    expect(option('win', 'requestedExecutionLevel')).toBe('requireAdministrator')
-  })
-
-  it('installs per-machine whenever the app manifest requires admin', () => {
-    // requestedExecutionLevel is applied to Kudu.exe only; the NSIS installer
-    // has a separate execution level derived from nsis.perMachine. If they
-    // disagree, the installer runs unelevated and installs an auto-elevating
-    // binary into user-writable %LOCALAPPDATA%\Programs — which both breaks the
-    // install and is a local privilege-escalation path, since the auto-launch
-    // task runs that exe with RunLevel HighestAvailable.
-    if (option('win', 'requestedExecutionLevel') === 'requireAdministrator') {
-      expect(option('nsis', 'perMachine')).toBe('true')
+  it.each([['ubuntu-latest', Arch.x64]])(
+    'builds only native Linux release targets on %s',
+    (runner, architecture) => {
+      const release = load(
+        readFileSync(path.resolve(__dirname, '../../.github/workflows/release.yml'), 'utf8')
+      ) as any
+      const job = release.jobs.build.strategy.matrix.include.find((job: any) => job.os === runner)
+      const args = configureBuildCommand(createYargs()).parseSync(job['build-args'].split(/\s+/))
+      const options = normalizeOptions(args)
+      // Exercise electron-builder's actual config fallback: architecture flags
+      // alone still expand the two architectures declared in electron-builder.yml.
+      const targets = computeArchToTargetNamesMap(
+        options.targets!.get(Platform.LINUX)!,
+        { platformSpecificBuildOptions: (load(CONFIG) as any).linux } as any,
+        Platform.LINUX
+      )
+      expect([...targets]).toEqual([[architecture, ['AppImage', 'deb']]])
     }
+  )
+
+  it('runs the app executable with least privilege', () => {
+    // Fabric Cleaner runs as the invoking user. Privileged features request
+    // elevation on demand instead of the manifest forcing a UAC prompt.
+    expect(option('win', 'requestedExecutionLevel')).toBe('asInvoker')
+  })
+
+  it('installs per-machine so the binary is not user-writable', () => {
+    // A per-user install puts the exe in %LOCALAPPDATA%\Programs, which any
+    // unprivileged process can replace. Program Files cannot be.
+    expect(option('nsis', 'perMachine')).toBe('true')
   })
 
   it('keeps the one-click installer flow', () => {
@@ -80,20 +74,20 @@ describe('electron-builder.yml', () => {
 
   it('publishes a Windows portable artifact alongside NSIS', () => {
     expect(block('win').some((l) => l.includes('target: portable'))).toBe(true)
-    expect(option('portable', 'artifactName')).toBe('Kudu-Portable-${version}.${ext}')
-    expect(option('portable', 'requestExecutionLevel')).toBe('admin')
+    expect(option('portable', 'artifactName')).toBe('Fabric-Cleaner-Portable-${version}.${ext}')
+    expect(option('portable', 'requestExecutionLevel')).toBe('user')
     expect((load(CONFIG) as any).afterAllArtifactBuild).toBe('scripts/build-portable-zip.js')
   })
 
   it('publishes a stable AppImage name for in-place Linux auto-update', () => {
     // Versioned AppImage basenames make electron-updater write a new file and
     // delete the old one, breaking desktop Exec= paths (#401).
-    expect(option('appImage', 'artifactName')).toBe('Kudu-${arch}.${ext}')
+    expect(option('appImage', 'artifactName')).toBe('Fabric-Cleaner-${arch}.${ext}')
     expect(option('appImage', 'artifactName')).not.toContain('${version}')
   })
 
   it('keeps versioned Linux deb artifact names', () => {
-    expect(option('deb', 'artifactName')).toBe('Kudu-${version}-${arch}.${ext}')
+    expect(option('deb', 'artifactName')).toBe('Fabric-Cleaner-${version}-${arch}.${ext}')
   })
 
   it('publishes Linux AppImage for x64 and arm64', () => {
@@ -110,7 +104,7 @@ describe('electron-builder.yml', () => {
     expect(appImageBlock.some((l) => l.trim() === '- arm64')).toBe(true)
   })
 
-  it('stages native ARM64 builds without publishing over x64 update metadata', () => {
+  it('stages release builds without publishing during packaging', () => {
     // Both architectures must reach verification separately, with no runner
     // able to publish or overwrite the other's manifest during packaging.
     const release = load(
@@ -119,10 +113,11 @@ describe('electron-builder.yml', () => {
         'utf-8'
       )
     ) as any
-    expect(release.jobs.build.strategy.matrix.include).toContainEqual({
-      os: 'ubuntu-24.04-arm',
-      'build-args': '--linux AppImage deb --arm64'
-    })
+    // Standard GitHub-hosted runners only (no ARM runners on this private repo).
+    for (const job of release.jobs.build.strategy.matrix.include)
+      expect(['windows-latest', 'macos-latest', 'ubuntu-latest']).toContain(job.os)
+    // Releases are manual: pushing a tag must never publish.
+    expect(Object.keys(release.on)).toEqual(['workflow_dispatch'])
     const buildSteps = release.jobs.build.steps as { run?: string }[]
     const packaging = buildSteps.map((step) => step.run || '').join('\n')
     expect(packaging).toContain('--publish never')

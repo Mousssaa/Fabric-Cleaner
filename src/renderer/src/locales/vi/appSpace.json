@@ -5,7 +5,7 @@
   "scanning": "Đang phân tích...",
   "refresh": "Làm mới phân tích",
   "introTitle": "Ứng dụng của bạn, với dung lượng được giải thích rõ ràng.",
-  "introDescription": "So sánh dung lượng cài đặt được báo cáo với các tệp mà Kudu có thể đưa ra để xem lại trước khi dọn dẹp. Tìm ra những cơ hội giải phóng dung lượng lớn nhất trước khi bạn dọn dẹp.",
+  "introDescription": "So sánh dung lượng cài đặt được báo cáo với các tệp mà Fabric Cleaner có thể đưa ra để xem lại trước khi dọn dẹp. Tìm ra những cơ hội giải phóng dung lượng lớn nhất trước khi bạn dọn dẹp.",
   "privacy": "Phân tích chỉ được thực hiện trên thiết bị này. Không có gì bị xóa trong quá trình phân tích.",
   "installed": "Kích thước đã cài đặt",
   "cache": "Tệp có thể xem lại",

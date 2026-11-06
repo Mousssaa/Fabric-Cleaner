@@ -16,7 +16,7 @@ vi.mock('./deletion-log-store', () => ({ recordDeletions: () => {} }))
 import { cleanItems, getDirectorySize } from './file-utils'
 const roots: string[] = []
 async function root() {
-  const p = await mkdtemp(join(tmpdir(), 'kudu-measure-'))
+  const p = await mkdtemp(join(tmpdir(), 'fc-measure-'))
   roots.push(p)
   return p
 }

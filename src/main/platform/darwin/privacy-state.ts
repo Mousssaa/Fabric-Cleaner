@@ -20,7 +20,9 @@ interface StoreFile {
 }
 
 function storePath(): string {
-  const dir = app.isPackaged ? app.getPath('userData') : join(app.getPath('userData'), 'Kudu-Dev')
+  const dir = app.isPackaged
+    ? app.getPath('userData')
+    : join(app.getPath('userData'), 'Fabric-Cleaner-Dev')
   return join(dir, 'privacy-prior-state.json')
 }
 

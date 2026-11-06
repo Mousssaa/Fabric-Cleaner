@@ -5,7 +5,7 @@
   "scanning": "Analyse en cours...",
   "refresh": "Actualiser l’analyse",
   "introTitle": "Vos applications, avec une explication de l’espace occupé.",
-  "introDescription": "Comparez les tailles d’installation signalées avec les fichiers que Kudu peut proposer à l’examen pour le nettoyage. Repérez les meilleures opportunités avant de nettoyer.",
+  "introDescription": "Comparez les tailles d’installation signalées avec les fichiers que Fabric Cleaner peut proposer à l’examen pour le nettoyage. Repérez les meilleures opportunités avant de nettoyer.",
   "privacy": "L’analyse reste sur cet appareil. Rien n’est supprimé pendant l’analyse.",
   "installed": "Taille installée",
   "cache": "Fichiers examinables",

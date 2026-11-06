@@ -435,7 +435,9 @@ export function StartupPage() {
   const safetyLoading = useStartupStore((s) => s.safetyLoading)
   const expandedItemId = useStartupStore((s) => s.expandedItemId)
 
-  const isCloudLinked = !!useSettingsStore((s) => s.settings.cloud.apiKey)
+  // Reputation ratings came from Kudu Cloud. Fabric Cloud is local-first, so
+  // they stay off until a threat intelligence provider is wired in.
+  const isCloudLinked = false as boolean
 
   const store = useStartupStore
 
@@ -443,7 +445,7 @@ export function StartupPage() {
     store.getState().setLoading(true)
     store.getState().setError(null)
     try {
-      const list = await window.kudu.startupList()
+      const list = await window.fabric.startupList()
       store.getState().setItems(list)
     } catch (err) {
       console.error('Failed to load startup items:', err)
@@ -455,7 +457,7 @@ export function StartupPage() {
   const loadBootTrace = useCallback(async () => {
     store.getState().setTraceLoading(true)
     try {
-      const trace = await window.kudu.startupBootTrace()
+      const trace = await window.fabric.startupBootTrace()
       store.getState().setBootTrace(trace)
     } catch (err) {
       console.error('Failed to load boot trace:', err)
@@ -483,7 +485,7 @@ export function StartupPage() {
     const startTime = Date.now()
     store.getState().updateItem(item.id, { enabled })
     try {
-      const success = await window.kudu.startupToggle(
+      const success = await window.fabric.startupToggle(
         item.name,
         item.location,
         item.command,
@@ -546,7 +548,7 @@ export function StartupPage() {
   const handleDelete = async (item: StartupItem) => {
     const startTime = Date.now()
     try {
-      const success = await window.kudu.startupDelete(
+      const success = await window.fabric.startupDelete(
         item.name,
         item.source === 'startup-folder' ? item.command : item.location,
         item.source

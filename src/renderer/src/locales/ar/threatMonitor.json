@@ -1,30 +1,13 @@
 {
   "pageTitle": "مراقب التهديدات",
-  "pageDescription": "مراقبة فورية لاتصالات الشبكة مقارنةً بقوائم التهديدات المعروفة.",
-  "checkingConnection": "جارٍ التحقق من اتصال Kudu Cloud…",
-  "cloudNotConfigured": {
-    "title": "يتطلب Kudu Cloud Pro",
-    "description": "قم بتوصيل هذا الجهاز بـ Kudu Cloud Pro لتلقي القائمة السوداء الحالية للتهديدات ومراقبة نشاط الشبكة المشبوه.",
-    "action": "عرض Kudu Cloud"
-  },
-  "connectionError": {
-    "title": "اتصال Cloud يحتاج إلى انتباه",
-    "description": "يحتوي هذا الجهاز على مفتاح Cloud محفوظ، لكنه لم يعد مخولًا. راجع الاتصال واربطه مرة أخرى.",
-    "action": "مراجعة اتصال Cloud"
-  },
-  "planRequired": {
-    "title": "يتطلب Kudu Cloud Pro",
-    "description": "مراقبة التهديدات هي ميزة Pro. قم بترقية خطة Cloud الخاصة بك لتلقي القائمة السوداء المباشرة للتهديدات على هذا الجهاز.",
-    "action": "عرض خطط Cloud"
-  },
+  "pageDescription": "قارن اتصالات الشبكة الحالية وذاكرة DNS على هذا الجهاز بقائمة حظر تستوردها. يعمل بالكامل على هذا الجهاز.",
   "loading": "جارٍ التحميل...",
   "inactive": {
-    "title": "مراقب التهديدات غير نشط",
-    "description": "Cloud متصل، ولكن لا تتوفر أي قائمة سوداء للتهديدات حتى الآن. تحقق من خطة Pro الخاصة بك أو حاول مرة أخرى بعد إعادة اتصال وكيل Cloud.",
-    "action": "مراجعة خطة Cloud"
+    "title": "لم يتم استيراد قائمة حظر",
+    "description": "استورد قائمة حظر محلية (نطاقات أو عناوين IP أو نطاقات CIDR، عنصر في كل سطر، أو ملف JSON) لبدء المراقبة. لا يتم تنزيل أو إرسال أي شيء."
   },
   "statusBar": {
-    "blacklistVersion": "القائمة السوداء",
+    "blacklistVersion": "قائمة الحظر",
     "connectionsScanned": "تم فحص الاتصالات {{time}}",
     "dnsScanned": "تم فحص DNS {{time}}",
     "threatsDetected": "تم اكتشاف {{count}} تهديد",
@@ -37,5 +20,20 @@
   },
   "flaggedConnections": "الاتصالات التي تم وضع علامة عليها",
   "flaggedDnsEntries": "إدخالات DNS التي تم وضع علامة عليها",
-  "connectionPid": "PID {{pid}}"
+  "connectionPid": "PID {{pid}}",
+  "local": {
+    "running": "المراقبة تعمل",
+    "stopped": "متوقفة",
+    "noBlocklist": "لا توجد قائمة حظر محلية",
+    "blocklistSummary": "{{domains}} نطاق · {{ips}} عنوان IP · {{cidrs}} نطاق CIDR",
+    "import": "استيراد قائمة حظر",
+    "start": "بدء المراقبة",
+    "stop": "إيقاف",
+    "clear": "إزالة قائمة الحظر",
+    "importSuccess": "تم استيراد قائمة الحظر",
+    "importFailed": "تعذّر استيراد قائمة الحظر",
+    "readyTitle": "جاهز للمراقبة",
+    "readyDescription": "تم تحميل قائمة الحظر. ابدأ المراقبة لفحص الاتصالات كل 30 ثانية وذاكرة DNS كل دقيقة.",
+    "privacyNote": "الوضع المحلي: بيانات الاتصالات لا تغادر هذا الجهاز أبدًا."
+  }
 }

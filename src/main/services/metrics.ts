@@ -16,16 +16,16 @@ export async function collectMetrics(): Promise<MetricLine[]> {
 
   // App info
   metrics.push({
-    name: 'kudu_info',
+    name: 'fabric_cleaner_info',
     type: 'gauge',
-    help: 'Kudu application info',
+    help: 'Fabric Cleaner application info',
     labels: { version: app.getVersion(), platform: process.platform, arch: process.arch },
     value: 1
   })
 
   // System uptime
   metrics.push({
-    name: 'kudu_system_uptime_seconds',
+    name: 'fabric_cleaner_system_uptime_seconds',
     type: 'gauge',
     help: 'System uptime in seconds',
     value: os.uptime()
@@ -36,21 +36,21 @@ export async function collectMetrics(): Promise<MetricLine[]> {
     const [load, mem] = await Promise.all([si.currentLoad(), si.mem()])
 
     metrics.push({
-      name: 'kudu_system_cpu_usage_percent',
+      name: 'fabric_cleaner_system_cpu_usage_percent',
       type: 'gauge',
       help: 'Current CPU usage percentage',
       value: Math.round(load.currentLoad * 100) / 100
     })
 
     metrics.push({
-      name: 'kudu_system_memory_total_bytes',
+      name: 'fabric_cleaner_system_memory_total_bytes',
       type: 'gauge',
       help: 'Total system memory in bytes',
       value: mem.total
     })
 
     metrics.push({
-      name: 'kudu_system_memory_used_bytes',
+      name: 'fabric_cleaner_system_memory_used_bytes',
       type: 'gauge',
       help: 'Used system memory in bytes',
       value: mem.used
@@ -65,7 +65,7 @@ export async function collectMetrics(): Promise<MetricLine[]> {
   const history = getHistory()
 
   metrics.push({
-    name: 'kudu_scans_total',
+    name: 'fabric_cleaner_scans_total',
     type: 'gauge',
     help: 'Total number of scans in history',
     value: history.length
@@ -73,7 +73,7 @@ export async function collectMetrics(): Promise<MetricLine[]> {
 
   const totalItemsCleaned = history.reduce((s, e) => s + e.totalItemsCleaned, 0)
   metrics.push({
-    name: 'kudu_items_cleaned_total',
+    name: 'fabric_cleaner_items_cleaned_total',
     type: 'gauge',
     help: 'Total items cleaned across history',
     value: totalItemsCleaned
@@ -81,7 +81,7 @@ export async function collectMetrics(): Promise<MetricLine[]> {
 
   const totalSpaceSaved = history.reduce((s, e) => s + e.totalSpaceSaved, 0)
   metrics.push({
-    name: 'kudu_space_saved_bytes_total',
+    name: 'fabric_cleaner_space_saved_bytes_total',
     type: 'gauge',
     help: 'Total space saved in bytes across history',
     value: totalSpaceSaved
@@ -89,7 +89,7 @@ export async function collectMetrics(): Promise<MetricLine[]> {
 
   const totalErrors = history.reduce((s, e) => s + e.errorCount, 0)
   metrics.push({
-    name: 'kudu_scan_errors_total',
+    name: 'fabric_cleaner_scan_errors_total',
     type: 'gauge',
     help: 'Total scan errors across history',
     value: totalErrors
@@ -98,21 +98,21 @@ export async function collectMetrics(): Promise<MetricLine[]> {
   if (history.length > 0) {
     const latest = history[0]
     metrics.push({
-      name: 'kudu_last_scan_timestamp_seconds',
+      name: 'fabric_cleaner_last_scan_timestamp_seconds',
       type: 'gauge',
       help: 'Timestamp of the most recent scan in seconds since epoch',
       value: Math.floor(new Date(latest.timestamp).getTime() / 1000)
     })
 
     metrics.push({
-      name: 'kudu_last_scan_duration_seconds',
+      name: 'fabric_cleaner_last_scan_duration_seconds',
       type: 'gauge',
       help: 'Duration of the most recent scan in seconds',
       value: Math.round((latest.duration / 1000) * 100) / 100
     })
 
     metrics.push({
-      name: 'kudu_last_scan_items_found',
+      name: 'fabric_cleaner_last_scan_items_found',
       type: 'gauge',
       help: 'Number of items found in the most recent scan',
       value: latest.totalItemsFound

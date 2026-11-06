@@ -804,13 +804,13 @@ summary,
 .app-content > * {
   width: 100%;
 }
-.kudu-sidebar nav {
+.fc-sidebar nav {
   scrollbar-width: none;
 }
-.kudu-sidebar nav::-webkit-scrollbar {
+.fc-sidebar nav::-webkit-scrollbar {
   display: none;
 }
-.kudu-sidebar [role='group'] > div:first-child span {
+.fc-sidebar [role='group'] > div:first-child span {
   color: var(--nav-section-fg) !important;
   letter-spacing: 0.13em;
 }
@@ -1046,17 +1046,17 @@ thead {
     padding-right: 24px;
     padding-left: 24px;
   }
-  .kudu-sidebar {
+  .fc-sidebar {
     width: 78px !important;
   }
-  .kudu-sidebar .calm-nav-item {
+  .fc-sidebar .calm-nav-item {
     justify-content: center;
     padding-right: 0;
     padding-left: 0;
   }
-  .kudu-sidebar .calm-nav-item > span,
-  .kudu-sidebar .calm-nav-item > svg:last-child,
-  .kudu-sidebar [role='group'] > div:first-child,
+  .fc-sidebar .calm-nav-item > span,
+  .fc-sidebar .calm-nav-item > svg:last-child,
+  .fc-sidebar [role='group'] > div:first-child,
   .automatic-care-card,
   .sidebar-submenu {
     display: none;
@@ -1454,37 +1454,37 @@ thead {
   }
 }
 
-/* Kudu 2.0 home — briefing-led layout with an independent care rail. */
+/* Fabric Cleaner 2.0 home — briefing-led layout with an independent care rail. */
 .app-content[data-route='/'] {
   padding: 0;
 }
-.kudu-home {
+.fc-home {
   min-height: 100%;
 }
-.kudu-home-grid {
+.fc-home-grid {
   display: grid;
   min-height: 100%;
   grid-template-columns: minmax(0, 1fr) 306px;
 }
-.kudu-home-main {
+.fc-home-main {
   min-width: 0;
   padding: 34px 38px 52px;
 }
-.kudu-home-greeting {
+.fc-home-greeting {
   display: flex;
   min-height: 92px;
   align-items: center;
   justify-content: space-between;
   gap: 28px;
 }
-.kudu-home-kicker {
+.fc-home-kicker {
   margin: 0 0 4px !important;
   color: var(--brand-solid) !important;
   font-size: 8px !important;
   font-weight: 800;
   letter-spacing: 0.18em;
 }
-.kudu-home-greeting h1 {
+.fc-home-greeting h1 {
   margin: 0;
   color: var(--text-primary);
   font-size: clamp(27px, 2.3vw, 36px);
@@ -1492,12 +1492,12 @@ thead {
   letter-spacing: -0.048em;
   line-height: 1.08;
 }
-.kudu-home-greeting p:not(.kudu-home-kicker) {
+.fc-home-greeting p:not(.fc-home-kicker) {
   margin: 7px 0 0;
   color: var(--text-muted);
   font-size: 11px;
 }
-.kudu-device-avatar {
+.fc-device-avatar {
   display: grid;
   width: 40px;
   height: 40px;
@@ -1510,7 +1510,7 @@ thead {
   font-size: 12px;
   font-weight: 800;
 }
-.kudu-briefing {
+.fc-briefing {
   position: relative;
   display: grid;
   min-height: 166px;
@@ -1524,8 +1524,8 @@ thead {
   box-shadow: 0 18px 46px rgba(15, 45, 36, 0.11);
   color: #f8f5ec;
 }
-.kudu-briefing::before,
-.kudu-briefing::after {
+.fc-briefing::before,
+.fc-briefing::after {
   position: absolute;
   right: -74px;
   width: 240px;
@@ -1534,27 +1534,27 @@ thead {
   border-radius: 50%;
   content: '';
 }
-.kudu-briefing::before {
+.fc-briefing::before {
   top: -108px;
 }
-.kudu-briefing::after {
+.fc-briefing::after {
   bottom: -160px;
   right: -1px;
   border-width: 30px;
   opacity: 0.55;
 }
-.kudu-briefing-copy {
+.fc-briefing-copy {
   position: relative;
   z-index: 1;
   min-width: 0;
 }
-.kudu-briefing-copy > span {
+.fc-briefing-copy > span {
   color: #9eb8ae;
   font-size: 8px;
   font-weight: 800;
   letter-spacing: 0.2em;
 }
-.kudu-briefing h2 {
+.fc-briefing h2 {
   max-width: 680px;
   margin: 10px 0 7px;
   color: #fffaf0;
@@ -1563,52 +1563,52 @@ thead {
   letter-spacing: -0.04em;
   line-height: 1.13;
 }
-.kudu-briefing p {
+.fc-briefing p {
   max-width: 650px;
   margin: 0;
   color: #b9ccc5;
   font-size: 10px;
   line-height: 1.55;
 }
-.kudu-briefing-score {
+.fc-briefing-score {
   position: relative;
   z-index: 2;
   display: grid;
   place-items: center;
 }
-.kudu-briefing-score .text-white {
+.fc-briefing-score .text-white {
   color: #fffaf0 !important;
 }
-.kudu-briefing-score span:last-child {
+.fc-briefing-score span:last-child {
   color: #b9ccc5 !important;
 }
-.kudu-home-section {
+.fc-home-section {
   margin-top: 25px;
 }
-.kudu-section-title {
+.fc-section-title {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 18px;
   margin-bottom: 10px;
 }
-.kudu-section-title h2 {
+.fc-section-title h2 {
   margin: 0;
   color: var(--text-primary);
   font-size: 12px;
   font-weight: 760;
   letter-spacing: -0.015em;
 }
-.kudu-section-title span {
+.fc-section-title span {
   color: var(--text-muted);
   font-size: 8px;
 }
-.kudu-recommendations {
+.fc-recommendations {
   display: grid;
   grid-template-columns: 1.35fr 0.9fr;
   gap: 12px;
 }
-.kudu-recommendation {
+.fc-recommendation {
   display: grid;
   min-height: 74px;
   grid-template-columns: 40px minmax(0, 1fr) auto;
@@ -1626,20 +1626,20 @@ thead {
     border-color 0.18s ease,
     box-shadow 0.18s ease;
 }
-.kudu-recommendation:hover {
+.fc-recommendation:hover {
   transform: translateY(-1px);
   border-color: var(--border-strong);
   box-shadow: 0 12px 26px rgba(20, 46, 38, 0.08);
 }
-.kudu-recommendation:disabled {
+.fc-recommendation:disabled {
   opacity: 0.6;
 }
-.kudu-recommendation.is-primary {
+.fc-recommendation.is-primary {
   border-color: #f3b640;
   background: #f3b640;
   color: #193a31;
 }
-.kudu-recommendation-icon {
+.fc-recommendation-icon {
   display: grid;
   width: 40px;
   height: 40px;
@@ -1648,20 +1648,20 @@ thead {
   background: var(--brand-surface);
   color: var(--brand-solid);
 }
-.kudu-recommendation-icon svg {
+.fc-recommendation-icon svg {
   width: 18px;
   height: 18px;
 }
-.kudu-recommendation.is-primary .kudu-recommendation-icon {
+.fc-recommendation.is-primary .fc-recommendation-icon {
   background: #174438;
   color: #fff7e8;
 }
-.kudu-recommendation b {
+.fc-recommendation b {
   display: block;
   font-size: 11px;
   font-weight: 760;
 }
-.kudu-recommendation small {
+.fc-recommendation small {
   display: block;
   overflow: hidden;
   margin-top: 2px;
@@ -1670,15 +1670,15 @@ thead {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.kudu-recommendation.is-primary small {
+.fc-recommendation.is-primary small {
   color: #29483f;
 }
-.kudu-recommendation > i {
+.fc-recommendation > i {
   font-size: 15px;
   font-style: normal;
   opacity: 0.45;
 }
-.kudu-operation {
+.fc-operation {
   margin-top: 14px;
   padding: 13px 15px;
   border: 1px solid var(--accent-muted-border);
@@ -1686,57 +1686,57 @@ thead {
   background: var(--accent-muted-bg);
   color: var(--text-secondary);
 }
-.kudu-operation > div:first-child {
+.fc-operation > div:first-child {
   display: flex;
   align-items: center;
   gap: 10px;
 }
-.kudu-operation > div:first-child > span {
+.fc-operation > div:first-child > span {
   flex: 1;
   font-size: 10px;
 }
-.kudu-operation > div:first-child > b {
+.fc-operation > div:first-child > b {
   color: var(--text-muted);
   font-size: 9px;
 }
-.kudu-operation-track,
-.kudu-drive-track,
-.kudu-glance-track {
+.fc-operation-track,
+.fc-drive-track,
+.fc-glance-track {
   overflow: hidden;
   border-radius: 99px;
   background: var(--bg-subtle-2);
 }
-.kudu-operation-track {
+.fc-operation-track {
   height: 4px;
   margin-top: 10px;
 }
-.kudu-operation-track i {
+.fc-operation-track i {
   display: block;
   height: 100%;
   border-radius: inherit;
   background: var(--accent);
 }
-.kudu-operation.is-complete,
-.kudu-operation.is-warning {
+.fc-operation.is-complete,
+.fc-operation.is-warning {
   display: flex;
   align-items: flex-start;
   gap: 10px;
 }
-.kudu-operation.is-complete {
+.fc-operation.is-complete {
   border-color: color-mix(in srgb, var(--success), transparent 72%);
   background: color-mix(in srgb, var(--success), transparent 91%);
   color: var(--success);
 }
-.kudu-operation.is-warning {
+.fc-operation.is-warning {
   border-color: color-mix(in srgb, var(--danger), transparent 68%);
   background: color-mix(in srgb, var(--danger), transparent 91%);
   color: var(--danger);
 }
-.kudu-operation:is(.is-complete, .is-warning) b {
+.fc-operation:is(.is-complete, .is-warning) b {
   color: var(--text-primary);
   font-size: 10px;
 }
-.kudu-operation:is(.is-complete, .is-warning) p {
+.fc-operation:is(.is-complete, .is-warning) p {
   display: flex;
   flex-wrap: wrap;
   gap: 5px 14px;
@@ -1744,25 +1744,25 @@ thead {
   color: var(--text-muted);
   font-size: 9px;
 }
-.kudu-operation:is(.is-complete, .is-warning) button {
+.fc-operation:is(.is-complete, .is-warning) button {
   border: 0;
   background: none;
   color: var(--brand-solid);
   font: inherit;
 }
-.kudu-glance-grid {
+.fc-glance-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
 }
-.kudu-glance-card {
+.fc-glance-card {
   padding: 14px 15px;
   border: 1px solid var(--border-default);
   border-radius: 15px;
   background: var(--card-bg);
   box-shadow: 0 3px 14px rgba(20, 46, 38, 0.03);
 }
-.kudu-glance-meta {
+.fc-glance-meta {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1770,52 +1770,52 @@ thead {
   color: var(--text-muted);
   font-size: 8px;
 }
-.kudu-glance-meta > span {
+.fc-glance-meta > span {
   display: flex;
   align-items: center;
   gap: 6px;
 }
-.kudu-glance-meta svg {
+.fc-glance-meta svg {
   width: 12px;
   height: 12px;
 }
-.kudu-glance-meta b {
+.fc-glance-meta b {
   color: var(--text-muted);
   font-size: 8px;
   font-weight: 600;
 }
-.kudu-glance-card h3 {
+.fc-glance-card h3 {
   margin: 7px 0 9px;
   color: var(--text-primary);
   font-size: 15px;
   font-weight: 740;
   letter-spacing: -0.025em;
 }
-.kudu-glance-track {
+.fc-glance-track {
   height: 4px;
 }
-.kudu-glance-track i {
+.fc-glance-track i {
   display: block;
   height: 100%;
   border-radius: inherit;
 }
-.kudu-glance-card.is-gold .kudu-glance-track i {
+.fc-glance-card.is-gold .fc-glance-track i {
   background: #eaae37;
 }
-.kudu-glance-card.is-green .kudu-glance-track i {
+.fc-glance-card.is-green .fc-glance-track i {
   background: #729989;
 }
-.kudu-glance-card.is-clay .kudu-glance-track i {
+.fc-glance-card.is-clay .fc-glance-track i {
   background: #c98058;
 }
-.kudu-activity-strip {
+.fc-activity-strip {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   margin-top: 14px;
   border-top: 1px solid var(--border-subtle);
   border-bottom: 1px solid var(--border-subtle);
 }
-.kudu-activity-strip > div {
+.fc-activity-strip > div {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
@@ -1823,18 +1823,18 @@ thead {
   padding: 12px 15px;
   border-right: 1px solid var(--border-subtle);
 }
-.kudu-activity-strip > div:last-child {
+.fc-activity-strip > div:last-child {
   border-right: 0;
 }
-.kudu-activity-strip span {
+.fc-activity-strip span {
   color: var(--text-muted);
   font-size: 8px;
 }
-.kudu-activity-strip b {
+.fc-activity-strip b {
   color: var(--text-primary);
   font-size: 10px;
 }
-.kudu-cloud-upsell {
+.fc-cloud-upsell {
   position: relative;
   display: grid;
   overflow: hidden;
@@ -1854,7 +1854,7 @@ thead {
     var(--card-bg);
   box-shadow: 0 8px 28px rgba(20, 46, 38, 0.045);
 }
-.kudu-cloud-upsell::after {
+.fc-cloud-upsell::after {
   position: absolute;
   right: 105px;
   width: 150px;
@@ -1864,11 +1864,11 @@ thead {
   content: '';
   pointer-events: none;
 }
-.kudu-cloud-upsell > * {
+.fc-cloud-upsell > * {
   position: relative;
   z-index: 1;
 }
-.kudu-cloud-upsell-icon {
+.fc-cloud-upsell-icon {
   display: grid;
   width: 44px;
   height: 44px;
@@ -1878,35 +1878,35 @@ thead {
   background: var(--brand-surface);
   color: var(--brand-solid);
 }
-.kudu-cloud-upsell-icon svg {
+.fc-cloud-upsell-icon svg {
   width: 19px;
   height: 19px;
 }
-.kudu-cloud-upsell-copy {
+.fc-cloud-upsell-copy {
   min-width: 0;
 }
-.kudu-cloud-upsell-copy > span {
+.fc-cloud-upsell-copy > span {
   color: var(--brand-solid);
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.13em;
   text-transform: uppercase;
 }
-.kudu-cloud-upsell h2 {
+.fc-cloud-upsell h2 {
   margin: 4px 0 3px;
   color: var(--text-primary);
   font-size: 15px;
   font-weight: 760;
   letter-spacing: -0.02em;
 }
-.kudu-cloud-upsell p {
+.fc-cloud-upsell p {
   max-width: 730px;
   margin: 0;
   color: var(--text-muted);
   font-size: 12px;
   line-height: 1.55;
 }
-.kudu-cloud-upsell > button {
+.fc-cloud-upsell > button {
   display: flex;
   min-height: 40px;
   align-items: center;
@@ -1924,12 +1924,12 @@ thead {
     background 0.18s ease,
     transform 0.18s ease;
 }
-.kudu-cloud-upsell > button:hover {
+.fc-cloud-upsell > button:hover {
   transform: translateY(-1px);
   border-color: color-mix(in srgb, var(--brand-solid), transparent 55%);
   background: color-mix(in srgb, var(--brand-solid), transparent 88%);
 }
-.kudu-attention-rail {
+.fc-attention-rail {
   display: flex;
   min-height: 100%;
   flex-direction: column;
@@ -1937,27 +1937,27 @@ thead {
   border-left: 1px solid var(--border-default);
   background: var(--sidebar-bg);
 }
-.kudu-attention-heading {
+.fc-attention-heading {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
   gap: 14px;
   padding-bottom: 15px;
 }
-.kudu-attention-heading span {
+.fc-attention-heading span {
   color: var(--text-dim);
   font-size: 7px;
   font-weight: 800;
   letter-spacing: 0.18em;
 }
-.kudu-attention-heading h2 {
+.fc-attention-heading h2 {
   margin: 3px 0 0;
   color: var(--text-primary);
   font-size: 13px;
   font-weight: 760;
   letter-spacing: -0.02em;
 }
-.kudu-attention-heading > b {
+.fc-attention-heading > b {
   display: grid;
   min-width: 24px;
   height: 24px;
@@ -1967,10 +1967,10 @@ thead {
   color: #1b392f;
   font-size: 9px;
 }
-.kudu-attention-list {
+.fc-attention-list {
   border-bottom: 1px solid var(--border-default);
 }
-.kudu-attention-list > button {
+.fc-attention-list > button {
   display: grid;
   width: 100%;
   grid-template-columns: 32px minmax(0, 1fr) auto;
@@ -1983,10 +1983,10 @@ thead {
   color: var(--text-primary);
   text-align: left;
 }
-.kudu-attention-list > button:hover b {
+.fc-attention-list > button:hover b {
   color: var(--brand-solid);
 }
-.kudu-attention-icon {
+.fc-attention-icon {
   display: grid;
   width: 30px;
   height: 30px;
@@ -1996,37 +1996,37 @@ thead {
   background: var(--card-bg);
   color: var(--brand-solid);
 }
-.kudu-attention-icon svg {
+.fc-attention-icon svg {
   width: 13px;
   height: 13px;
 }
-.kudu-attention-icon.is-success {
+.fc-attention-icon.is-success {
   color: var(--success);
 }
-.kudu-attention-list b,
-.kudu-rail-link b {
+.fc-attention-list b,
+.fc-rail-link b {
   display: block;
   color: var(--text-primary);
   font-size: 9px;
   font-weight: 720;
   transition: color 0.18s ease;
 }
-.kudu-attention-list small,
-.kudu-rail-link small {
+.fc-attention-list small,
+.fc-rail-link small {
   display: block;
   margin-top: 2px;
   color: var(--text-muted);
   font-size: 7px;
   line-height: 1.45;
 }
-.kudu-attention-list em {
+.fc-attention-list em {
   color: #a46b13;
   font-size: 7px;
   font-style: normal;
   font-weight: 800;
   letter-spacing: 0.06em;
 }
-.kudu-drive-card {
+.fc-drive-card {
   margin-top: 22px;
   padding: 16px;
   border: 1px solid var(--border-default);
@@ -2034,37 +2034,37 @@ thead {
   background: var(--card-bg);
   box-shadow: 0 5px 18px rgba(20, 46, 38, 0.035);
 }
-.kudu-drive-card > div:first-child {
+.fc-drive-card > div:first-child {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
 }
-.kudu-drive-card b {
+.fc-drive-card b {
   color: var(--text-primary);
   font-size: 8px;
 }
-.kudu-drive-card span {
+.fc-drive-card span {
   color: var(--text-secondary);
   font-size: 7px;
 }
-.kudu-drive-track {
+.fc-drive-track {
   height: 4px;
   margin-top: 13px;
 }
-.kudu-drive-track i {
+.fc-drive-track i {
   display: block;
   height: 100%;
   border-radius: inherit;
   background: #e8ad3b;
 }
-.kudu-drive-card p {
+.fc-drive-card p {
   margin: 8px 0 0;
   color: var(--text-muted);
   font-size: 7px;
   line-height: 1.5;
 }
-.kudu-drive-card button {
+.fc-drive-card button {
   margin: 9px 0 0;
   padding: 0;
   border: 0;
@@ -2073,7 +2073,7 @@ thead {
   font-size: 8px;
   font-weight: 700;
 }
-.kudu-rail-link {
+.fc-rail-link {
   display: grid;
   width: 100%;
   grid-template-columns: 32px minmax(0, 1fr) auto;
@@ -2087,11 +2087,11 @@ thead {
   color: var(--text-primary);
   text-align: left;
 }
-.kudu-rail-link > i {
+.fc-rail-link > i {
   color: var(--text-dim);
   font-style: normal;
 }
-.kudu-cloud-status {
+.fc-cloud-status {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -2103,14 +2103,14 @@ thead {
   font-size: 8px;
   text-align: left;
 }
-.kudu-cloud-status > i {
+.fc-cloud-status > i {
   width: 7px;
   height: 7px;
   border-radius: 50%;
   background: var(--text-faint);
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--text-faint), transparent 86%);
 }
-.kudu-cloud-status > i.is-connected {
+.fc-cloud-status > i.is-connected {
   background: var(--success);
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--success), transparent 85%);
 }
@@ -2126,26 +2126,26 @@ thead {
   backdrop-filter: blur(18px);
 }
 
-.dark .kudu-briefing {
+.dark .fc-briefing {
   background: #12392f;
   box-shadow: 0 18px 46px rgba(0, 0, 0, 0.22);
 }
-.dark .kudu-recommendation.is-primary {
+.dark .fc-recommendation.is-primary {
   border-color: #d99f35;
   background: #d99f35;
 }
-.dark .kudu-attention-list em {
+.dark .fc-attention-list em {
   color: #e5ad49;
 }
-.light .kudu-attention-list em {
+.light .fc-attention-list em {
   color: #875506;
 }
 
 @media (max-width: 1160px) {
-  .kudu-home-grid {
+  .fc-home-grid {
     grid-template-columns: minmax(0, 1fr) 272px;
   }
-  .kudu-home-main {
+  .fc-home-main {
     padding-right: 28px;
     padding-left: 28px;
   }
@@ -2154,46 +2154,46 @@ thead {
   .app-content[data-route='/'] {
     overflow-y: auto;
   }
-  .kudu-home-grid {
+  .fc-home-grid {
     grid-template-columns: 1fr;
   }
-  .kudu-attention-rail {
+  .fc-attention-rail {
     min-height: auto;
     border-top: 1px solid var(--border-default);
     border-left: 0;
   }
-  .kudu-cloud-status {
+  .fc-cloud-status {
     margin-top: 18px;
   }
 }
 @media (max-width: 680px) {
-  .kudu-home-main {
+  .fc-home-main {
     padding: 24px 20px 36px;
   }
-  .kudu-briefing {
+  .fc-briefing {
     grid-template-columns: 1fr;
   }
-  .kudu-briefing-score {
+  .fc-briefing-score {
     display: none;
   }
-  .kudu-recommendations,
-  .kudu-glance-grid {
+  .fc-recommendations,
+  .fc-glance-grid {
     grid-template-columns: 1fr;
   }
-  .kudu-activity-strip {
+  .fc-activity-strip {
     grid-template-columns: 1fr;
   }
-  .kudu-activity-strip > div {
+  .fc-activity-strip > div {
     border-right: 0;
     border-bottom: 1px solid var(--border-subtle);
   }
-  .kudu-activity-strip > div:last-child {
+  .fc-activity-strip > div:last-child {
     border-bottom: 0;
   }
-  .kudu-cloud-upsell {
+  .fc-cloud-upsell {
     grid-template-columns: 44px minmax(0, 1fr);
   }
-  .kudu-cloud-upsell > button {
+  .fc-cloud-upsell > button {
     grid-column: 1 / -1;
     justify-content: center;
   }
@@ -2442,14 +2442,14 @@ body {
 .window-control {
   height: 48px;
 }
-.kudu-sidebar {
+.fc-sidebar {
   width: 224px !important;
 }
 .calm-nav-item {
   min-height: 44px;
   font-size: 13px !important;
 }
-.kudu-sidebar [role='group'] > div:first-child span {
+.fc-sidebar [role='group'] > div:first-child span {
   font-size: 12px !important;
 }
 .automatic-care-card {
@@ -2541,106 +2541,106 @@ body {
   color: var(--text-dim) !important;
 }
 
-.kudu-home,
-.kudu-home-grid {
+.fc-home,
+.fc-home-grid {
   min-height: calc(100vh - 48px);
 }
-.kudu-home-main {
+.fc-home-main {
   padding-top: 38px;
 }
-.kudu-home-greeting {
+.fc-home-greeting {
   min-height: 105px;
 }
-.kudu-home-kicker {
+.fc-home-kicker {
   margin-bottom: 6px !important;
   font-size: 12px !important;
 }
-.kudu-home-greeting h1 {
+.fc-home-greeting h1 {
   font-size: clamp(31px, 2.5vw, 40px);
 }
-.kudu-home-greeting p:not(.kudu-home-kicker) {
+.fc-home-greeting p:not(.fc-home-kicker) {
   margin-top: 9px;
   font-size: 13px;
 }
-.kudu-device-avatar {
+.fc-device-avatar {
   width: 44px;
   height: 44px;
   flex-basis: 44px;
   font-size: 13px;
 }
-.kudu-briefing {
+.fc-briefing {
   min-height: 188px;
   padding: 29px 32px;
   grid-template-columns: minmax(0, 1fr) 188px;
 }
-.kudu-briefing-copy > span {
+.fc-briefing-copy > span {
   font-size: 12px;
 }
-.kudu-briefing h2 {
+.fc-briefing h2 {
   margin-top: 12px;
   font-size: clamp(26px, 2.25vw, 34px);
 }
-.kudu-briefing p {
+.fc-briefing p {
   max-width: 710px;
   font-size: 13px;
   line-height: 1.6;
 }
-.kudu-home-section {
+.fc-home-section {
   margin-top: 29px;
 }
-.kudu-section-title {
+.fc-section-title {
   margin-bottom: 12px;
 }
-.kudu-section-title h2 {
+.fc-section-title h2 {
   font-size: 15px;
 }
-.kudu-section-title span {
+.fc-section-title span {
   font-size: 12px;
 }
-.kudu-recommendation {
+.fc-recommendation {
   min-height: 84px;
   padding: 15px 18px;
 }
-.kudu-recommendation b {
+.fc-recommendation b {
   font-size: 13px;
 }
-.kudu-recommendation small {
+.fc-recommendation small {
   margin-top: 4px;
   font-size: 12px;
 }
-.kudu-recommendation > i {
+.fc-recommendation > i {
   font-size: 18px;
 }
-.kudu-glance-card {
+.fc-glance-card {
   position: relative;
   min-height: 126px;
   padding: 16px 17px;
   --glance-color: #eaae37;
 }
-.kudu-glance-card.is-green {
+.fc-glance-card.is-green {
   --glance-color: #729989;
 }
-.kudu-glance-card.is-clay {
+.fc-glance-card.is-clay {
   --glance-color: #c98058;
 }
-.kudu-glance-meta {
+.fc-glance-meta {
   font-size: 12px;
 }
-.kudu-glance-meta svg {
+.fc-glance-meta svg {
   width: 14px;
   height: 14px;
 }
-.kudu-glance-body {
+.fc-glance-body {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 14px;
 }
-.kudu-glance-card h3 {
+.fc-glance-card h3 {
   margin: 10px 0 12px;
   font-size: 18px;
 }
-.kudu-glance-dial {
+.fc-glance-dial {
   position: relative;
   display: grid;
   width: 42px;
@@ -2649,20 +2649,20 @@ body {
   place-items: center;
   border-radius: 50%;
 }
-.kudu-glance-dial::before {
+.fc-glance-dial::before {
   position: absolute;
   inset: 5px;
   border-radius: 50%;
   background: var(--card-bg);
   content: '';
 }
-.kudu-glance-dial span {
+.fc-glance-dial span {
   position: relative;
   color: var(--text-secondary);
   font-size: 12px;
   font-weight: 750;
 }
-.kudu-glance-track {
+.fc-glance-track {
   position: relative;
   height: 5px;
   background:
@@ -2680,85 +2680,85 @@ body {
     ),
     var(--bg-subtle-2);
 }
-.kudu-activity-strip span {
+.fc-activity-strip span {
   font-size: 12px;
 }
-.kudu-activity-strip b {
+.fc-activity-strip b {
   font-size: 12px;
 }
-.kudu-operation > div:first-child > span,
-.kudu-operation:is(.is-complete, .is-warning) b {
+.fc-operation > div:first-child > span,
+.fc-operation:is(.is-complete, .is-warning) b {
   font-size: 12px;
 }
-.kudu-operation > div:first-child > b,
-.kudu-operation:is(.is-complete, .is-warning) p {
+.fc-operation > div:first-child > b,
+.fc-operation:is(.is-complete, .is-warning) p {
   font-size: 12px;
 }
 
-.kudu-attention-rail {
+.fc-attention-rail {
   min-height: calc(100vh - 48px);
   align-self: stretch;
   padding: 42px 27px 29px;
 }
-.kudu-attention-heading {
+.fc-attention-heading {
   padding-bottom: 18px;
 }
-.kudu-attention-heading span {
+.fc-attention-heading span {
   font-size: 12px;
 }
-.kudu-attention-heading h2 {
+.fc-attention-heading h2 {
   margin-top: 5px;
   font-size: 16px;
 }
-.kudu-attention-heading > b {
+.fc-attention-heading > b {
   min-width: 28px;
   height: 28px;
   font-size: 11px;
 }
-.kudu-attention-list > button {
+.fc-attention-list > button {
   grid-template-columns: 38px minmax(0, 1fr) auto;
   gap: 11px;
   padding: 17px 0;
 }
-.kudu-attention-icon {
+.fc-attention-icon {
   width: 36px;
   height: 36px;
   border-radius: 12px;
 }
-.kudu-attention-icon svg {
+.fc-attention-icon svg {
   width: 16px;
   height: 16px;
 }
-.kudu-attention-list b,
-.kudu-rail-link b {
+.fc-attention-list b,
+.fc-rail-link b {
   font-size: 13px;
 }
-.kudu-attention-list small,
-.kudu-rail-link small {
+.fc-attention-list small,
+.fc-rail-link small {
   margin-top: 3px;
   font-size: 12px;
 }
-.kudu-attention-list em {
+.fc-attention-list em {
   font-size: 12px;
 }
-.kudu-drive-card {
+.fc-drive-card {
   padding: 18px;
 }
-.kudu-drive-card b {
+.fc-drive-card b {
   font-size: 12px;
 }
-.kudu-drive-card span {
+.fc-drive-card span {
   font-size: 12px;
 }
-.kudu-drive-card p {
+.fc-drive-card p {
   margin-top: 10px;
   font-size: 12px;
 }
-.kudu-drive-card button {
+.fc-drive-card button {
   margin-top: 11px;
   font-size: 12px;
 }
-.kudu-cloud-status {
+.fc-cloud-status {
   font-size: 12px;
 }
 
@@ -2913,12 +2913,12 @@ body {
 }
 
 /* Accessibility floor for navigation chrome that sits outside app-content. */
-.kudu-sidebar .text-\[8px\],
-.kudu-sidebar .text-\[9px\],
-.kudu-sidebar .text-\[10px\] {
+.fc-sidebar .text-\[8px\],
+.fc-sidebar .text-\[9px\],
+.fc-sidebar .text-\[10px\] {
   font-size: 12px !important;
 }
-.kudu-sidebar .h-\[16px\] {
+.fc-sidebar .h-\[16px\] {
   min-width: 20px !important;
   height: 20px !important;
 }
@@ -3081,7 +3081,7 @@ body {
     width: 82px;
     flex-basis: 82px;
   }
-  .kudu-sidebar {
+  .fc-sidebar {
     width: 82px !important;
   }
 }
@@ -3092,14 +3092,14 @@ body {
   }
 }
 @media (max-width: 920px) {
-  .kudu-home,
-  .kudu-home-grid,
-  .kudu-attention-rail {
+  .fc-home,
+  .fc-home-grid,
+  .fc-attention-rail {
     min-height: auto;
   }
 }
 
-/* Native-modern window shell. The OS owns its controls; Kudu owns the canvas around them. */
+/* Native-modern window shell. The OS owns its controls; Fabric Cleaner owns the canvas around them. */
 html,
 body,
 #root,
@@ -3155,7 +3155,7 @@ body,
   padding-right: 8px;
 }
 
-.kudu-sidebar {
+.fc-sidebar {
   background: var(--sidebar-bg) !important;
   backdrop-filter: blur(32px) saturate(1.08);
   -webkit-backdrop-filter: blur(32px) saturate(1.08);

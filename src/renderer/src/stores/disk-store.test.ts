@@ -26,7 +26,7 @@ describe('disk request lifecycle', () => {
   it('shows enumeration until settled, deduplicates requests and selects an available drive', async () => {
     const request = deferred<DriveInfo[]>()
     const diskDrives = vi.fn(() => request.promise)
-    vi.stubGlobal('window', { kudu: { diskDrives } })
+    vi.stubGlobal('window', { fabric: { diskDrives } })
     const pending = useDiskStore.getState().loadDrives()
     expect(useDiskStore.getState().drivesLoading).toBe(true)
     await useDiskStore.getState().loadDrives()
@@ -38,7 +38,7 @@ describe('disk request lifecycle', () => {
 
   it('exits enumeration on rejection and allows retry', async () => {
     const diskDrives = vi.fn().mockRejectedValueOnce(new Error('offline')).mockResolvedValue([])
-    vi.stubGlobal('window', { kudu: { diskDrives } })
+    vi.stubGlobal('window', { fabric: { diskDrives } })
     await expect(useDiskStore.getState().loadDrives()).rejects.toThrow('offline')
     expect(useDiskStore.getState().drivesLoading).toBe(false)
     await useDiskStore.getState().loadDrives()
@@ -49,7 +49,7 @@ describe('disk request lifecycle', () => {
     const request = deferred<DiskNode>()
     const diskAnalyze = vi.fn(() => request.promise)
     const diskFileTypes = vi.fn()
-    vi.stubGlobal('window', { kudu: { diskAnalyze, diskFileTypes } })
+    vi.stubGlobal('window', { fabric: { diskAnalyze, diskFileTypes } })
     useDiskStore.setState({
       data: tree,
       breadcrumb: [tree],
@@ -86,7 +86,7 @@ describe('disk request lifecycle', () => {
         .fn()
         .mockRejectedValueOnce(new Error('cancelled'))
         .mockResolvedValue(action === 'analyze' ? tree : [])
-      vi.stubGlobal('window', { kudu: { diskAnalyze: request, diskFileTypes: request } })
+      vi.stubGlobal('window', { fabric: { diskAnalyze: request, diskFileTypes: request } })
       await expect(useDiskStore.getState()[action]()).rejects.toThrow('cancelled')
       expect(useDiskStore.getState()).toMatchObject({
         analyzing: false,

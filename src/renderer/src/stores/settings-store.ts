@@ -1,14 +1,14 @@
 import { create } from 'zustand'
-import type { KuduSettings } from '@shared/types'
+import type { FabricSettings } from '@shared/types'
 
 interface SettingsState {
-  settings: KuduSettings
+  settings: FabricSettings
   loaded: boolean
-  setSettings: (settings: KuduSettings) => void
-  updateSettings: (partial: Partial<KuduSettings>) => void
+  setSettings: (settings: FabricSettings) => void
+  updateSettings: (partial: Partial<FabricSettings>) => void
 }
 
-export const defaultSettings: KuduSettings = {
+export const defaultSettings: FabricSettings = {
   theme: 'system',
   dashboardView: 'simple',
   language: 'en',
@@ -25,6 +25,7 @@ export const defaultSettings: KuduSettings = {
   cleaner: {
     skipRecentMinutes: 60,
     secureDelete: false,
+    disposalMode: 'trash',
     closeBrowsersBeforeClean: false,
     createRestorePoint: false,
     protectRecycleBin: true,
@@ -42,17 +43,6 @@ export const defaultSettings: KuduSettings = {
     hour: 9
   },
   schedules: [],
-  cloud: {
-    apiKey: '',
-    telemetryIntervalSec: 60,
-    shareDiskHealth: true,
-    shareProcessList: true,
-    shareThreatMonitor: true,
-    allowRemotePower: false,
-    allowRemoteCleanup: false,
-    allowRemoteInstalls: false,
-    allowRemoteConfig: false
-  },
   windowsPackageManager: 'winget',
   windowsPackageManagers: ['winget', 'choco', 'scoop', 'npm'],
   gameMode: {
@@ -90,7 +80,6 @@ export const useSettingsStore = create<SettingsState>((set) => ({
         schedule: { ...s.settings.schedule, ...(partial.schedule ?? {}) },
         // schedules is an array — replace entirely when provided
         schedules: partial.schedules ?? s.settings.schedules,
-        cloud: { ...s.settings.cloud, ...(partial.cloud ?? {}) },
         gameMode: { ...s.settings.gameMode, ...(partial.gameMode ?? {}) }
       }
     }))
@@ -98,7 +87,7 @@ export const useSettingsStore = create<SettingsState>((set) => ({
 
 /** Re-fetch settings from main process into the store */
 export function refreshSettings(): void {
-  window.kudu
+  window.fabric
     ?.settingsGet?.()
     .then((settings) => {
       useSettingsStore.getState().setSettings(settings)
@@ -108,6 +97,6 @@ export function refreshSettings(): void {
 
 // Hydrate settings eagerly so pages that depend on them (e.g. ThreatMonitorPage)
 // don't see stale defaults before the user visits Settings.
-if (typeof window !== 'undefined' && window.kudu) {
+if (typeof window !== 'undefined' && window.fabric) {
   refreshSettings()
 }

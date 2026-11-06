@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ShieldAlert, X } from 'lucide-react'
+import { toast } from 'sonner'
 import { usePlatform } from '@/hooks/usePlatform'
 import { useSettingsStore } from '@/stores/settings-store'
 
@@ -14,12 +15,12 @@ export function AdminBanner() {
   const autoRelaunchTried = useRef(false)
 
   useEffect(() => {
-    window.kudu.elevationCheck().then((elevated) => {
+    window.fabric.elevationCheck().then((elevated) => {
       if (elevated) return
       setVisible(true)
       if (!loaded || !preferElevatedLaunch || autoRelaunchTried.current) return
       autoRelaunchTried.current = true
-      window.kudu.elevationRelaunch()
+      window.fabric.elevationRelaunch().catch(() => {})
     })
   }, [loaded, preferElevatedLaunch])
 
@@ -44,7 +45,14 @@ export function AdminBanner() {
       />
       <span className="text-zinc-300">{t('adminBannerMessage')}</span>
       <button
-        onClick={() => window.kudu.elevationRelaunch()}
+        onClick={async () => {
+          try {
+            const result = await window.fabric.elevationRelaunch()
+            if (result?.declined) toast.info(t('elevationDeclined'))
+          } catch {
+            toast.info(t('elevationDeclined'))
+          }
+        }}
         className="ml-1 shrink-0 rounded-lg px-3 py-1 text-xs font-semibold transition-colors"
         style={{ background: 'var(--accent-muted-bg)', color: 'var(--warning)' }}
       >

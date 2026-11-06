@@ -17,7 +17,6 @@
     "items": "megtisztított elem",
     "cleanups": "elvégzett tisztítás",
     "tagline": "Kevesebb felesleg. Több hely annak, ami számít.",
-    "footer": "Tisztítva a Kuduval · Ingyenes és nyílt forráskódú",
     "privacy": "Helyben készült. Csak az összesítések és az általános kategóriák szerepelnek benne — fájlútvonalak és számítógép-azonosítók nélkül.",
     "save": "PNG mentése",
     "copyImage": "Kép másolása",
@@ -26,12 +25,12 @@
     "copied": "Vágólapra másolva",
     "exportError": "A kép exportálása nem sikerült. Próbáld meg a PNG mentését megosztás vagy másolás helyett.",
     "copyError": "A képaláírás másolása nem sikerült. Ellenőrizd a vágólaphoz kapcsolódó engedélyeket.",
-    "caption": "A Kuduval {{space}} tárhelyet szabadítottam fel, és {{items}} elemet tisztítottam meg. Ingyenes és nyílt forráskódú. Oszd meg az eredményeidet, és segíts, hogy a Kudu mindannyiunk számára fejlődhessen. https://usekudu.com",
-    "communityTitle": "Segíts, hogy a Kudu mindannyiunk számára fejlődhessen.",
-    "communityDescription": "A tisztításod megosztásával többen ismerhetik meg a Kudu-t, és erősödik az ingyenes, nyílt forráskódú tisztító mögött álló közösség. Minden megosztás számít.",
+    "caption": "A a Fabric Cleanerrel {{space}} tárhelyet szabadítottam fel, és {{items}} elemet tisztítottam meg. Ingyenes és nyílt forráskódú. Oszd meg az eredményeidet, és segíts, hogy a Fabric Cleaner mindannyiunk számára fejlődhessen. https://github.com/Mousssaa/Fabric-Cleaner",
+    "communityTitle": "Segíts, hogy a Fabric Cleaner mindannyiunk számára fejlődhessen.",
+    "communityDescription": "A tisztításod megosztásával többen ismerhetik meg a Fabric-Cleaner-t, és erősödik az ingyenes, nyílt forráskódú tisztító mögött álló közösség. Minden megosztás számít.",
     "platforms": "Megosztás platformon",
     "openPlatform": "Megosztás itt: {{platform}} (böngészőben nyílik meg)",
-    "postTitle": "{{space}} tárhelyet szabadítottam fel a Kuduval, egy ingyenes, nyílt forráskódú tisztítóval",
+    "postTitle": "{{space}} tárhelyet szabadítottam fel a a Fabric Cleanerrel, egy ingyenes, nyílt forráskódú tisztítóval",
     "discord": "Másolás Discordhoz",
     "discordCopied": "A kártya és a képaláírás másolva. Illeszd be a Discord-csevegésbe vagy -csatornába.",
     "destinations": "A platformgombok egy piszkozatot vagy megosztási képernyőt nyitnak meg. Illeszd be a kártyát a Kép másolása funkcióval, vagy csatold a mentett PNG-t, majd tedd közzé, amikor készen állsz.",
@@ -77,6 +76,5 @@
   "close": "Bezárás",
   "dismiss": "Elvetés",
   "skipToMainContent": "Ugrás a fő tartalomra",
-  "windowTitlebar": "Kudu ablak címsora",
-  "checkingCloudConnection": "Kudu Cloud kapcsolat ellenőrzése…"
+  "windowTitlebar": "Fabric Cleaner ablak címsora"
 }

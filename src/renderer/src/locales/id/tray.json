@@ -1,12 +1,12 @@
 {
-  "trayTooltip": "Kudu",
-  "openKudu": "Buka Kudu",
+  "trayTooltip": "Fabric Cleaner",
+  "openKudu": "Buka Fabric Cleaner",
   "quit": "Keluar",
-  "scheduledTaskNotificationTitle": "Kudu - Tugas Terjadwal",
+  "scheduledTaskNotificationTitle": "Fabric Cleaner - Tugas Terjadwal",
   "scheduledTaskNotificationBody": "Menjalankan \"{{name}}\"...",
-  "scanCompleteNotificationTitle": "Kudu - Pemindaian Selesai",
+  "scanCompleteNotificationTitle": "Fabric Cleaner - Pemindaian Selesai",
   "scanCompleteNotificationBody": "Ditemukan {{itemCount}} item ({{sizeMB}} MB) yang dapat dibersihkan.",
   "scheduledScanName": "Pemindaian Terjadwal",
-  "rendererStartupFailureTitle": "Kudu tidak dapat dimulai",
-  "rendererStartupFailureMessage": "Kudu tidak dapat memulai antarmukanya dan harus ditutup. Harap sertakan berkas log yang ditampilkan di bawah saat melaporkan masalah ini."
+  "rendererStartupFailureTitle": "Fabric Cleaner tidak dapat dimulai",
+  "rendererStartupFailureMessage": "Fabric Cleaner tidak dapat memulai antarmukanya dan harus ditutup. Harap sertakan berkas log yang ditampilkan di bawah saat melaporkan masalah ini."
 }

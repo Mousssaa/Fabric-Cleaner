@@ -17,7 +17,6 @@
     "items": "개 항목 정리됨",
     "cleanups": "회 정리 완료",
     "tagline": "더 적은 잡동사니. 더 많은 여유 공간.",
-    "footer": "Kudu로 정리함 · 무료 및 오픈 소스",
     "privacy": "로컬에서 생성됩니다. 총합과 일반 범주만 포함되며, 파일 경로나 컴퓨터 식별자는 포함되지 않습니다.",
     "save": "PNG 저장",
     "copyImage": "이미지 복사",
@@ -26,7 +25,7 @@
     "copied": "클립보드에 복사됨",
     "exportError": "이미지를 내보낼 수 없습니다. 공유하거나 복사하는 대신 PNG 저장을 시도해 보세요.",
     "copyError": "캡션을 복사할 수 없습니다. 클립보드 권한을 확인해 주세요.",
-    "caption": "Kudu로 {{space}}를 복구하고 {{items}}개 항목을 정리했습니다. 무료 및 오픈 소스입니다. 결과를 공유하고 Kudu가 모두를 위해 성장할 수 있도록 도와주세요. https://usekudu.com",
+    "caption": "Kudu로 {{space}}를 복구하고 {{items}}개 항목을 정리했습니다. 무료 및 오픈 소스입니다. 결과를 공유하고 Kudu가 모두를 위해 성장할 수 있도록 도와주세요. https://github.com/Mousssaa/Fabric-Cleaner",
     "communityTitle": "모두를 위해 Kudu의 성장을 도와주세요.",
     "communityDescription": "정리 결과를 공유하면 더 많은 사람들이 Kudu를 알게 되고, 무료 오픈 소스 클리너를 만드는 커뮤니티가 성장합니다. 모든 공유가 변화를 만듭니다.",
     "platforms": "플랫폼에 공유",
@@ -77,6 +76,5 @@
   "close": "닫기",
   "dismiss": "닫기",
   "skipToMainContent": "본문으로 건너뛰기",
-  "windowTitlebar": "Kudu 창 제목 표시줄",
-  "checkingCloudConnection": "Kudu Cloud 연결 확인 중…"
+  "windowTitlebar": "Fabric Cleaner 창 제목 표시줄"
 }

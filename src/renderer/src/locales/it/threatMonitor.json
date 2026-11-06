@@ -1,30 +1,8 @@
 {
   "pageTitle": "Monitor minacce",
-  "pageDescription": "Monitoraggio in tempo reale delle connessioni di rete rispetto a elenchi di minacce noti.",
-  "checkingConnection": "Verifica della connessione a Kudu Cloud…",
-  "cloudNotConfigured": {
-    "title": "Kudu Cloud Pro richiesto",
-    "description": "Collega questo dispositivo a Kudu Cloud Pro per ricevere l'attuale blacklist delle minacce e monitorare l'attività di rete sospetta.",
-    "action": "Visualizza Kudu Cloud"
-  },
-  "connectionError": {
-    "title": "La connessione Cloud richiede attenzione",
-    "description": "Questo dispositivo ha una chiave Cloud salvata, ma non è più autorizzata. Controlla la connessione e collegalo di nuovo.",
-    "action": "Controlla la connessione Cloud"
-  },
-  "planRequired": {
-    "title": "Kudu Cloud Pro richiesto",
-    "description": "Il monitoraggio delle minacce è una funzionalità Pro. Aggiorna il tuo piano Cloud per ricevere la blacklist delle minacce in tempo reale su questo dispositivo.",
-    "action": "Visualizza i piani Cloud"
-  },
   "loading": "Caricamento...",
-  "inactive": {
-    "title": "Monitor minacce inattivo",
-    "description": "Cloud è connesso, ma non è ancora disponibile alcuna blacklist delle minacce. Controlla il tuo piano Pro o riprova dopo la riconnessione dell'agente Cloud.",
-    "action": "Controlla il piano Cloud"
-  },
+  "inactive": {},
   "statusBar": {
-    "blacklistVersion": "Blacklist",
     "connectionsScanned": "Connessioni analizzate {{time}}",
     "dnsScanned": "DNS analizzati {{time}}",
     "threatsDetected": "{{count}} minaccia rilevata",

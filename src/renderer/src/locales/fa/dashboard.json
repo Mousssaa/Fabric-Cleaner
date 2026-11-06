@@ -17,13 +17,6 @@
   "statusLastScan": "آخرین اسکن",
   "statusLastScanNever": "هنوز اسکن نشده",
   "statusTotalScans": "تعداد کل اسکن‌ها",
-  "statusCloud": "فضای ابری",
-  "statusCloudConnected": "متصل",
-  "statusCloudNotConnected": "متصل نیست",
-  "cloudUpsellEyebrow": "ارتقای اختیاری به فضای ابری",
-  "cloudUpsellTitle": "چهار قابلیت قدرتمند فضای ابری را فعال کنید",
-  "cloudUpsellDescription": "از پایش تهدیدهای امنیتی، اسکن آسیب‌پذیری‌ها، هشدارهای نشت اطلاعات و مدیریت از راه دور بهره‌مند شوید. اشتراک شما همچنین به ادامهٔ توسعهٔ متن‌باز Kudu کمک می‌کند.",
-  "cloudUpsellAction": "آشنایی با Kudu Cloud",
   "toolLabelCleaner": "پاک‌سازی",
   "toolLabelRegistry": "رجیستری",
   "toolLabelDrivers": "درایورها",
@@ -92,17 +85,15 @@
   "toastStartupCheckFailed": "بررسی برنامه‌های شروع به کار ناموفق بود",
   "toastSoftwareUpdateCheckFailed": "بررسی به‌روزرسانی‌های نرم‌افزار ناموفق بود",
   "toastDriverCleanupFailed": "پاک‌سازی درایورها ناموفق بود",
-
   "greetingMorning": "صبح بخیر",
   "greetingAfternoon": "روز بخیر",
   "greetingEvening": "عصر بخیر",
   "greetingDeviceNeedsAttention": "دستگاه شما به بررسی نیاز دارد. {{count}} تهدید فعال باقی مانده است.",
   "greetingDeviceNeedsAttentionPlural": "دستگاه شما به بررسی نیاز دارد. {{count}} تهدید فعال باقی مانده‌اند.",
-  "greetingEstablishingStatus": "Kudu هنوز در حال بررسی وضعیت این دستگاه است. برای دریافت گزارش دقیق از وضعیت سیستم، بررسی‌های باقی‌مانده را کامل کنید.",
+  "greetingEstablishingStatus": "Fabric Cleaner هنوز در حال بررسی وضعیت این دستگاه است. برای دریافت گزارش دقیق از وضعیت سیستم، بررسی‌های باقی‌مانده را کامل کنید.",
   "greetingHealthyAllUpToDate": "سیستم شما وضعیت خوبی دارد و همهٔ موارد مهم به‌روز هستند.",
   "greetingChecksCompleteItems": "بررسی‌ها کامل شده‌اند. {{count}} مورد آمادهٔ بررسی است.",
   "greetingChecksCompleteItemsPlural": "بررسی‌ها کامل شده‌اند. {{count}} مورد آمادهٔ بررسی هستند.",
-
   "briefingEyebrow": "گزارش وضعیت سیستم امروز",
   "healthHeadlineThreats": "{{count}} تهدید نیاز به بررسی دارد.",
   "healthHeadlineThreatsPlural": "{{count}} تهدید نیاز به بررسی دارند.",
@@ -110,19 +101,16 @@
   "healthHeadlineProtected": "همهٔ موارد مهم تحت محافظت هستند.",
   "healthHeadlineGoodShape": "وضعیت دستگاه شما خوب است.",
   "healthHeadlineReady": "چند مورد وجود دارد که بهتر است بررسی کنید.",
-
   "briefingDescThreats": "{{count}} تهدید فعال نیاز به بررسی دارد.",
   "briefingDescThreatsPlural": "{{count}} تهدید فعال نیاز به بررسی دارند.",
   "briefingDescThreatsLastScan": " آخرین اسکن بدافزار در {{date}} انجام شد.",
-  "briefingDescClean": "در آخرین اسکن بدافزار در {{date}} هیچ تهدید فعالی پیدا نشد. Kudu از زمان شروع استفاده، در مجموع {{size}} فضا آزاد کرده است.",
+  "briefingDescClean": "در آخرین اسکن بدافزار در {{date}} هیچ تهدید فعالی پیدا نشد. Fabric Cleaner از زمان شروع استفاده، در مجموع {{size}} فضا آزاد کرده است.",
   "briefingDescBaseline": "یک اسکن کامل اجرا کنید تا وضعیت اولیهٔ امنیت سیستم مشخص شود و فرصت‌های امن برای پاک‌سازی شناسایی شوند.",
-
   "recommendedHeading": "پیشنهاد برای شما",
   "safeActionsOnly": "فقط اقدامات ایمن",
   "quickCleanSubtextDesc": "حافظهٔ پنهان مرورگر، باقی‌ماندهٔ دانلودها و فایل‌های موقت",
   "smartScanTitle": "اجرای اسکن هوشمند",
   "smartScanDesc": "بررسی امنیت، حریم خصوصی و عملکرد سیستم",
-
   "scanCompleteThreats": "اسکن کامل شد — تهدیدهایی نیاز به بررسی دارند",
   "threatsQuarantinedCount": "{{count}} مورد قرنطینه شد",
   "threatsActiveCount": "{{count}} تهدید همچنان فعال است",
@@ -130,7 +118,6 @@
   "privacyImprovementsCount": "{{count}} مورد برای بهبود حریم خصوصی",
   "startupItemsCount": "{{count}} برنامهٔ شروع به کار",
   "updatesCount": "{{count}} به‌روزرسانی",
-
   "systemGlanceHeading": "نگاهی سریع به وضعیت سیستم",
   "updatedJustNow": "همین الان به‌روز شد",
   "glanceProcessor": "پردازنده",
@@ -141,14 +128,11 @@
   "glanceChecking": "در حال بررسی…",
   "glanceStorage": "فضای ذخیره‌سازی",
   "glanceStorageUnavailable": "اطلاعات در دسترس نیست",
-
   "activitySpaceReclaimed": "فضای آزادشده",
   "activityFilesCleaned": "فایل‌های پاک‌سازی‌شده",
   "activityScansCompleted": "اسکن‌های انجام‌شده",
-
   "deviceCareEyebrow": "مراقبت از دستگاه",
   "deviceCareHeading": "نیاز به توجه شما دارد",
-
   "railCheckAppUpdates": "بررسی به‌روزرسانی برنامه‌ها",
   "railPendingAppUpdates": "{{count}} به‌روزرسانی برنامه",
   "railPendingAppUpdatesPlural": "{{count}} به‌روزرسانی برنامه",
@@ -159,7 +143,6 @@
   "railAction5Min": "۵ دقیقه",
   "railActionReview": "بررسی",
   "railActionDone": "انجام شد",
-
   "railCheckStartupApps": "بررسی برنامه‌های شروع به کار",
   "railStartupAppsAttention": "{{count}} برنامهٔ شروع به کار نیاز به بررسی دارد",
   "railStartupAppsAttentionPlural": "{{count}} برنامهٔ شروع به کار نیاز به بررسی دارند",
@@ -169,7 +152,6 @@
   "railStartupSubtextNone": "هیچ برنامه‌ای با تأثیر زیاد پیدا نشد",
   "railActionChecking": "در حال بررسی",
   "railActionCheck": "بررسی",
-
   "railThreatsAttention": "{{count}} تهدید نیاز به بررسی دارد",
   "railThreatsAttentionPlural": "{{count}} تهدید نیاز به بررسی دارند",
   "railFirstMalwareScan": "اجرای اولین اسکن بدافزار",
@@ -178,7 +160,6 @@
   "railMalwareSubtextBaseline": "وضعیت اولیهٔ امنیت سیستم را مشخص کنید",
   "railMalwareSubtextNone": "هیچ تهدید فعالی شناسایی نشد",
   "railActionStart": "شروع",
-
   "systemDriveLabel": "درایو سیستم",
   "storageChecking": "در حال بررسی فضای ذخیره‌سازی…",
   "storageUnavailable": "فضای ذخیره‌سازی در دسترس نیست",
@@ -187,12 +168,7 @@
   "storageCleanupRecommended": "بهتر است به‌زودی فضای ذخیره‌سازی را پاک‌سازی کنید.",
   "storagePlentyAvailable": "فضای کافی برای استفاده در دسترس است.",
   "openStorageTools": "باز کردن ابزارهای مدیریت فضای ذخیره‌سازی →",
-
   "gameModeActiveLabel": "حالت بازی فعال است",
   "gameModeReadyLabel": "حالت بازی آماده است",
-  "gameModeFocusResources": "پیش از شروع بازی، منابع سیستم را به بازی اختصاص دهید",
-
-  "cloudStatusConnected": "Kudu Cloud متصل است",
-  "cloudStatusNeedsAttention": "اتصال Kudu Cloud نیاز به بررسی دارد",
-  "cloudStatusConnect": "اتصال به Kudu Cloud"
+  "gameModeFocusResources": "پیش از شروع بازی، منابع سیستم را به بازی اختصاص دهید"
 }

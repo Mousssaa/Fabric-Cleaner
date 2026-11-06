@@ -17,7 +17,6 @@
     "items": "objekt rensade",
     "cleanups": "rensningar slutförda",
     "tagline": "Mindre röra. Mer plats för det som är viktigt.",
-    "footer": "Rensat med Kudu · Gratis och öppen källkod",
     "privacy": "Genererad lokalt. Endast totaler och allmänna kategorier ingår — inga filsökvägar eller datoridentifierare.",
     "save": "Spara PNG",
     "copyImage": "Kopiera bild",
@@ -26,12 +25,12 @@
     "copied": "Kopierad till Urklipp",
     "exportError": "Det gick inte att exportera bilden. Försök med Spara PNG i stället för att dela eller kopiera.",
     "copyError": "Det gick inte att kopiera bildtexten. Kontrollera behörigheterna för Urklipp.",
-    "caption": "Jag återvann {{space}} och rensade {{items}} objekt med Kudu. Gratis och öppen källkod. Dela dina resultat och hjälp Kudu att växa för oss alla. https://usekudu.com",
-    "communityTitle": "Hjälp Kudu att växa, för oss alla.",
-    "communityDescription": "När du delar din rensning hjälper du fler att upptäcka Kudu och stärker gemenskapen bakom ett gratis rengöringsverktyg med öppen källkod. Varje delning gör skillnad.",
+    "caption": "Jag återvann {{space}} och rensade {{items}} objekt med Fabric Cleaner. Gratis och öppen källkod. Dela dina resultat och hjälp Fabric Cleaner att växa för oss alla. https://github.com/Mousssaa/Fabric-Cleaner",
+    "communityTitle": "Hjälp Fabric Cleaner att växa, för oss alla.",
+    "communityDescription": "När du delar din rensning hjälper du fler att upptäcka Fabric Cleaner och stärker gemenskapen bakom ett gratis rengöringsverktyg med öppen källkod. Varje delning gör skillnad.",
     "platforms": "Dela till en plattform",
     "openPlatform": "Dela på {{platform}} (öppnas i webbläsaren)",
-    "postTitle": "Jag återvann {{space}} med Kudu, ett gratis rengöringsverktyg med öppen källkod",
+    "postTitle": "Jag återvann {{space}} med Fabric Cleaner, ett gratis rengöringsverktyg med öppen källkod",
     "discord": "Kopiera för Discord",
     "discordCopied": "Kort och bildtext kopierade. Klistra in i din Discord-chatt eller kanal.",
     "destinations": "Plattformsknappar öppnar ett utkast eller en delningsvy. Klistra in kortet med Kopiera bild, eller bifoga den sparade PNG-filen och publicera när du är redo.",
@@ -77,6 +76,5 @@
   "close": "Stäng",
   "dismiss": "Avvisa",
   "skipToMainContent": "Hoppa till huvudinnehåll",
-  "windowTitlebar": "Kudu fönstertitellist",
-  "checkingCloudConnection": "Kontrollerar anslutning till Kudu Cloud…"
+  "windowTitlebar": "Fabric Cleaner fönstertitellist"
 }

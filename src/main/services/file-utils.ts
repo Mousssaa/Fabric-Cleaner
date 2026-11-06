@@ -18,6 +18,7 @@ import { getSettings } from './settings-store'
 import { recordDeletions } from './deletion-log-store'
 import { CooperativeScheduler } from './cooperative-scheduler'
 import { trackMainWork } from './main-work'
+import { dispose, type DisposalMode } from './execution-engine'
 import { cleanupTreeSize, measureCleanupTree, removedCleanupEntries } from './cleanup-measurement'
 
 export interface DeleteResult {
@@ -437,6 +438,24 @@ export async function safeDelete(filePath: string): Promise<DeleteResult> {
   }
 }
 
+/** Disposal mode from settings. Secure delete is an explicit choice to destroy data. */
+export function currentDisposalMode(): DisposalMode {
+  const cleaner = getSettings().cleaner
+  if (cleaner.secureDelete) return 'permanent'
+  return cleaner.disposalMode === 'trash' ? 'trash' : 'permanent'
+}
+
+/**
+ * Remove one cleanup target through the ExecutionEngine (protected-path and
+ * link checks, Trash-first, local history). All cleaners use this.
+ */
+export function disposeCleanupPath(
+  path: string,
+  origin: DeletionOrigin = 'local'
+): Promise<DeleteResult> {
+  return dispose(path, { mode: currentDisposalMode(), origin, permanentDelete: safeDelete })
+}
+
 /**
  * Cap on how many descendants a single directory contributes to the deletion
  * log. Beyond this the record carries a `truncated` count, so a capped audit
@@ -657,7 +676,7 @@ async function cleanItemsNow(
       return
     }
 
-    const result = await safeDelete(item.path)
+    const result = await disposeCleanupPath(item.path, origin)
     if (result.success) {
       receipt.add(item, 'deleted', '', true, measuredSize)
       totalCleaned += measuredSize

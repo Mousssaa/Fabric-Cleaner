@@ -17,7 +17,6 @@
     "items": "item dibersihkan",
     "cleanups": "pembersihan selesai",
     "tagline": "Kurang kekusutan. Lebih banyak ruang untuk yang penting.",
-    "footer": "Dibersihkan dengan Kudu · Percuma & sumber terbuka",
     "privacy": "Dijana secara setempat. Hanya jumlah keseluruhan dan kategori umum disertakan — tiada laluan fail atau pengecam komputer.",
     "save": "Simpan PNG",
     "copyImage": "Salin imej",
@@ -26,12 +25,12 @@
     "copied": "Disalin ke papan klip",
     "exportError": "Tidak dapat mengeksport imej. Cuba Simpan PNG dan bukannya berkongsi atau menyalin.",
     "copyError": "Tidak dapat menyalin kapsyen. Sila semak kebenaran papan klip.",
-    "caption": "Saya memulihkan {{space}} dan membersihkan {{items}} item dengan Kudu. Percuma & sumber terbuka. Kongsi hasil anda dan bantu Kudu berkembang untuk kita semua. https://usekudu.com",
-    "communityTitle": "Bantu Kudu berkembang, untuk kita semua.",
-    "communityDescription": "Perkongsian pembersihan anda membantu lebih ramai orang menemui Kudu dan mengembangkan komuniti di sebalik pembersih percuma dan sumber terbuka. Setiap perkongsian membawa perubahan.",
+    "caption": "Saya memulihkan {{space}} dan membersihkan {{items}} item dengan Fabric Cleaner. Percuma & sumber terbuka. Kongsi hasil anda dan bantu Fabric Cleaner berkembang untuk kita semua. https://github.com/Mousssaa/Fabric-Cleaner",
+    "communityTitle": "Bantu Fabric Cleaner berkembang, untuk kita semua.",
+    "communityDescription": "Perkongsian pembersihan anda membantu lebih ramai orang menemui Fabric Cleaner dan mengembangkan komuniti di sebalik pembersih percuma dan sumber terbuka. Setiap perkongsian membawa perubahan.",
     "platforms": "Kongsi ke platform",
     "openPlatform": "Kongsi di {{platform}} (dibuka dalam pelayar)",
-    "postTitle": "Saya memulihkan {{space}} dengan Kudu, pembersih percuma dan sumber terbuka",
+    "postTitle": "Saya memulihkan {{space}} dengan Fabric Cleaner, pembersih percuma dan sumber terbuka",
     "discord": "Salin untuk Discord",
     "discordCopied": "Kad dan kapsyen disalin. Tampalkan ke dalam sembang atau saluran Discord anda.",
     "destinations": "Butang platform membuka draf atau skrin perkongsian. Tampalkan kad menggunakan Salin imej, atau lampirkan PNG yang disimpan, kemudian siarkan apabila anda bersedia.",
@@ -77,6 +76,5 @@
   "close": "Tutup",
   "dismiss": "Tolak",
   "skipToMainContent": "Langkau ke kandungan utama",
-  "windowTitlebar": "Bar tajuk tetingkap Kudu",
-  "checkingCloudConnection": "Memeriksa sambungan Kudu Cloud…"
+  "windowTitlebar": "Bar tajuk tetingkap Fabric Cleaner"
 }

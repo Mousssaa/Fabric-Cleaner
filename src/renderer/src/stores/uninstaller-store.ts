@@ -123,7 +123,7 @@ export const useUninstallerStore = create<UninstallerState>((set) => ({
   fetchSafetyRatings: async () => {
     set({ safetyLoading: true })
     try {
-      const result = await window.kudu.programSafetyFetch()
+      const result = await window.fabric.programSafetyFetch()
       const ratings = Array.isArray(result?.ratings) ? result.ratings : []
       set({
         safetyRatings: Object.fromEntries(ratings.map((r) => [r.name, r])),
@@ -157,11 +157,11 @@ export const useUninstallerStore = create<UninstallerState>((set) => ({
 let _programSafetyListenerRegistered = false
 if (
   typeof window !== 'undefined' &&
-  window.kudu?.onProgramSafetyUpdated &&
+  window.fabric?.onProgramSafetyUpdated &&
   !_programSafetyListenerRegistered
 ) {
   _programSafetyListenerRegistered = true
-  window.kudu.onProgramSafetyUpdated((result) => {
+  window.fabric.onProgramSafetyUpdated((result) => {
     const ratings = Array.isArray(result?.ratings) ? result.ratings : []
     useUninstallerStore.setState({
       safetyRatings: Object.fromEntries(ratings.map((r) => [r.name, r])),

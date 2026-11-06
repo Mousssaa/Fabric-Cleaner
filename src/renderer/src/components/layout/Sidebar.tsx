@@ -46,8 +46,6 @@ import { useAppUpdateStore } from '@/stores/app-update-store'
 import { useUpdaterStore } from '@/stores/updater-store'
 import { useDriverStore } from '@/stores/driver-store'
 import { useGameModeStore } from '@/stores/game-mode-store'
-import { useCveStore } from '@/stores/cve-store'
-import { useBreachStore } from '@/stores/breach-store'
 import { usePlatform } from '@/hooks/usePlatform'
 import { useSettingsStore } from '@/stores/settings-store'
 
@@ -57,7 +55,6 @@ interface SubItemDef {
   labelKey?: string
   path: string
   badge?: boolean
-  cloudTier?: 'basic' | 'pro'
   section?: 'storageOverview' | 'storageFileCleanup' | 'storageDiskCare'
 }
 
@@ -124,24 +121,9 @@ const navGroups: NavGroup[] = [
             icon: Radar,
             labelKey: 'threatMonitor:pageTitle',
             label: 'Threat Monitor',
-            path: '/threat-monitor',
-            cloudTier: 'pro'
+            path: '/threat-monitor'
           },
-          { icon: Flame, labelKey: 'firewallAudit', label: 'Firewall Audit', path: '/firewall' },
-          {
-            icon: Bug,
-            labelKey: 'cveScanner:pageTitle',
-            label: 'Vulnerability Scanner',
-            path: '/cve',
-            cloudTier: 'pro'
-          },
-          {
-            icon: Mail,
-            labelKey: 'breachMonitor:pageTitle',
-            label: 'Breach Monitor',
-            path: '/breach-monitor',
-            cloudTier: 'basic'
-          }
+          { icon: Flame, labelKey: 'firewallAudit', label: 'Firewall Audit', path: '/firewall' }
         ]
       },
       {
@@ -155,13 +137,6 @@ const navGroups: NavGroup[] = [
             labelKey: 'performance:pageTitle',
             label: 'Live Performance',
             path: '/performance'
-          },
-          {
-            icon: Activity,
-            labelKey: 'diagnostics:title',
-            label: 'Diagnostics',
-            path: '/performance-diagnostics',
-            cloudTier: 'pro'
           },
           {
             icon: Server,
@@ -312,7 +287,6 @@ function useBottomNavItems(): NavItemDef[] {
       path: '/settings',
       children: [
         { icon: Settings, labelKey: 'settings:pageTitle', label: 'Preferences', path: '/settings' },
-        { icon: Cloud, labelKey: 'cloud:pageTitle', label: 'Cloud', path: '/cloud' },
         {
           icon: Info,
           labelKey: 'settings:sectionAbout',
@@ -336,12 +310,6 @@ function useBadgeCounts(): Record<string, number> {
   const threatCount =
     (threatSnapshot?.flaggedConnections.length ?? 0) + (threatSnapshot?.flaggedDns.length ?? 0)
   const gameModeActive = useGameModeStore((s) => s.active)
-  const cveTotal = useCveStore((s) => s.total)
-  const breachEmails = useBreachStore((s) => s.emails)
-  const breachTotal = breachEmails.reduce(
-    (sum, e) => sum + e.breaches.filter((b) => !b.acknowledgedAt).length,
-    0
-  )
 
   const softwareUpdateCount = softwareUpdaterNotifications ? updaterApps.length : 0
   const updatesCount = softwareUpdateCount + driverUpdates.length
@@ -351,9 +319,7 @@ function useBadgeCounts(): Record<string, number> {
     '/software': updatesCount,
     '/drivers': driverUpdates.length,
     '/threat-monitor': threatCount,
-    '/game-mode': gameModeActive ? 1 : 0,
-    '/cve': cveTotal,
-    '/breach-monitor': breachTotal
+    '/game-mode': gameModeActive ? 1 : 0
   }
 }
 
@@ -375,7 +341,7 @@ export function Sidebar() {
   const showScheduleNudge = !hasAnySchedule && !scheduleNudgeDismissed
   const dismissScheduleNudge = useCallback(() => {
     updateSettings({ scheduleNudgeDismissed: true })
-    window.kudu?.settingsSet?.({ scheduleNudgeDismissed: true }).catch(() => {})
+    window.fabric?.settingsSet?.({ scheduleNudgeDismissed: true }).catch(() => {})
   }, [updateSettings])
 
   // Filter nav items based on platform features and cloud state
@@ -411,8 +377,7 @@ export function Sidebar() {
       .flatMap((group) => group.items)
       .find((item) => item.children?.some((child) => child.path === location.pathname))
     if (activeParent) setOpenSubmenu(activeParent.path)
-    else if (['/settings', '/cloud', '/about'].includes(location.pathname))
-      setOpenSubmenu('/settings')
+    else if (['/settings', '/about'].includes(location.pathname)) setOpenSubmenu('/settings')
   }, [location.pathname])
 
   // Keep group totals separate: a parent can share its path with a child.
@@ -443,7 +408,7 @@ export function Sidebar() {
 
   return (
     <div
-      className="kudu-sidebar flex h-full w-[214px] shrink-0 flex-col"
+      className="fc-sidebar flex h-full w-[214px] shrink-0 flex-col"
       style={{
         background: 'var(--sidebar-bg)',
         borderRight: '1px solid var(--border-medium)'
@@ -708,7 +673,6 @@ function NavItem({
                       {badgeCounts![child.path]}
                     </b>
                   )}
-                  {child.cloudTier && <CloudTierBadge tier={child.cloudTier} />}
                   {child.badge && <b>{t('badgeNew')}</b>}
                 </button>
               </Fragment>
@@ -866,7 +830,6 @@ function FlyoutMenu({
                     {badgeCounts![child.path]}
                   </span>
                 )}
-                {child.cloudTier && <CloudTierBadge tier={child.cloudTier} />}
                 {child.badge && (
                   <span
                     className="flex h-[16px] min-w-[16px] items-center justify-center rounded-full px-1 text-[8px] font-bold leading-none"
@@ -885,26 +848,5 @@ function FlyoutMenu({
         })}
       </div>
     </div>
-  )
-}
-
-function CloudTierBadge({ tier }: { tier: 'basic' | 'pro' }) {
-  const { t } = useTranslation('cloud')
-  const label = tier === 'pro' ? t('planProName') : t('planBasicName')
-  return (
-    <span
-      className="cloud-tier-badge"
-      style={{
-        background:
-          tier === 'pro'
-            ? 'var(--accent-muted-bg)'
-            : 'color-mix(in srgb, var(--info), transparent 89%)',
-        border: `1px solid ${tier === 'pro' ? 'var(--accent-muted-border)' : 'color-mix(in srgb, var(--info), transparent 72%)'}`,
-        color: tier === 'pro' ? 'var(--warning)' : 'var(--info)'
-      }}
-      aria-label={t('pageTitle') + ' ' + label}
-    >
-      {label}
-    </span>
   )
 }

@@ -17,7 +17,6 @@
     "items": "itens limpos",
     "cleanups": "limpezas concluídas",
     "tagline": "Menos desordem. Mais espaço para o que importa.",
-    "footer": "Limpo com Kudu · Gratuito e de código aberto",
     "privacy": "Gerado localmente. Apenas os totais e as categorias gerais são incluídos — sem caminhos de ficheiros nem identificadores do computador.",
     "save": "Guardar PNG",
     "copyImage": "Copiar imagem",
@@ -26,12 +25,12 @@
     "copied": "Copiado para a área de transferência",
     "exportError": "Não foi possível exportar a imagem. Experimente Guardar PNG em vez de partilhar ou copiar.",
     "copyError": "Não foi possível copiar a legenda. Verifique as permissões da área de transferência.",
-    "caption": "Recuperei {{space}} e limpei {{items}} itens com o Kudu. Gratuito e de código aberto. Partilhe os seus resultados e ajude o Kudu a crescer para todos nós. https://usekudu.com",
-    "communityTitle": "Ajude o Kudu a crescer, para todos nós.",
-    "communityDescription": "Partilhar a sua limpeza ajuda mais pessoas a descobrir o Kudu e faz crescer a comunidade por trás de um limpador gratuito e de código aberto. Cada partilha faz a diferença.",
+    "caption": "Recuperei {{space}} e limpei {{items}} itens com o Fabric Cleaner. Gratuito e de código aberto. Partilhe os seus resultados e ajude o Fabric Cleaner a crescer para todos nós. https://github.com/Mousssaa/Fabric-Cleaner",
+    "communityTitle": "Ajude o Fabric Cleaner a crescer, para todos nós.",
+    "communityDescription": "Partilhar a sua limpeza ajuda mais pessoas a descobrir o Fabric Cleaner e faz crescer a comunidade por trás de um limpador gratuito e de código aberto. Cada partilha faz a diferença.",
     "platforms": "Partilhar numa plataforma",
     "openPlatform": "Partilhar em {{platform}} (abre no navegador)",
-    "postTitle": "Recuperei {{space}} com o Kudu, um limpador gratuito e de código aberto",
+    "postTitle": "Recuperei {{space}} com o Fabric Cleaner, um limpador gratuito e de código aberto",
     "discord": "Copiar para o Discord",
     "discordCopied": "Cartão e legenda copiados. Cole na sua conversa ou canal do Discord.",
     "destinations": "Os botões das plataformas abrem um rascunho ou ecrã de partilha. Cole o cartão com Copiar imagem, ou anexe o PNG guardado e publique quando estiver pronto.",
@@ -77,6 +76,5 @@
   "close": "Fechar",
   "dismiss": "Dispensar",
   "skipToMainContent": "Pular para o conteúdo principal",
-  "windowTitlebar": "Barra de título do Kudu",
-  "checkingCloudConnection": "Verificando conexão com o Kudu Cloud…"
+  "windowTitlebar": "Barra de título do Fabric Cleaner"
 }

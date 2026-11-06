@@ -132,7 +132,9 @@ export function UninstallerPage() {
   const safetyRatings = useUninstallerStore((s) => s.safetyRatings)
   const safetyLoading = useUninstallerStore((s) => s.safetyLoading)
   const expandedItemId = useUninstallerStore((s) => s.expandedItemId)
-  const isCloudLinked = !!useSettingsStore((s) => s.settings.cloud.apiKey)
+  // Reputation ratings came from Kudu Cloud. Fabric Cloud is local-first, so
+  // they stay off until a threat intelligence provider is wired in.
+  const isCloudLinked = false as boolean
 
   const [confirmProgram, setConfirmProgram] = useState<InstalledProgram | null>(null)
   const [confirmForceRemove, setConfirmForceRemove] = useState<InstalledProgram | null>(null)
@@ -146,7 +148,7 @@ export function UninstallerPage() {
 
   // Listen for progress events
   useEffect(() => {
-    const cleanup = window.kudu.onUninstallerProgress((data: UninstallProgress) => {
+    const cleanup = window.fabric.onUninstallerProgress((data: UninstallProgress) => {
       useUninstallerStore.getState().setProgress(data)
     })
     return () => {
@@ -187,7 +189,7 @@ export function UninstallerPage() {
     store.setExpandedItemId(null)
 
     try {
-      const result = await window.kudu.uninstallerList()
+      const result = await window.fabric.uninstallerList()
       const s = useUninstallerStore.getState()
       s.setPrograms(result.programs)
       s.setHasLoaded(true)
@@ -216,7 +218,7 @@ export function UninstallerPage() {
     lastFailedProgramRef.current = program
 
     try {
-      const result = await window.kudu.uninstallerUninstall(program.id, {
+      const result = await window.fabric.uninstallerUninstall(program.id, {
         dependencyWarningAcknowledged: getSharedComponentKind(program) !== null
       })
       const s = useUninstallerStore.getState()
@@ -284,7 +286,7 @@ export function UninstallerPage() {
 
     for (const program of toUninstall) {
       try {
-        const result = await window.kudu.uninstallerUninstall(program.id)
+        const result = await window.fabric.uninstallerUninstall(program.id)
         const s = useUninstallerStore.getState()
 
         if (result.success) {
@@ -371,7 +373,7 @@ export function UninstallerPage() {
     uninstallStartRef.current = Date.now()
 
     try {
-      const result = await window.kudu.uninstallerForceRemove(program.id, {
+      const result = await window.fabric.uninstallerForceRemove(program.id, {
         dependencyWarningAcknowledged: getSharedComponentKind(program) !== null
       })
       const s = useUninstallerStore.getState()

@@ -20,7 +20,7 @@ const ipcMessage = (e: unknown) =>
 export function RecoveryPage() {
   const { t } = useTranslation('history')
   const { t: tx } = useTranslation('experience')
-  const [data, setData] = useState<Awaited<ReturnType<typeof window.kudu.recoveryList>> | null>(
+  const [data, setData] = useState<Awaited<ReturnType<typeof window.fabric.recoveryList>> | null>(
     null
   )
   const [offset, setOffset] = useState(0)
@@ -36,7 +36,7 @@ export function RecoveryPage() {
   const [elevated, setElevated] = useState<boolean | null>(null)
   useEffect(() => {
     if (!isWin) return
-    window.kudu
+    window.fabric
       .elevationCheck()
       .then((value) => setElevated(!!value))
       .catch(() => setElevated(false))
@@ -52,8 +52,8 @@ export function RecoveryPage() {
     setLoading(true)
     try {
       const [result, registry] = await Promise.all([
-        window.kudu.recoveryList(offset),
-        isWin ? window.kudu.recoveryRegistryBackups() : Promise.resolve([])
+        window.fabric.recoveryList(offset),
+        isWin ? window.fabric.recoveryRegistryBackups() : Promise.resolve([])
       ])
       if (token !== request.current) return
       setData(result)
@@ -84,7 +84,7 @@ export function RecoveryPage() {
     setBusy(true)
     let outcome: { ok: boolean; message: string }
     try {
-      const result = await window.kudu.recoveryRegistryRestore(backup.name)
+      const result = await window.fabric.recoveryRegistryRestore(backup.name)
       outcome = {
         ok: true,
         message: result.preRestoreBackup
@@ -130,7 +130,7 @@ export function RecoveryPage() {
         <button
           className={button}
           disabled={busy || !data?.total}
-          onClick={() => void run(() => window.kudu.recoveryExport())}
+          onClick={() => void run(() => window.fabric.recoveryExport())}
         >
           {t('recovery.export')}
         </button>
@@ -256,7 +256,7 @@ export function RecoveryPage() {
         <button
           className={button}
           disabled={busy}
-          onClick={() => void run(() => window.kudu.recoveryOpenBackups())}
+          onClick={() => void run(() => window.fabric.recoveryOpenBackups())}
         >
           {t('recovery.openBackups')}
         </button>
@@ -277,7 +277,7 @@ export function RecoveryPage() {
             busy={busy}
             elevated={elevated}
             onRestore={() => setRegistryConfirm(backup)}
-            onShow={() => void run(() => window.kudu.recoveryShowBackup(backup.name))}
+            onShow={() => void run(() => window.fabric.recoveryShowBackup(backup.name))}
           />
         ))}
       </section>
@@ -291,7 +291,7 @@ export function RecoveryPage() {
         onConfirm={() => {
           const id = remove!
           setRemove(null)
-          void run(() => window.kudu.recoveryRemove(id))
+          void run(() => window.fabric.recoveryRemove(id))
         }}
       />
       <ConfirmDialog
@@ -324,7 +324,7 @@ export function RecoveryPage() {
         onConfirm={() => {
           const id = confirm!.id
           setConfirm(null)
-          void run(() => window.kudu.recoveryRestore(id))
+          void run(() => window.fabric.recoveryRestore(id))
         }}
       />
     </div>

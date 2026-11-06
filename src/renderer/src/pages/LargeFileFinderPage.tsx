@@ -44,8 +44,8 @@ export function LargeFileFinderPage() {
   const [excludeInput, setExcludeInput] = useState('')
 
   useEffect(() => {
-    if (!window.kudu?.onLargeFilesProgress) return
-    return window.kudu.onLargeFilesProgress((data) => {
+    if (!window.fabric?.onLargeFilesProgress) return
+    return window.fabric.onLargeFilesProgress((data) => {
       useLargeFileStore.getState().setProgress(data)
     })
   }, [])
@@ -67,7 +67,7 @@ export function LargeFileFinderPage() {
   }, [store.result])
 
   const handleSelectDir = async () => {
-    const dir = await window.kudu?.largeFilesSelectDir?.()
+    const dir = await window.fabric?.largeFilesSelectDir?.()
     if (dir) store.setDirectory(dir)
   }
 
@@ -76,7 +76,7 @@ export function LargeFileFinderPage() {
     store.reset()
     store.setStatus('scanning')
     try {
-      const result = await window.kudu?.largeFilesScan?.({
+      const result = await window.fabric?.largeFilesScan?.({
         directory: store.directory,
         minFileSize: store.minFileSize,
         maxDepth: store.maxDepth,
@@ -92,7 +92,7 @@ export function LargeFileFinderPage() {
   }
 
   const handleCancel = async () => {
-    await window.kudu?.largeFilesCancel?.()
+    await window.fabric?.largeFilesCancel?.()
   }
 
   const handleDelete = async () => {
@@ -101,7 +101,7 @@ export function LargeFileFinderPage() {
     store.setStatus('deleting')
     try {
       const paths = Array.from(deletingPaths)
-      const result = await window.kudu?.largeFilesDelete?.(paths, store.deleteMode)
+      const result = await window.fabric?.largeFilesDelete?.(paths, store.deleteMode)
       if (result) {
         store.setDeleteResult(result)
         if (result.deleted > 0) {
@@ -479,7 +479,7 @@ export function LargeFileFinderPage() {
                     <button
                       onClick={(e) => {
                         e.stopPropagation()
-                        window.kudu?.largeFilesOpenLocation?.(file.path)
+                        window.fabric?.largeFilesOpenLocation?.(file.path)
                       }}
                       className="shrink-0 text-zinc-600 hover:text-zinc-400"
                       title={t('openLocation')}

@@ -8,7 +8,7 @@ import {
   CheckCircle,
   AlertCircle,
   Loader,
-  Heart
+  Scale
 } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { useAppUpdateStore } from '@/stores/app-update-store'
@@ -28,7 +28,7 @@ export function AboutPage() {
 
       <div className="glass-card rounded-2xl p-6">
         <div className="flex items-center gap-4">
-          <img src={logoSrc} alt="Kudu" className="h-14 w-14 rounded-xl" />
+          <img src={logoSrc} alt="Fabric Cleaner" className="h-14 w-14 rounded-xl" />
           <div>
             <p className="text-[16px] font-semibold text-white">
               {t('appVersion', { version: __APP_VERSION__ })}
@@ -44,20 +44,20 @@ export function AboutPage() {
             <p className="text-[12px] text-zinc-400">
               {t('portableUpdatesDesc', {
                 defaultValue:
-                  'Portable builds use manual updates. Close Kudu and replace the app files with the latest portable download. Your settings are retained.'
+                  'Portable builds use manual updates. Close Fabric Cleaner and replace the app files with the latest portable download. Your settings are retained.'
               })}
             </p>
             <LinkButton
               icon={Download}
               label={t('portableDownload', { defaultValue: 'Download latest portable build' })}
-              href="https://github.com/AdventDevInc/kudu/releases/latest"
+              href="https://github.com/Mousssaa/Fabric-Cleaner/releases/latest"
             />
           </div>
         ) : (
           <div className="mt-5 flex items-center gap-3">
             {updateStatus.state === 'idle' && (
               <button
-                onClick={() => window.kudu?.updaterCheck?.()}
+                onClick={() => window.fabric?.updaterCheck?.()}
                 className="flex items-center gap-2 rounded-xl px-4 py-2.5 text-[12px] font-medium text-zinc-400 transition-colors"
                 style={{ border: '1px solid var(--border-medium)' }}
               >
@@ -81,7 +81,7 @@ export function AboutPage() {
                   {t('upToDate')}
                 </span>
                 <button
-                  onClick={() => window.kudu?.updaterCheck?.()}
+                  onClick={() => window.fabric?.updaterCheck?.()}
                   className="flex items-center gap-2 rounded-xl px-3 py-2 text-[12px] font-medium text-zinc-400 transition-colors"
                   style={{ border: '1px solid var(--border-medium)' }}
                 >
@@ -95,7 +95,7 @@ export function AboutPage() {
                   {t('versionAvailable', { version: updateStatus.version })}
                 </span>
                 <button
-                  onClick={() => window.kudu?.updaterDownload?.()}
+                  onClick={() => window.fabric?.updaterDownload?.()}
                   className="flex items-center gap-2 rounded-xl px-4 py-2.5 text-[12px] font-medium text-zinc-200 transition-colors"
                   style={{ background: 'var(--accent)', color: 'var(--text-on-accent)' }}
                 >
@@ -130,7 +130,7 @@ export function AboutPage() {
             )}
             {updateStatus.state === 'downloaded' && (
               <button
-                onClick={() => window.kudu?.updaterInstall?.()}
+                onClick={() => window.fabric?.updaterInstall?.()}
                 className="flex items-center gap-2 rounded-xl px-4 py-2.5 text-[12px] font-medium transition-colors"
                 style={{ background: '#22c55e', color: 'var(--text-on-accent)' }}
               >
@@ -145,7 +145,7 @@ export function AboutPage() {
                   {updateStatus.error}
                 </span>
                 <button
-                  onClick={() => window.kudu?.updaterCheck?.()}
+                  onClick={() => window.fabric?.updaterCheck?.()}
                   className="flex items-center gap-2 rounded-xl px-3 py-2 text-[12px] font-medium text-zinc-400 transition-colors"
                   style={{ border: '1px solid var(--border-medium)' }}
                 >
@@ -159,12 +159,12 @@ export function AboutPage() {
           <LinkButton
             icon={CodeXml}
             label={t('github')}
-            href="https://github.com/adventdevinc/kudu"
+            href="https://github.com/Mousssaa/Fabric-Cleaner"
           />
           <LinkButton
             icon={Bug}
             label={t('reportBug')}
-            href="https://github.com/adventdevinc/kudu/issues"
+            href="https://github.com/Mousssaa/Fabric-Cleaner/issues"
           />
         </div>
 
@@ -179,7 +179,7 @@ export function AboutPage() {
             className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
             style={{ background: 'var(--accent)', color: 'var(--text-on-accent)' }}
           >
-            <Heart className="h-5 w-5" strokeWidth={2} aria-hidden="true" />
+            <Scale className="h-5 w-5" strokeWidth={2} aria-hidden="true" />
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-[13px] font-semibold text-zinc-200">{t('supportKudu')}</p>
@@ -191,9 +191,9 @@ export function AboutPage() {
             </p>
           </div>
           <LinkButton
-            icon={Heart}
+            icon={Scale}
             label={t('supportKuduAction')}
-            href="https://usekudu.com/sponsors"
+            href="https://github.com/AdventDevInc/kudu"
           />
         </div>
       </div>

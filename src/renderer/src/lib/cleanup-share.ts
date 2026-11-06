@@ -69,15 +69,18 @@ export function cleanupShareLinks(caption: string, title: string) {
     { name: 'X', url: link('https://x.com/intent/tweet', { text: caption }) },
     {
       name: 'Reddit',
-      url: link('https://www.reddit.com/submit', { url: 'https://usekudu.com', title })
+      url: link('https://www.reddit.com/submit', {
+        url: 'https://github.com/Mousssaa/Fabric-Cleaner',
+        title
+      })
     },
     { name: 'Bluesky', url: link('https://bsky.app/intent/compose', { text: caption }) },
     { name: 'WhatsApp', url: link('https://wa.me/', { text: caption }) },
     {
       name: 'Telegram',
       url: link('https://t.me/share/url', {
-        url: 'https://usekudu.com',
-        text: caption.replace('https://usekudu.com', '').trim()
+        url: 'https://github.com/Mousssaa/Fabric-Cleaner',
+        text: caption.replace('https://github.com/Mousssaa/Fabric-Cleaner', '').trim()
       })
     }
   ]
@@ -118,7 +121,7 @@ export function cleanupCardSvg(
   <circle cx="970" cy="100" r="390" fill="url(#glow)"/>
   <g font-family="Arial, sans-serif">
   <rect x="56" y="52" width="48" height="48" rx="14" fill="#f59e0b"/>
-  ${text(67, 87, 32, 'k', '#18181b', 700)}${text(119, 88, 32, 'kudu', ink, 700)}
+  ${text(67, 87, 32, 'k', '#18181b', 700)}${text(119, 88, 32, 'fabric-cleaner', ink, 700)}
   ${text(56, 150, 18, t(data.cleanups > 1 ? 'share.historyEyebrow' : 'share.cleanupEyebrow'), muted)}
   ${text(56, heroY, 76, formatBytes(data.bytes, 1), accent, 700)}
   ${text(59, heroY + 43, 22, t('share.recovered'), muted)}
@@ -136,7 +139,7 @@ export function cleanupCardSvg(
   ${rows.length === 0 ? text(56, barsY + 38, 26, t('share.tagline'), ink, 500) : ''}
   <path d="M56 ${height - 100}H1024" stroke="${dark ? '#343438' : '#ddddda'}"/>
   ${text(56, height - 52, 17, t('share.footer'), muted)}
-  ${text(850, height - 52, 22, 'usekudu.com', accent, 700)}
+  ${text(850, height - 52, 22, 'github.com/Mousssaa/Fabric-Cleaner', accent, 700)}
   </g></svg>`
 }
 

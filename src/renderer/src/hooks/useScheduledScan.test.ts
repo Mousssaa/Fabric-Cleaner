@@ -45,13 +45,12 @@ const api = {
   systemClean: vi.fn(),
   registryScan: vi.fn(),
   registryFix: vi.fn(),
-  recycleBinScan: vi.fn(),
-  cveFetch: vi.fn()
+  recycleBinScan: vi.fn()
 }
 beforeEach(() => {
   vi.clearAllMocks()
   mocks.createRestorePoint = false
-  vi.stubGlobal('window', { kudu: api })
+  vi.stubGlobal('window', { fabric: api })
   api.scheduleAuthorize.mockReset().mockResolvedValue({ allowed: true, reason: null })
   api.systemScan.mockResolvedValue([result('Cache', 'one'), result('Logs', 'two')])
   api.systemClean.mockResolvedValue({ filesDeleted: 1, totalCleaned: 10, errors: [] })
@@ -163,10 +162,4 @@ it('files history under the task that actually ran when a workflow stops early',
   expect(api.systemScan).not.toHaveBeenCalled()
   expect(mocks.history).toHaveBeenCalledWith(expect.objectContaining({ type: 'registry' }))
   expect(api.scheduleRunComplete).toHaveBeenCalledWith('one', 'partial', 'run-token')
-})
-it('files a vulnerability-only workflow under the CVE scan type', async () => {
-  api.cveFetch.mockResolvedValue({ total: 3 })
-  await runSchedule({ ...payload, tasks: ['cve-scan'], autoApply: false })
-  expect(api.cveFetch).toHaveBeenCalledTimes(1)
-  expect(mocks.history).toHaveBeenCalledWith(expect.objectContaining({ type: 'cve-scan' }))
 })

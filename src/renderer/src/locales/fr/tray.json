@@ -1,12 +1,12 @@
 {
-  "trayTooltip": "Kudu",
-  "openKudu": "Ouvrir Kudu",
+  "trayTooltip": "Fabric Cleaner",
+  "openKudu": "Ouvrir Fabric Cleaner",
   "quit": "Quitter",
-  "scheduledTaskNotificationTitle": "Kudu - Tâche planifiée",
+  "scheduledTaskNotificationTitle": "Fabric Cleaner - Tâche planifiée",
   "scheduledTaskNotificationBody": "Exécution de \"{{name}}\"...",
-  "scanCompleteNotificationTitle": "Kudu - Analyse terminée",
+  "scanCompleteNotificationTitle": "Fabric Cleaner - Analyse terminée",
   "scanCompleteNotificationBody": "{{itemCount}} éléments trouvés ({{sizeMB}} Mo) pouvant être nettoyés.",
   "scheduledScanName": "Analyse planifiée",
-  "rendererStartupFailureTitle": "Kudu n’a pas pu démarrer",
-  "rendererStartupFailureMessage": "Kudu n’a pas pu démarrer son interface et doit se fermer. Veuillez joindre le fichier journal indiqué ci-dessous lorsque vous signalez ce problème."
+  "rendererStartupFailureTitle": "Fabric Cleaner n’a pas pu démarrer",
+  "rendererStartupFailureMessage": "Fabric Cleaner n’a pas pu démarrer son interface et doit se fermer. Veuillez joindre le fichier journal indiqué ci-dessous lorsque vous signalez ce problème."
 }

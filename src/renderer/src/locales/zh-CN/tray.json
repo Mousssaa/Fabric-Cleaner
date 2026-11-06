@@ -1,12 +1,12 @@
 {
-  "trayTooltip": "Kudu",
-  "openKudu": "打开 Kudu",
+  "trayTooltip": "Fabric Cleaner",
+  "openKudu": "打开 Fabric Cleaner",
   "quit": "退出",
-  "scheduledTaskNotificationTitle": "Kudu - 计划任务",
+  "scheduledTaskNotificationTitle": "Fabric Cleaner - 计划任务",
   "scheduledTaskNotificationBody": "正在运行“{{name}}”...",
-  "scanCompleteNotificationTitle": "Kudu - 扫描完成",
+  "scanCompleteNotificationTitle": "Fabric Cleaner - 扫描完成",
   "scanCompleteNotificationBody": "发现 {{itemCount}} 个可清理项（{{sizeMB}} MB）。",
   "scheduledScanName": "计划扫描",
-  "rendererStartupFailureTitle": "Kudu 无法启动",
-  "rendererStartupFailureMessage": "Kudu 无法启动界面，需要关闭。报告此问题时，请附上下面所示的日志文件。"
+  "rendererStartupFailureTitle": "Fabric Cleaner 无法启动",
+  "rendererStartupFailureMessage": "Fabric Cleaner 无法启动界面，需要关闭。报告此问题时，请附上下面所示的日志文件。"
 }

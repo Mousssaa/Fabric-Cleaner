@@ -40,7 +40,7 @@ const mockTouchesExclusions = vi.fn()
 const settings = vi.hoisted(() => ({ exclusions: [] as string[] }))
 
 vi.mock('../services/file-utils', () => ({
-  safeDelete: (...args: unknown[]) => mockSafeDelete(...args),
+  disposeCleanupPath: (...args: unknown[]) => mockSafeDelete(...args),
   deletionTouchesExclusions: (...args: unknown[]) => mockTouchesExclusions(...args)
 }))
 

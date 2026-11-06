@@ -5,7 +5,7 @@
   "scanning": "分析中...",
   "refresh": "重新整理分析",
   "introTitle": "清楚說明您的應用程式與其空間占用。",
-  "introDescription": "比較回報的安裝大小與 Kudu 可提供清理檢視的檔案。在清理前先找出最大的清理機會。",
+  "introDescription": "比較回報的安裝大小與 Fabric Cleaner 可提供清理檢視的檔案。在清理前先找出最大的清理機會。",
   "privacy": "分析會保留在此裝置上。分析期間不會移除任何內容。",
   "installed": "安裝大小",
   "cache": "可檢視的檔案",

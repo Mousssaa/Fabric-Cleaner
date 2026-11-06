@@ -1,12 +1,12 @@
 {
-  "trayTooltip": "Kudu",
-  "openKudu": "פתח את Kudu",
+  "trayTooltip": "Fabric Cleaner",
+  "openKudu": "פתח את Fabric Cleaner",
   "quit": "יציאה",
-  "scheduledTaskNotificationTitle": "Kudu - משימה מתוזמנת",
+  "scheduledTaskNotificationTitle": "Fabric Cleaner - משימה מתוזמנת",
   "scheduledTaskNotificationBody": "מפעיל את \"{{name}}\"...",
-  "scanCompleteNotificationTitle": "Kudu - הסריקה הושלמה",
+  "scanCompleteNotificationTitle": "Fabric Cleaner - הסריקה הושלמה",
   "scanCompleteNotificationBody": "נמצאו {{itemCount}} פריטים ({{sizeMB}} MB) שניתן לנקות.",
   "scheduledScanName": "סריקה מתוזמנת",
-  "rendererStartupFailureTitle": "לא ניתן להפעיל את Kudu",
-  "rendererStartupFailureMessage": "Kudu לא הצליח להפעיל את הממשק שלו ועליו להיסגר. יש לצרף את קובץ היומן שמופיע למטה בעת דיווח על הבעיה."
+  "rendererStartupFailureTitle": "לא ניתן להפעיל את Fabric Cleaner",
+  "rendererStartupFailureMessage": "Fabric Cleaner לא הצליח להפעיל את הממשק שלו ועליו להיסגר. יש לצרף את קובץ היומן שמופיע למטה בעת דיווח על הבעיה."
 }

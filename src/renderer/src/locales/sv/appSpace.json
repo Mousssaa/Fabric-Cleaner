@@ -5,7 +5,7 @@
   "scanning": "Analyserar...",
   "refresh": "Uppdatera analys",
   "introTitle": "Dina appar, med en tydlig bild av utrymmet.",
-  "introDescription": "Jämför rapporterade installationsstorlekar med de filer som Kudu kan erbjuda för granskning inför rensning. Hitta de största möjligheterna innan du rensar.",
+  "introDescription": "Jämför rapporterade installationsstorlekar med de filer som Fabric Cleaner kan erbjuda för granskning inför rensning. Hitta de största möjligheterna innan du rensar.",
   "privacy": "Analysen stannar på den här enheten. Ingenting tas bort under analysen.",
   "installed": "Installerad storlek",
   "cache": "Granskningsbara filer",

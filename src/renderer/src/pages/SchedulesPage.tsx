@@ -186,7 +186,7 @@ export function SchedulesPage() {
   useEffect(() => {
     let mounted = true
     const refresh = () =>
-      window.kudu
+      window.fabric
         .scheduleRuntime()
         .then((value) => {
           if (mounted) setRuntime(value)
@@ -202,8 +202,8 @@ export function SchedulesPage() {
 
   const save = async (updated: ScheduleEntry[]) => {
     try {
-      await window.kudu.settingsSet({ schedules: updated })
-      const persisted = await window.kudu.settingsGet()
+      await window.fabric.settingsSet({ schedules: updated })
+      const persisted = await window.fabric.settingsGet()
       if (
         JSON.stringify(persisted.schedules.map(scheduleDefinition)) !==
         JSON.stringify(updated.map(scheduleDefinition))
@@ -221,22 +221,22 @@ export function SchedulesPage() {
   const ensureBackgroundMode = () => {
     if (!isPortable && !settings.runAtStartup) {
       updateSettings({ runAtStartup: true })
-      window.kudu?.settingsSet?.({ runAtStartup: true }).catch(() => {})
-      window.kudu?.applyStartup?.(true).catch(() => {
+      window.fabric?.settingsSet?.({ runAtStartup: true }).catch(() => {})
+      window.fabric?.applyStartup?.(true).catch(() => {
         updateSettings({ runAtStartup: false })
-        window.kudu?.settingsSet?.({ runAtStartup: false }).catch(() => {})
+        window.fabric?.settingsSet?.({ runAtStartup: false }).catch(() => {})
         toast.error(t('failedEnableStartup'), {
           action: {
             label: t('failedEnableStartupAction'),
-            onClick: () => window.open('https://usekudu.com/help/startup-failed', '_blank')
+            onClick: () => window.open('https://github.com/Mousssaa/Fabric-Cleaner', '_blank')
           }
         })
       })
     }
     if (!settings.minimizeToTray) {
       updateSettings({ minimizeToTray: true })
-      window.kudu?.settingsSet?.({ minimizeToTray: true }).catch(() => {})
-      window.kudu?.applyTray?.(true)
+      window.fabric?.settingsSet?.({ minimizeToTray: true }).catch(() => {})
+      window.fabric?.applyTray?.(true)
     }
   }
 
@@ -443,7 +443,7 @@ export function SchedulesPage() {
         onConfirm={() => {
           const id = runId!
           setRunId(null)
-          void window.kudu
+          void window.fabric
             .scheduleRunNow(id)
             .then((state) => {
               if (state) setRuntime((previous) => [...previous.filter((r) => r.id !== id), state])

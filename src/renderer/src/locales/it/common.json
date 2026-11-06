@@ -17,7 +17,6 @@
     "items": "elementi puliti",
     "cleanups": "pulizie completate",
     "tagline": "Meno disordine. Più spazio per ciò che conta.",
-    "footer": "Pulito con Kudu · Gratuito e open source",
     "privacy": "Generato localmente. Sono inclusi solo i totali e le categorie generali — nessun percorso di file o identificatore del computer.",
     "save": "Salva PNG",
     "copyImage": "Copia immagine",
@@ -26,12 +25,12 @@
     "copied": "Copiato negli appunti",
     "exportError": "Impossibile esportare l'immagine. Prova a usare Salva PNG invece di condividere o copiare.",
     "copyError": "Impossibile copiare la didascalia. Controlla le autorizzazioni degli appunti.",
-    "caption": "Ho recuperato {{space}} e pulito {{items}} elementi con Kudu. Gratuito e open source. Condividi i tuoi risultati e aiuta Kudu a crescere per tutti noi. https://usekudu.com",
-    "communityTitle": "Aiuta Kudu a crescere, per tutti noi.",
-    "communityDescription": "Condividere la tua pulizia aiuta più persone a scoprire Kudu e fa crescere la comunità dietro un pulitore gratuito e open source. Ogni condivisione fa la differenza.",
+    "caption": "Ho recuperato {{space}} e pulito {{items}} elementi con Fabric Cleaner. Gratuito e open source. Condividi i tuoi risultati e aiuta Fabric Cleaner a crescere per tutti noi. https://github.com/Mousssaa/Fabric-Cleaner",
+    "communityTitle": "Aiuta Fabric Cleaner a crescere, per tutti noi.",
+    "communityDescription": "Condividere la tua pulizia aiuta più persone a scoprire Fabric Cleaner e fa crescere la comunità dietro un pulitore gratuito e open source. Ogni condivisione fa la differenza.",
     "platforms": "Condividi su una piattaforma",
     "openPlatform": "Condividi su {{platform}} (si apre nel browser)",
-    "postTitle": "Ho recuperato {{space}} con Kudu, un pulitore gratuito e open source",
+    "postTitle": "Ho recuperato {{space}} con Fabric Cleaner, un pulitore gratuito e open source",
     "discord": "Copia per Discord",
     "discordCopied": "Scheda e didascalia copiate. Incollale nella chat o nel canale Discord.",
     "destinations": "I pulsanti delle piattaforme aprono una bozza o una schermata di condivisione. Incolla la scheda usando Copia immagine, oppure allega il PNG salvato, quindi pubblica quando sei pronto.",
@@ -77,6 +76,5 @@
   "close": "Chiudi",
   "dismiss": "Ignora",
   "skipToMainContent": "Salta al contenuto principale",
-  "windowTitlebar": "Barra del titolo di Kudu",
-  "checkingCloudConnection": "Verifica della connessione a Kudu Cloud…"
+  "windowTitlebar": "Barra del titolo di Fabric Cleaner"
 }

@@ -102,8 +102,8 @@ export function DiskMaintenancePage() {
 
   // Listen for trim progress events
   useEffect(() => {
-    if (!window.kudu?.onDiskTrimProgress) return
-    return window.kudu.onDiskTrimProgress((data) => store.setProgress(data))
+    if (!window.fabric?.onDiskTrimProgress) return
+    return window.fabric.onDiskTrimProgress((data) => store.setProgress(data))
   }, [])
 
   // Initial load
@@ -116,7 +116,7 @@ export function DiskMaintenancePage() {
     store.setLoading(true)
     store.setError(null)
     try {
-      const list = await window.kudu.diskTrimList()
+      const list = await window.fabric.diskTrimList()
       store.setDrives(list)
     } catch (err) {
       console.error('Failed to list trim drives:', err)
@@ -154,7 +154,7 @@ export function DiskMaintenancePage() {
       store.setRunState(id, 'running')
     }
     try {
-      const results = await window.kudu.diskTrimRun(selectableSelected)
+      const results = await window.fabric.diskTrimRun(selectableSelected)
       let needsAdmin = false
       let throttled = 0
       let success = 0

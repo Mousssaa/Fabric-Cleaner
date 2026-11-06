@@ -27,12 +27,12 @@ function markerPath(): string {
 
 /**
  * Whether the GPU process should be disabled this launch. True when the
- * user passed --disable-gpu, set KUDU_DISABLE_GPU, or a previous launch
+ * user passed --disable-gpu, set FABRIC_CLEANER_DISABLE_GPU, or a previous launch
  * recorded a GPU launch failure.
  */
 export function shouldDisableGpu(): boolean {
   if (process.argv.includes('--disable-gpu')) return true
-  if (process.env.KUDU_DISABLE_GPU) return true
+  if (process.env.FABRIC_CLEANER_DISABLE_GPU) return true
   try {
     return existsSync(markerPath())
   } catch {

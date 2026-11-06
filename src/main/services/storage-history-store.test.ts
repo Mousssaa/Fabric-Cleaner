@@ -33,7 +33,7 @@ const snapshot = (): StorageSnapshot => ({
   rows: [{ path: '', bytes: 123, files: 1 }]
 })
 beforeEach(async () => {
-  state.directory = await mkdtemp(join(tmpdir(), 'kudu-storage-store-test-'))
+  state.directory = await mkdtemp(join(tmpdir(), 'fc-storage-store-test-'))
   scope = {
     id: randomUUID(),
     name: 'Test',

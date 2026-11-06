@@ -42,7 +42,7 @@ const target = { kind: 'registry-dword' as const, key: 'HKCU\\Software\\KuduTest
 const record = (apply: () => Promise<void> = async () => {}) =>
   recordRecoveryChange('privacy', 'Test setting', target, null, 1, apply)
 beforeEach(async () => {
-  state.directory = await mkdtemp(join(tmpdir(), 'kudu-recovery-test-'))
+  state.directory = await mkdtemp(join(tmpdir(), 'fc-recovery-test-'))
   state.available = true
   state.encryptions = 0
 })

@@ -29,7 +29,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       <header
         className="app-titlebar drag-region"
-        aria-label={t('windowTitlebar', 'Kudu window titlebar')}
+        aria-label={t('windowTitlebar', 'Fabric Cleaner window titlebar')}
       >
         <div className="app-brand">
           <img src={logoSrc} alt="" className="h-6 w-6 rounded-full" />
@@ -38,7 +38,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               className="text-[12px] font-bold leading-none"
               style={{ color: 'var(--text-primary)' }}
             >
-              Kudu
+              Fabric Cleaner
             </div>
           </div>
         </div>
@@ -112,7 +112,7 @@ function AppearanceMenu() {
 
   const selectTheme = (nextTheme: ThemeMode) => {
     updateSettings({ theme: nextTheme })
-    window.kudu?.settingsSet?.({ theme: nextTheme }).catch(() => {})
+    window.fabric?.settingsSet?.({ theme: nextTheme }).catch(() => {})
     setOpen(false)
   }
 

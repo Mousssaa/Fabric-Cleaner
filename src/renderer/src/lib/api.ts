@@ -1,9 +1,9 @@
-import type { KuduAPI } from '../../../preload/index'
+import type { FabricAPI } from '../../../preload/index'
 
 declare global {
   interface Window {
-    kudu: KuduAPI
+    fabric: FabricAPI
   }
 }
 
-export const api = window.kudu
+export const api = window.fabric
