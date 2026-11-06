@@ -29,5 +29,10 @@
   "gameMode": "Game Mode",
   "firewallAudit": "Firewall Audit",
   "mainNavigation": "Main navigation",
-  "badgeNew": "NEW"
+  "badgeNew": "NEW",
+  "smartCare": "Smart Care",
+  "cleanupPillar": "Cleanup",
+  "systemJunk": "System Junk",
+  "applications": "Applications",
+  "spaceLens": "Space Lens & Clutter"
 }

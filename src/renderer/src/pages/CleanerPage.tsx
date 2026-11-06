@@ -25,9 +25,11 @@ import {
   FolderOpen,
   AlertTriangle,
   ShieldAlert,
-  Loader2
+  Loader2,
+  FileWarning
 } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
+import { ModuleStage } from '@/components/shared/ModuleStage'
 import { ScanProgress } from '@/components/shared/ScanProgress'
 import { ConfirmDialog } from '@/components/shared/ConfirmDialog'
 import { EmptyState } from '@/components/shared/EmptyState'
@@ -234,6 +236,7 @@ function CleanerContextMenu({
 
 export function CleanerPage() {
   const { t } = useTranslation(['cleaner', 'settings'])
+  const { t: tx } = useTranslation('experience')
   const navigate = useNavigate()
   const { platform } = usePlatform()
   const store = useScanStore()
@@ -740,6 +743,8 @@ export function CleanerPage() {
   const isScanning = store.status === ScanStatus.Scanning
   const isCleaning = store.status === ScanStatus.Cleaning
   const hasResults = store.results.length > 0
+  const showStage =
+    !hasResults && !isScanning && !isCleaning && !preparingClean && !store.cleanSummary
   const isRecycleBinProtected =
     protectRecycleBin && activeCategory === CleanerType.RecycleBin && searchScope === 'category'
   const confirmCleanIds = scopedClean?.ids ?? store.getSelectedIds()
@@ -813,834 +818,877 @@ export function CleanerPage() {
         }
       />
 
-      <div className="cleaner-workspace flex gap-5">
-        {/* Category sidebar */}
-        <div className="cleaner-categories w-56 shrink-0 space-y-1.5">
-          {categories.map((cat) => {
-            const count = categoryItemCount(cat.type)
-            const isActive = searchScope === 'category' && activeCategory === cat.type
-            const isProtected = protectRecycleBin && cat.type === CleanerType.RecycleBin
-            return (
-              <button
-                key={cat.type}
-                onClick={() => {
-                  setActiveCategory(cat.type)
-                  setSearchScope('category')
-                }}
-                onContextMenu={(e) => {
-                  // Privacy traces are opt-in per item: no clean-everything shortcut.
-                  if (isProtected || cat.type === CleanerType.PrivacyTraces) return
-                  const ids = categoryResults(cat.type).flatMap((r) =>
-                    r.items.map((item) => item.id)
-                  )
-                  openContextMenu(e, t(cat.labelKey), ids)
-                }}
-                className="relative flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left transition-all"
-                style={{
-                  background: isActive ? 'var(--accent-muted-bg)' : 'transparent',
-                  color: isActive ? 'var(--warning)' : 'var(--text-muted)'
-                }}
-              >
-                {isActive && (
-                  <div
-                    className="absolute left-0 top-1/2 h-4 w-[3px] -translate-y-1/2 rounded-r-full"
-                    style={{ background: 'var(--accent)' }}
-                  />
-                )}
-                {scanningCategory === cat.type ||
-                (cat.type === AI_TOOLS_VIEW && scanningCategory === CleanerType.App) ? (
-                  <Loader2
-                    className="h-[17px] w-[17px] shrink-0 animate-spin text-amber-400"
-                    strokeWidth={1.8}
-                  />
-                ) : (
-                  <cat.icon className="h-[17px] w-[17px] shrink-0" strokeWidth={1.8} />
-                )}
-                <div className="flex-1 min-w-0">
-                  <span className="text-[13px] font-medium">{t(cat.labelKey)}</span>
-                  <p className="text-[11px]" style={{ color: 'var(--text-muted)' }}>
-                    {isProtected ? t('settings:protectRecycleBinLabel') : t(cat.descriptionKey)}
-                  </p>
-                </div>
-                {count > 0 && (
-                  <span
-                    className="rounded-md px-1.5 py-0.5 font-mono text-[11px]"
-                    style={{ background: 'var(--bg-hover-2)', color: 'var(--text-muted)' }}
-                  >
-                    {count}
-                  </span>
-                )}
-              </button>
-            )
-          })}
-        </div>
-
-        {/* Item panel */}
-        <div className="cleaner-results flex-1 min-w-0">
-          {hasResults && (
-            <section className="pulse-cleaner-summary" aria-label={t('totalRecoverable')}>
-              <div>
-                <span>{t('totalRecoverable')}</span>
-                <strong>{formatBytes(store.getTotalSize())}</strong>
-              </div>
-              <div>
-                <span>
-                  {t('itemsCount', {
-                    count: formatNumber(
-                      store.results.reduce((sum, result) => sum + result.itemCount, 0)
+      {showStage ? (
+        <ModuleStage
+          eyebrow={tx('stages.cleanup.eyebrow')}
+          title={tx('stages.cleanup.title')}
+          description={tx('stages.cleanup.description')}
+          features={[
+            {
+              icon: Sparkles,
+              title: tx('stages.cleanup.features.caches.title'),
+              description: tx('stages.cleanup.features.caches.description')
+            },
+            {
+              icon: FileWarning,
+              title: tx('stages.cleanup.features.leftovers.title'),
+              description: tx('stages.cleanup.features.leftovers.description')
+            },
+            {
+              icon: Trash2,
+              title: tx('stages.cleanup.features.trash.title'),
+              description: tx('stages.cleanup.features.trash.description')
+            }
+          ]}
+          action={{
+            label: tx('stages.cleanup.action'),
+            onClick: () => void handleScan(),
+            disabled: preparingClean
+          }}
+          footnote={tx('stages.cleanup.footnote')}
+        />
+      ) : (
+        <div className="cleaner-workspace flex gap-5">
+          {/* Category sidebar */}
+          <div className="cleaner-categories w-56 shrink-0 space-y-1.5">
+            {categories.map((cat) => {
+              const count = categoryItemCount(cat.type)
+              const isActive = searchScope === 'category' && activeCategory === cat.type
+              const isProtected = protectRecycleBin && cat.type === CleanerType.RecycleBin
+              return (
+                <button
+                  key={cat.type}
+                  onClick={() => {
+                    setActiveCategory(cat.type)
+                    setSearchScope('category')
+                  }}
+                  onContextMenu={(e) => {
+                    // Privacy traces are opt-in per item: no clean-everything shortcut.
+                    if (isProtected || cat.type === CleanerType.PrivacyTraces) return
+                    const ids = categoryResults(cat.type).flatMap((r) =>
+                      r.items.map((item) => item.id)
                     )
-                  })}
-                </span>
-                <strong>
-                  {t('selectedLabel')}: {formatBytes(store.getSelectedSize())}
-                </strong>
-              </div>
-            </section>
-          )}
-          {(isScanning || isCleaning) && store.progress && (
-            <ScanProgress
-              status={isScanning ? 'scanning' : 'cleaning'}
-              progress={store.progress.progress}
-              currentPath={store.progress.currentPath}
-              itemsFound={store.progress.itemsFound}
-              sizeFound={store.progress.sizeFound}
-              className="mb-5"
-            />
-          )}
+                    openContextMenu(e, t(cat.labelKey), ids)
+                  }}
+                  className="relative flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left transition-all"
+                  style={{
+                    background: isActive ? 'var(--accent-muted-bg)' : 'transparent',
+                    color: isActive ? 'var(--warning)' : 'var(--text-muted)'
+                  }}
+                >
+                  {isActive && (
+                    <div
+                      className="absolute left-0 top-1/2 h-4 w-[3px] -translate-y-1/2 rounded-r-full"
+                      style={{ background: 'var(--accent)' }}
+                    />
+                  )}
+                  {scanningCategory === cat.type ||
+                  (cat.type === AI_TOOLS_VIEW && scanningCategory === CleanerType.App) ? (
+                    <Loader2
+                      className="h-[17px] w-[17px] shrink-0 animate-spin text-amber-400"
+                      strokeWidth={1.8}
+                    />
+                  ) : (
+                    <cat.icon className="h-[17px] w-[17px] shrink-0" strokeWidth={1.8} />
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <span className="text-[13px] font-medium">{t(cat.labelKey)}</span>
+                    <p className="text-[11px]" style={{ color: 'var(--text-muted)' }}>
+                      {isProtected ? t('settings:protectRecycleBinLabel') : t(cat.descriptionKey)}
+                    </p>
+                  </div>
+                  {count > 0 && (
+                    <span
+                      className="rounded-md px-1.5 py-0.5 font-mono text-[11px]"
+                      style={{ background: 'var(--bg-hover-2)', color: 'var(--text-muted)' }}
+                    >
+                      {count}
+                    </span>
+                  )}
+                </button>
+              )
+            })}
+          </div>
 
-          {failedCategories.length > 0 && store.status === ScanStatus.Complete && (
-            <div
-              className="mb-5 flex items-center gap-3 rounded-2xl px-4 py-3"
-              style={{
-                background: 'var(--accent-muted-bg)',
-                border: '1px solid rgba(34, 211, 238,0.12)'
-              }}
-            >
-              <AlertTriangle className="h-4 w-4 shrink-0 text-amber-400" strokeWidth={1.8} />
-              <p className="text-[12px]" style={{ color: 'var(--text-muted)' }}>
-                {t('scannersFailed')}{' '}
-                <span className="text-amber-400 font-medium">{failedCategories.join(', ')}</span>
-              </p>
-            </div>
-          )}
+          {/* Item panel */}
+          <div className="cleaner-results flex-1 min-w-0">
+            {hasResults && (
+              <section className="pulse-cleaner-summary" aria-label={t('totalRecoverable')}>
+                <div>
+                  <span>{t('totalRecoverable')}</span>
+                  <strong>{formatBytes(store.getTotalSize())}</strong>
+                </div>
+                <div>
+                  <span>
+                    {t('itemsCount', {
+                      count: formatNumber(
+                        store.results.reduce((sum, result) => sum + result.itemCount, 0)
+                      )
+                    })}
+                  </span>
+                  <strong>
+                    {t('selectedLabel')}: {formatBytes(store.getSelectedSize())}
+                  </strong>
+                </div>
+              </section>
+            )}
+            {(isScanning || isCleaning) && store.progress && (
+              <ScanProgress
+                status={isScanning ? 'scanning' : 'cleaning'}
+                progress={store.progress.progress}
+                currentPath={store.progress.currentPath}
+                itemsFound={store.progress.itemsFound}
+                sizeFound={store.progress.sizeFound}
+                className="mb-5"
+              />
+            )}
 
-          {elevationSkipped.length > 0 &&
-            store.status === ScanStatus.Complete &&
-            !store.cleanSummary && (
+            {failedCategories.length > 0 && store.status === ScanStatus.Complete && (
               <div
                 className="mb-5 flex items-center gap-3 rounded-2xl px-4 py-3"
                 style={{
                   background: 'var(--accent-muted-bg)',
-                  border: '1px solid var(--accent-muted-border)'
+                  border: '1px solid rgba(34, 211, 238,0.12)'
                 }}
               >
-                <ShieldAlert className="h-4 w-4 shrink-0 text-amber-400" strokeWidth={1.8} />
-                <div className="flex-1 min-w-0">
-                  <p className="text-[12px] text-zinc-300">
-                    <span className="font-medium">
-                      {t('categoriesSkipped', { count: elevationSkipped.length })}
-                    </span>
-                    <span style={{ color: 'var(--text-muted)' }}>
-                      {' '}
-                      {t('categoriesSkippedSuffix')}
-                    </span>
-                  </p>
-                  <p className="text-[11px] mt-0.5 truncate" style={{ color: 'var(--text-muted)' }}>
-                    {elevationSkipped.slice(0, 4).join(', ')}
-                    {elevationSkipped.length > 4
-                      ? ` ${t('categoriesSkippedMore', { count: elevationSkipped.length - 4 })}`
-                      : ''}
-                  </p>
-                </div>
-                {platform !== 'darwin' && (
-                  <button
-                    onClick={handleRelaunch}
-                    className="shrink-0 rounded-lg px-3 py-1.5 text-[12px] font-medium text-amber-400 transition-colors hover:bg-amber-500/15"
-                    style={{ border: '1px solid rgba(34, 211, 238,0.2)' }}
-                  >
-                    {t('relaunchAsAdmin')}
-                  </button>
-                )}
+                <AlertTriangle className="h-4 w-4 shrink-0 text-amber-400" strokeWidth={1.8} />
+                <p className="text-[12px]" style={{ color: 'var(--text-muted)' }}>
+                  {t('scannersFailed')}{' '}
+                  <span className="text-amber-400 font-medium">{failedCategories.join(', ')}</span>
+                </p>
               </div>
             )}
 
-          {(checkingBlockers || blockers.length > 0) &&
-            store.status === ScanStatus.Complete &&
-            !store.cleanSummary && (
-              <div
-                className="mb-5 flex items-start gap-3 rounded-2xl px-4 py-3"
-                style={{
-                  background: 'var(--accent-muted-bg)',
-                  border: '1px solid var(--accent-muted-border)'
-                }}
-              >
-                {checkingBlockers ? (
-                  <Loader2
-                    className="mt-0.5 h-4 w-4 shrink-0 animate-spin text-amber-400"
-                    strokeWidth={1.8}
-                  />
-                ) : (
-                  <AlertTriangle
-                    className="mt-0.5 h-4 w-4 shrink-0 text-amber-400"
-                    strokeWidth={1.8}
-                  />
-                )}
-                <div className="min-w-0 flex-1">
-                  <p className="text-[12px] font-medium text-zinc-200">
-                    {checkingBlockers
-                      ? t('checkingRunningApps')
-                      : t('closeAppsBeforeCleaning', {
-                          apps: blockerNames(blockers, (count) => t('moreApps', { count }))
-                        })}
-                  </p>
-                  {!checkingBlockers && (
-                    <p className="mt-0.5 text-[11px]" style={{ color: 'var(--text-muted)' }}>
-                      {t('blockersDescription')}
-                    </p>
-                  )}
-                </div>
-              </div>
-            )}
-
-          {store.cleanSummary && store.status === ScanStatus.Complete && (
-            <CleanSummary
-              summary={store.cleanSummary}
-              onRelaunchAsAdmin={handleRelaunch}
-              platform={platform}
-            />
-          )}
-
-          {isRecycleBinProtected && !isScanning && !isCleaning && (
-            <EmptyState
-              icon={ShieldAlert}
-              title={t('settings:protectRecycleBinLabel')}
-              description={t('settings:protectRecycleBinDesc')}
-              action={
-                <button
-                  onClick={() => navigate('/settings')}
-                  className="flex items-center gap-2 rounded-xl px-5 py-2.5 text-[13px] font-semibold transition-all"
-                  style={{
-                    background: 'var(--bg-hover)',
-                    border: '1px solid var(--border-medium)',
-                    color: 'var(--text-secondary)'
-                  }}
-                >
-                  {t('settings:sectionCleaningPreferences')}
-                </button>
-              }
-            />
-          )}
-
-          {!hasResults && !isScanning && !isRecycleBinProtected && (
-            <EmptyState
-              icon={Search}
-              title={t('noScanResultsTitle')}
-              description={t('noScanResultsDescription')}
-              action={
-                <button
-                  onClick={handleScan}
-                  disabled={isCleaning || preparingClean}
-                  className="pulse-primary-action pulse-scan-action flex items-center gap-2 rounded-xl px-5 py-2.5 text-[13px] font-semibold transition-all disabled:opacity-40"
-                  style={{
-                    background: 'linear-gradient(135deg, #22d3ee 0%, #0891b2 100%)',
-                    color: 'var(--text-on-accent)'
-                  }}
-                >
-                  <Search className="h-4 w-4" strokeWidth={1.8} />
-                  {t('startScan')}
-                </button>
-              }
-            />
-          )}
-
-          {hasResults && (
-            <fieldset
-              disabled={isScanning || isCleaning || preparingClean}
-              className="mb-4 space-y-3 rounded-xl border p-3 disabled:opacity-50"
-              style={{ borderColor: 'var(--border-default)', background: 'var(--card-bg)' }}
-            >
-              <legend className="sr-only">{t('searchResults')}</legend>
-              <div className="flex flex-wrap items-center gap-2">
+            {elevationSkipped.length > 0 &&
+              store.status === ScanStatus.Complete &&
+              !store.cleanSummary && (
                 <div
-                  className="relative flex min-w-48 flex-1 items-center gap-2 rounded-lg border px-3 py-2"
-                  style={{ borderColor: 'var(--border-medium)' }}
+                  className="mb-5 flex items-center gap-3 rounded-2xl px-4 py-3"
+                  style={{
+                    background: 'var(--accent-muted-bg)',
+                    border: '1px solid var(--accent-muted-border)'
+                  }}
                 >
-                  <Search className="h-4 w-4 shrink-0" style={{ color: 'var(--text-muted)' }} />
-                  <input
-                    type="search"
-                    value={searchQuery}
-                    onChange={(event) => setSearchQuery(event.target.value)}
-                    placeholder={t('searchResultsPlaceholder')}
-                    aria-label={t('searchResults')}
-                    className="min-w-0 flex-1 bg-transparent text-[13px] outline-none [&::-webkit-search-cancel-button]:hidden"
-                    style={{ color: 'var(--text-primary)' }}
-                  />
-                  {searchQuery && (
-                    <button
-                      type="button"
-                      aria-label={t('clearSearch')}
-                      onClick={() => setSearchQuery('')}
+                  <ShieldAlert className="h-4 w-4 shrink-0 text-amber-400" strokeWidth={1.8} />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[12px] text-zinc-300">
+                      <span className="font-medium">
+                        {t('categoriesSkipped', { count: elevationSkipped.length })}
+                      </span>
+                      <span style={{ color: 'var(--text-muted)' }}>
+                        {' '}
+                        {t('categoriesSkippedSuffix')}
+                      </span>
+                    </p>
+                    <p
+                      className="text-[11px] mt-0.5 truncate"
+                      style={{ color: 'var(--text-muted)' }}
                     >
-                      <X className="h-4 w-4" />
+                      {elevationSkipped.slice(0, 4).join(', ')}
+                      {elevationSkipped.length > 4
+                        ? ` ${t('categoriesSkippedMore', { count: elevationSkipped.length - 4 })}`
+                        : ''}
+                    </p>
+                  </div>
+                  {platform !== 'darwin' && (
+                    <button
+                      onClick={handleRelaunch}
+                      className="shrink-0 rounded-lg px-3 py-1.5 text-[12px] font-medium text-amber-400 transition-colors hover:bg-amber-500/15"
+                      style={{ border: '1px solid rgba(34, 211, 238,0.2)' }}
+                    >
+                      {t('relaunchAsAdmin')}
                     </button>
                   )}
                 </div>
-                <select
-                  aria-label={t('searchScope')}
-                  value={searchScope}
-                  onChange={(event) => setSearchScope(event.target.value as 'category' | 'all')}
-                  className="rounded-lg border px-3 py-2 text-[12px]"
+              )}
+
+            {(checkingBlockers || blockers.length > 0) &&
+              store.status === ScanStatus.Complete &&
+              !store.cleanSummary && (
+                <div
+                  className="mb-5 flex items-start gap-3 rounded-2xl px-4 py-3"
                   style={{
-                    borderColor: 'var(--border-medium)',
-                    background: 'var(--card-bg)',
-                    color: 'var(--text-secondary)'
+                    background: 'var(--accent-muted-bg)',
+                    border: '1px solid var(--accent-muted-border)'
                   }}
                 >
-                  <option value="category">{t('currentCategory')}</option>
-                  <option value="all">{t('allCleanupCategories')}</option>
-                </select>
-                <label
-                  className="flex items-center gap-2 text-[12px]"
-                  style={{ color: 'var(--text-secondary)' }}
-                >
-                  <input
-                    type="checkbox"
-                    checked={selectedOnly}
-                    onChange={(event) => setSelectedOnly(event.target.checked)}
-                    className="accent-amber-500"
-                  />
-                  {t('selectedOnly')}
-                </label>
-              </div>
-              <div className="flex flex-wrap items-center justify-between gap-2 text-[12px]">
-                <p role="status" style={{ color: 'var(--text-muted)' }}>
-                  {t('resultSelectionSummary', {
-                    count: formatNumber(visibleIds.length),
-                    selected: formatNumber(selectedHere),
-                    elsewhere: formatNumber(selectedElsewhere)
-                  })}
-                </p>
-                <div className="flex gap-3 text-amber-500">
-                  <button
-                    type="button"
-                    disabled={!bulkSelectableIds.length}
-                    onClick={() => store.setItemsSelected(bulkSelectableIds, true)}
-                    className="disabled:opacity-40"
-                  >
-                    {t(isFiltering ? 'selectMatches' : 'selectInView')}
-                  </button>
-                  <button
-                    type="button"
-                    disabled={!selectedHere}
-                    onClick={() => store.setItemsSelected(visibleIds, false)}
-                    className="disabled:opacity-40"
-                  >
-                    {t(isFiltering ? 'deselectMatches' : 'deselectInView')}
-                  </button>
-                </div>
-              </div>
-              <p className="text-[11px]" style={{ color: 'var(--text-muted)' }}>
-                {t('searchSelectionHint')}
-              </p>
-              {visibleResults.some((result) => result.category === CleanerType.PrivacyTraces) && (
-                <p className="text-[11px]" style={{ color: 'var(--text-muted)' }}>
-                  {t('privacyBulkSelectionHint')}
-                </p>
-              )}
-            </fieldset>
-          )}
-
-          {hasResults && !isRecycleBinProtected && (
-            <div key={activeCategory} className="space-y-2">
-              <div className="mb-3 flex items-center justify-between px-1">
-                <span
-                  className="text-[11px] font-medium uppercase tracking-wider"
-                  style={{ color: 'var(--text-muted)' }}
-                >
-                  {t('categoryItemsHeading', {
-                    category:
-                      searchScope === 'all'
-                        ? t('allCleanupCategories')
-                        : t(categories.find((c) => c.type === activeCategory)?.labelKey ?? '')
-                  })}
-                </span>
-                <div className="flex items-center gap-3">
-                  <div className="relative" ref={sortMenuRef}>
-                    <button
-                      onClick={() => setShowSortMenu((v) => !v)}
-                      className="flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-[12px] font-medium transition-colors"
-                      style={{
-                        color: 'var(--text-muted)',
-                        border: '1px solid var(--border-medium)'
-                      }}
-                    >
-                      <ArrowUpDown className="h-3 w-3" strokeWidth={1.8} />
-                      {t(SORT_LABEL_KEYS[sortMode])}
-                      <ChevronDown
-                        className={cn('h-3 w-3 transition-transform', showSortMenu && 'rotate-180')}
-                        strokeWidth={2}
-                      />
-                    </button>
-                    {showSortMenu && (
-                      <div
-                        className="absolute right-0 top-full z-50 mt-1 rounded-xl py-1 shadow-xl"
-                        style={{
-                          background: '#1e1e22',
-                          border: '1px solid var(--border-strong)',
-                          minWidth: 140
-                        }}
-                      >
-                        {(Object.keys(SORT_LABEL_KEYS) as SortMode[]).map((mode) => (
-                          <button
-                            key={mode}
-                            onClick={() => {
-                              setSortMode(mode)
-                              setShowSortMenu(false)
-                            }}
-                            className="flex w-full items-center gap-2 px-4 py-2 text-[12px] transition-colors hover:bg-white/5"
-                            style={{
-                              color:
-                                sortMode === mode ? 'var(--accent-hover)' : 'var(--text-secondary)'
-                            }}
-                          >
-                            {t(SORT_LABEL_KEYS[mode])}
-                          </button>
-                        ))}
-                      </div>
+                  {checkingBlockers ? (
+                    <Loader2
+                      className="mt-0.5 h-4 w-4 shrink-0 animate-spin text-amber-400"
+                      strokeWidth={1.8}
+                    />
+                  ) : (
+                    <AlertTriangle
+                      className="mt-0.5 h-4 w-4 shrink-0 text-amber-400"
+                      strokeWidth={1.8}
+                    />
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[12px] font-medium text-zinc-200">
+                      {checkingBlockers
+                        ? t('checkingRunningApps')
+                        : t('closeAppsBeforeCleaning', {
+                            apps: blockerNames(blockers, (count) => t('moreApps', { count }))
+                          })}
+                    </p>
+                    {!checkingBlockers && (
+                      <p className="mt-0.5 text-[11px]" style={{ color: 'var(--text-muted)' }}>
+                        {t('blockersDescription')}
+                      </p>
                     )}
                   </div>
                 </div>
-              </div>
-
-              {visibleResults.length === 0 && (
-                <div
-                  className="py-12 text-center text-[13px]"
-                  style={{ color: 'var(--text-muted)' }}
-                >
-                  {t(isFiltering ? 'noMatchingResults' : 'noItemsInCategory')}
-                </div>
               )}
 
-              {(() => {
-                const results = visibleResults
-                // Group results by group label (ungrouped first, then grouped
-                // sections); each section is sorted independently so sort
-                // order never interleaves group sections.
-                const ungrouped =
-                  activeCategory === AI_TOOLS_VIEW && searchScope === 'category'
-                    ? sortResults(results)
-                    : sortResults(results.filter((r) => !r.group))
-                const grouped = new Map<string, ScanResult[]>()
-                if (activeCategory !== AI_TOOLS_VIEW || searchScope === 'all') {
-                  for (const r of results) {
-                    if (!r.group) continue
-                    if (!grouped.has(r.group)) grouped.set(r.group, [])
-                    grouped.get(r.group)!.push(r)
-                  }
+            {store.cleanSummary && store.status === ScanStatus.Complete && (
+              <CleanSummary
+                summary={store.cleanSummary}
+                onRelaunchAsAdmin={handleRelaunch}
+                platform={platform}
+              />
+            )}
+
+            {isRecycleBinProtected && !isScanning && !isCleaning && (
+              <EmptyState
+                icon={ShieldAlert}
+                title={t('settings:protectRecycleBinLabel')}
+                description={t('settings:protectRecycleBinDesc')}
+                action={
+                  <button
+                    onClick={() => navigate('/settings')}
+                    className="flex items-center gap-2 rounded-xl px-5 py-2.5 text-[13px] font-semibold transition-all"
+                    style={{
+                      background: 'var(--bg-hover)',
+                      border: '1px solid var(--border-medium)',
+                      color: 'var(--text-secondary)'
+                    }}
+                  >
+                    {t('settings:sectionCleaningPreferences')}
+                  </button>
                 }
-                for (const [label, items] of grouped) grouped.set(label, sortResults(items))
+              />
+            )}
 
-                const sections: { label?: string; items: ScanResult[] }[] = []
-                if (ungrouped.length > 0) sections.push({ items: ungrouped })
-                for (const [label, items] of grouped) sections.push({ label, items })
+            {!hasResults && !isScanning && !isRecycleBinProtected && (
+              <EmptyState
+                icon={Search}
+                title={t('noScanResultsTitle')}
+                description={t('noScanResultsDescription')}
+                action={
+                  <button
+                    onClick={handleScan}
+                    disabled={isCleaning || preparingClean}
+                    className="pulse-primary-action pulse-scan-action flex items-center gap-2 rounded-xl px-5 py-2.5 text-[13px] font-semibold transition-all disabled:opacity-40"
+                    style={{
+                      background: 'linear-gradient(135deg, #22d3ee 0%, #0891b2 100%)',
+                      color: 'var(--text-on-accent)'
+                    }}
+                  >
+                    <Search className="h-4 w-4" strokeWidth={1.8} />
+                    {t('startScan')}
+                  </button>
+                }
+              />
+            )}
 
-                return sections.map((section) => (
-                  <div key={section.label || '_ungrouped'}>
-                    {section.label && (
-                      <div className="mt-4 mb-2 flex items-center gap-2 px-1">
-                        <span
-                          className="text-[11px] font-semibold uppercase tracking-wider"
-                          style={{ color: 'var(--text-secondary)' }}
-                        >
-                          {highlight(section.label)}
-                        </span>
-                        <div className="flex-1 h-px" style={{ background: 'var(--bg-hover-2)' }} />
-                        <span
-                          className="text-[11px] font-mono"
-                          style={{ color: 'var(--text-muted)' }}
-                        >
-                          {formatBytes(section.items.reduce((s, r) => s + r.totalSize, 0))}
-                        </span>
-                      </div>
+            {hasResults && (
+              <fieldset
+                disabled={isScanning || isCleaning || preparingClean}
+                className="mb-4 space-y-3 rounded-xl border p-3 disabled:opacity-50"
+                style={{ borderColor: 'var(--border-default)', background: 'var(--card-bg)' }}
+              >
+                <legend className="sr-only">{t('searchResults')}</legend>
+                <div className="flex flex-wrap items-center gap-2">
+                  <div
+                    className="relative flex min-w-48 flex-1 items-center gap-2 rounded-lg border px-3 py-2"
+                    style={{ borderColor: 'var(--border-medium)' }}
+                  >
+                    <Search className="h-4 w-4 shrink-0" style={{ color: 'var(--text-muted)' }} />
+                    <input
+                      type="search"
+                      value={searchQuery}
+                      onChange={(event) => setSearchQuery(event.target.value)}
+                      placeholder={t('searchResultsPlaceholder')}
+                      aria-label={t('searchResults')}
+                      className="min-w-0 flex-1 bg-transparent text-[13px] outline-none [&::-webkit-search-cancel-button]:hidden"
+                      style={{ color: 'var(--text-primary)' }}
+                    />
+                    {searchQuery && (
+                      <button
+                        type="button"
+                        aria-label={t('clearSearch')}
+                        onClick={() => setSearchQuery('')}
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
                     )}
-                    <div className="space-y-1.5">
-                      {section.items.map((result) => {
-                        const groupKey = JSON.stringify([
-                          result.category,
-                          result.group,
-                          result.subcategory
-                        ])
-                        const displayKey = viewKey + groupKey
-                        const visibleLimit = visibleLimits[displayKey] ?? 50
-                        const isExpanded = isFiltering
-                          ? !collapsedMatches.has(displayKey)
-                          : expandedGroups.has(groupKey)
-                        const selectedInGroup = result.items.filter((item) =>
-                          store.selectedItems.has(item.id)
-                        ).length
-                        const allSelected = selectedInGroup === result.items.length
-                        const someSelected = selectedInGroup > 0 && !allSelected
+                  </div>
+                  <select
+                    aria-label={t('searchScope')}
+                    value={searchScope}
+                    onChange={(event) => setSearchScope(event.target.value as 'category' | 'all')}
+                    className="rounded-lg border px-3 py-2 text-[12px]"
+                    style={{
+                      borderColor: 'var(--border-medium)',
+                      background: 'var(--card-bg)',
+                      color: 'var(--text-secondary)'
+                    }}
+                  >
+                    <option value="category">{t('currentCategory')}</option>
+                    <option value="all">{t('allCleanupCategories')}</option>
+                  </select>
+                  <label
+                    className="flex items-center gap-2 text-[12px]"
+                    style={{ color: 'var(--text-secondary)' }}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectedOnly}
+                      onChange={(event) => setSelectedOnly(event.target.checked)}
+                      className="accent-amber-500"
+                    />
+                    {t('selectedOnly')}
+                  </label>
+                </div>
+                <div className="flex flex-wrap items-center justify-between gap-2 text-[12px]">
+                  <p role="status" style={{ color: 'var(--text-muted)' }}>
+                    {t('resultSelectionSummary', {
+                      count: formatNumber(visibleIds.length),
+                      selected: formatNumber(selectedHere),
+                      elsewhere: formatNumber(selectedElsewhere)
+                    })}
+                  </p>
+                  <div className="flex gap-3 text-amber-500">
+                    <button
+                      type="button"
+                      disabled={!bulkSelectableIds.length}
+                      onClick={() => store.setItemsSelected(bulkSelectableIds, true)}
+                      className="disabled:opacity-40"
+                    >
+                      {t(isFiltering ? 'selectMatches' : 'selectInView')}
+                    </button>
+                    <button
+                      type="button"
+                      disabled={!selectedHere}
+                      onClick={() => store.setItemsSelected(visibleIds, false)}
+                      className="disabled:opacity-40"
+                    >
+                      {t(isFiltering ? 'deselectMatches' : 'deselectInView')}
+                    </button>
+                  </div>
+                </div>
+                <p className="text-[11px]" style={{ color: 'var(--text-muted)' }}>
+                  {t('searchSelectionHint')}
+                </p>
+                {visibleResults.some((result) => result.category === CleanerType.PrivacyTraces) && (
+                  <p className="text-[11px]" style={{ color: 'var(--text-muted)' }}>
+                    {t('privacyBulkSelectionHint')}
+                  </p>
+                )}
+              </fieldset>
+            )}
 
-                        return (
-                          <div
-                            key={groupKey}
-                            className="rounded-xl overflow-hidden"
-                            style={{
-                              background: 'var(--card-bg)',
-                              border: '1px solid var(--border-default)'
-                            }}
-                          >
-                            {/* Group header */}
-                            <div
-                              className="flex items-center gap-3 px-4 py-3.5 cursor-pointer"
-                              onClick={() => toggleResultGroup(groupKey, displayKey)}
-                              onContextMenu={(e) => {
-                                // The quick-clean menu would clear traces without selecting them.
-                                if (result.category === CleanerType.PrivacyTraces) return
-                                const ids = result.items.map((item) => item.id)
-                                openContextMenu(e, result.subcategory, ids)
+            {hasResults && !isRecycleBinProtected && (
+              <div key={activeCategory} className="space-y-2">
+                <div className="mb-3 flex items-center justify-between px-1">
+                  <span
+                    className="text-[11px] font-medium uppercase tracking-wider"
+                    style={{ color: 'var(--text-muted)' }}
+                  >
+                    {t('categoryItemsHeading', {
+                      category:
+                        searchScope === 'all'
+                          ? t('allCleanupCategories')
+                          : t(categories.find((c) => c.type === activeCategory)?.labelKey ?? '')
+                    })}
+                  </span>
+                  <div className="flex items-center gap-3">
+                    <div className="relative" ref={sortMenuRef}>
+                      <button
+                        onClick={() => setShowSortMenu((v) => !v)}
+                        className="flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-[12px] font-medium transition-colors"
+                        style={{
+                          color: 'var(--text-muted)',
+                          border: '1px solid var(--border-medium)'
+                        }}
+                      >
+                        <ArrowUpDown className="h-3 w-3" strokeWidth={1.8} />
+                        {t(SORT_LABEL_KEYS[sortMode])}
+                        <ChevronDown
+                          className={cn(
+                            'h-3 w-3 transition-transform',
+                            showSortMenu && 'rotate-180'
+                          )}
+                          strokeWidth={2}
+                        />
+                      </button>
+                      {showSortMenu && (
+                        <div
+                          className="absolute right-0 top-full z-50 mt-1 rounded-xl py-1 shadow-xl"
+                          style={{
+                            background: '#1e1e22',
+                            border: '1px solid var(--border-strong)',
+                            minWidth: 140
+                          }}
+                        >
+                          {(Object.keys(SORT_LABEL_KEYS) as SortMode[]).map((mode) => (
+                            <button
+                              key={mode}
+                              onClick={() => {
+                                setSortMode(mode)
+                                setShowSortMenu(false)
                               }}
-                              onMouseEnter={(e) => {
-                                e.currentTarget.style.background = 'var(--bg-subtle)'
-                              }}
-                              onMouseLeave={(e) => {
-                                e.currentTarget.style.background = 'transparent'
+                              className="flex w-full items-center gap-2 px-4 py-2 text-[12px] transition-colors hover:bg-white/5"
+                              style={{
+                                color:
+                                  sortMode === mode
+                                    ? 'var(--accent-hover)'
+                                    : 'var(--text-secondary)'
                               }}
                             >
-                              {/* Checkbox */}
-                              <button
-                                type="button"
-                                role="checkbox"
-                                aria-checked={someSelected ? 'mixed' : allSelected}
-                                aria-label={t('selectGroup', { name: result.subcategory })}
-                                disabled={isScanning || isCleaning || preparingClean}
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  toggleSubcategorySelection(result)
+                              {t(SORT_LABEL_KEYS[mode])}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {visibleResults.length === 0 && (
+                  <div
+                    className="py-12 text-center text-[13px]"
+                    style={{ color: 'var(--text-muted)' }}
+                  >
+                    {t(isFiltering ? 'noMatchingResults' : 'noItemsInCategory')}
+                  </div>
+                )}
+
+                {(() => {
+                  const results = visibleResults
+                  // Group results by group label (ungrouped first, then grouped
+                  // sections); each section is sorted independently so sort
+                  // order never interleaves group sections.
+                  const ungrouped =
+                    activeCategory === AI_TOOLS_VIEW && searchScope === 'category'
+                      ? sortResults(results)
+                      : sortResults(results.filter((r) => !r.group))
+                  const grouped = new Map<string, ScanResult[]>()
+                  if (activeCategory !== AI_TOOLS_VIEW || searchScope === 'all') {
+                    for (const r of results) {
+                      if (!r.group) continue
+                      if (!grouped.has(r.group)) grouped.set(r.group, [])
+                      grouped.get(r.group)!.push(r)
+                    }
+                  }
+                  for (const [label, items] of grouped) grouped.set(label, sortResults(items))
+
+                  const sections: { label?: string; items: ScanResult[] }[] = []
+                  if (ungrouped.length > 0) sections.push({ items: ungrouped })
+                  for (const [label, items] of grouped) sections.push({ label, items })
+
+                  return sections.map((section) => (
+                    <div key={section.label || '_ungrouped'}>
+                      {section.label && (
+                        <div className="mt-4 mb-2 flex items-center gap-2 px-1">
+                          <span
+                            className="text-[11px] font-semibold uppercase tracking-wider"
+                            style={{ color: 'var(--text-secondary)' }}
+                          >
+                            {highlight(section.label)}
+                          </span>
+                          <div
+                            className="flex-1 h-px"
+                            style={{ background: 'var(--bg-hover-2)' }}
+                          />
+                          <span
+                            className="text-[11px] font-mono"
+                            style={{ color: 'var(--text-muted)' }}
+                          >
+                            {formatBytes(section.items.reduce((s, r) => s + r.totalSize, 0))}
+                          </span>
+                        </div>
+                      )}
+                      <div className="space-y-1.5">
+                        {section.items.map((result) => {
+                          const groupKey = JSON.stringify([
+                            result.category,
+                            result.group,
+                            result.subcategory
+                          ])
+                          const displayKey = viewKey + groupKey
+                          const visibleLimit = visibleLimits[displayKey] ?? 50
+                          const isExpanded = isFiltering
+                            ? !collapsedMatches.has(displayKey)
+                            : expandedGroups.has(groupKey)
+                          const selectedInGroup = result.items.filter((item) =>
+                            store.selectedItems.has(item.id)
+                          ).length
+                          const allSelected = selectedInGroup === result.items.length
+                          const someSelected = selectedInGroup > 0 && !allSelected
+
+                          return (
+                            <div
+                              key={groupKey}
+                              className="rounded-xl overflow-hidden"
+                              style={{
+                                background: 'var(--card-bg)',
+                                border: '1px solid var(--border-default)'
+                              }}
+                            >
+                              {/* Group header */}
+                              <div
+                                className="flex items-center gap-3 px-4 py-3.5 cursor-pointer"
+                                onClick={() => toggleResultGroup(groupKey, displayKey)}
+                                onContextMenu={(e) => {
+                                  // The quick-clean menu would clear traces without selecting them.
+                                  if (result.category === CleanerType.PrivacyTraces) return
+                                  const ids = result.items.map((item) => item.id)
+                                  openContextMenu(e, result.subcategory, ids)
                                 }}
-                                className="flex items-center disabled:opacity-40"
-                              >
-                                <div
-                                  className="flex h-[18px] w-[18px] items-center justify-center rounded-[5px] cursor-pointer"
-                                  style={{
-                                    background:
-                                      allSelected || someSelected
-                                        ? 'var(--accent)'
-                                        : 'var(--bg-hover-2)',
-                                    border:
-                                      allSelected || someSelected
-                                        ? 'none'
-                                        : '1.5px solid var(--border-stronger)'
-                                  }}
-                                >
-                                  {allSelected && (
-                                    <svg className="h-3 w-3" viewBox="0 0 12 12" fill="none">
-                                      <path
-                                        d="M2.5 6l2.5 2.5 4.5-5"
-                                        stroke="var(--text-on-accent)"
-                                        strokeWidth="2"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                      />
-                                    </svg>
-                                  )}
-                                  {someSelected && (
-                                    <div
-                                      className="h-[2px] w-2 rounded-full"
-                                      style={{ background: 'var(--text-on-accent)' }}
-                                    />
-                                  )}
-                                </div>
-                              </button>
-
-                              {/* Expand arrow */}
-                              <button
-                                type="button"
-                                aria-label={t('toggleGroupDetails', { name: result.subcategory })}
-                                aria-expanded={isExpanded}
-                                onClick={(event) => {
-                                  event.stopPropagation()
-                                  toggleResultGroup(groupKey, displayKey)
+                                onMouseEnter={(e) => {
+                                  e.currentTarget.style.background = 'var(--bg-subtle)'
                                 }}
-                                className="shrink-0 rounded p-1 hover:bg-[var(--bg-hover)]"
-                              >
-                                <ChevronRight
-                                  className={cn(
-                                    'h-3.5 w-3.5 transition-transform',
-                                    isExpanded && 'rotate-90'
-                                  )}
-                                  style={{ color: 'var(--text-muted)' }}
-                                  strokeWidth={2}
-                                />
-                              </button>
-
-                              {/* Folder icon */}
-                              <Folder
-                                className="h-4 w-4 shrink-0"
-                                style={{
-                                  color: allSelected ? 'var(--accent)' : 'var(--text-muted)'
-                                }}
-                                strokeWidth={1.8}
-                              />
-
-                              {/* Label */}
-                              <div className="flex-1 min-w-0">
-                                <span className="text-[13px] font-medium text-zinc-300">
-                                  {highlight(result.subcategory)}
-                                </span>
-                                {searchScope === 'all' && (
-                                  <p
-                                    className="mt-0.5 text-[11px]"
-                                    style={{ color: 'var(--text-muted)' }}
-                                  >
-                                    {highlight(resultCategoryLabel(result))}
-                                  </p>
-                                )}
-                                {result.descriptionKey && (
-                                  <p
-                                    className="mt-1 text-[11px]"
-                                    style={{ color: 'var(--text-muted)' }}
-                                  >
-                                    {t(result.descriptionKey)}
-                                  </p>
-                                )}
-                                {result.items[0]?.cleanupAction && (
-                                  <p
-                                    className="mt-1 text-[11px]"
-                                    style={{ color: 'var(--text-muted)' }}
-                                  >
-                                    {result.items[0].cleanupAction === 'windows-components'
-                                      ? t('maintenanceComponentsNote', {
-                                          defaultValue:
-                                            'Removes older Windows component versions immediately. May take a while; savings are not included in totals.'
-                                        })
-                                      : t('maintenanceNativeNote', {
-                                          defaultValue:
-                                            'Uses the built-in cleanup tool. Savings are not included in totals.'
-                                        })}
-                                  </p>
-                                )}
-                              </div>
-
-                              {/* Stats */}
-                              <span
-                                className="rounded-md px-2 py-0.5 font-mono text-[11px] shrink-0"
-                                style={{
-                                  background: 'var(--bg-subtle-2)',
-                                  color: 'var(--text-secondary)'
+                                onMouseLeave={(e) => {
+                                  e.currentTarget.style.background = 'transparent'
                                 }}
                               >
-                                {t(result.itemCount === 1 ? 'itemCount' : 'itemCountPlural', {
-                                  count: formatNumber(result.itemCount)
-                                })}
-                              </span>
-                              <span
-                                className="font-mono text-[12px] font-medium shrink-0"
-                                style={{ color: 'var(--text-muted)' }}
-                              >
-                                {result.items.some((item) => item.cleanupAction)
-                                  ? t('maintenanceSizeUnknown', { defaultValue: 'Savings vary' })
-                                  : result.items.length > 0 &&
-                                      result.items.every((item) => item.entryCount !== undefined)
-                                    ? entryCountLabel(
-                                        result.items.reduce(
-                                          (sum, item) => sum + (item.entryCount ?? 0),
-                                          0
-                                        )
-                                      )
-                                    : formatBytes(result.totalSize)}
-                              </span>
-
-                              {/* Open location */}
-                              {result.items.length > 0 && isAbsolutePath(result.items[0].path) && (
+                                {/* Checkbox */}
                                 <button
                                   type="button"
-                                  title={t('openLocation')}
-                                  className="shrink-0 p-1 rounded transition-colors hover:bg-[var(--bg-hover-2)]"
+                                  role="checkbox"
+                                  aria-checked={someSelected ? 'mixed' : allSelected}
+                                  aria-label={t('selectGroup', { name: result.subcategory })}
+                                  disabled={isScanning || isCleaning || preparingClean}
                                   onClick={(e) => {
                                     e.stopPropagation()
-                                    window.fabric?.cleanerOpenLocation?.(result.items[0].path)
+                                    toggleSubcategorySelection(result)
                                   }}
+                                  className="flex items-center disabled:opacity-40"
                                 >
-                                  <FolderOpen
-                                    className="h-3.5 w-3.5"
+                                  <div
+                                    className="flex h-[18px] w-[18px] items-center justify-center rounded-[5px] cursor-pointer"
+                                    style={{
+                                      background:
+                                        allSelected || someSelected
+                                          ? 'var(--accent)'
+                                          : 'var(--bg-hover-2)',
+                                      border:
+                                        allSelected || someSelected
+                                          ? 'none'
+                                          : '1.5px solid var(--border-stronger)'
+                                    }}
+                                  >
+                                    {allSelected && (
+                                      <svg className="h-3 w-3" viewBox="0 0 12 12" fill="none">
+                                        <path
+                                          d="M2.5 6l2.5 2.5 4.5-5"
+                                          stroke="var(--text-on-accent)"
+                                          strokeWidth="2"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                        />
+                                      </svg>
+                                    )}
+                                    {someSelected && (
+                                      <div
+                                        className="h-[2px] w-2 rounded-full"
+                                        style={{ background: 'var(--text-on-accent)' }}
+                                      />
+                                    )}
+                                  </div>
+                                </button>
+
+                                {/* Expand arrow */}
+                                <button
+                                  type="button"
+                                  aria-label={t('toggleGroupDetails', { name: result.subcategory })}
+                                  aria-expanded={isExpanded}
+                                  onClick={(event) => {
+                                    event.stopPropagation()
+                                    toggleResultGroup(groupKey, displayKey)
+                                  }}
+                                  className="shrink-0 rounded p-1 hover:bg-[var(--bg-hover)]"
+                                >
+                                  <ChevronRight
+                                    className={cn(
+                                      'h-3.5 w-3.5 transition-transform',
+                                      isExpanded && 'rotate-90'
+                                    )}
                                     style={{ color: 'var(--text-muted)' }}
+                                    strokeWidth={2}
                                   />
                                 </button>
-                              )}
-                            </div>
 
-                            {/* Expanded item list */}
-                            {isExpanded && (
-                              <div style={{ borderTop: '1px solid var(--border-subtle)' }}>
-                                {result.items.slice(0, visibleLimit).map((item) => {
-                                  const checked = store.selectedItems.has(item.id)
-                                  const pathLabel =
-                                    item.path.split(/[/\\]/).slice(-2).join('/') || item.path
-                                  return (
-                                    <label
-                                      key={item.id}
-                                      className="flex items-center gap-3 px-4 py-2 pl-14 cursor-pointer transition-colors"
-                                      style={{
-                                        background: checked
-                                          ? 'rgba(34, 211, 238,0.03)'
-                                          : 'transparent'
-                                      }}
-                                      onMouseEnter={(e) => {
-                                        e.currentTarget.style.background = checked
-                                          ? 'rgba(34, 211, 238,0.05)'
-                                          : 'var(--bg-subtle)'
-                                      }}
-                                      onMouseLeave={(e) => {
-                                        e.currentTarget.style.background = checked
-                                          ? 'rgba(34, 211, 238,0.03)'
-                                          : 'transparent'
+                                {/* Folder icon */}
+                                <Folder
+                                  className="h-4 w-4 shrink-0"
+                                  style={{
+                                    color: allSelected ? 'var(--accent)' : 'var(--text-muted)'
+                                  }}
+                                  strokeWidth={1.8}
+                                />
+
+                                {/* Label */}
+                                <div className="flex-1 min-w-0">
+                                  <span className="text-[13px] font-medium text-zinc-300">
+                                    {highlight(result.subcategory)}
+                                  </span>
+                                  {searchScope === 'all' && (
+                                    <p
+                                      className="mt-0.5 text-[11px]"
+                                      style={{ color: 'var(--text-muted)' }}
+                                    >
+                                      {highlight(resultCategoryLabel(result))}
+                                    </p>
+                                  )}
+                                  {result.descriptionKey && (
+                                    <p
+                                      className="mt-1 text-[11px]"
+                                      style={{ color: 'var(--text-muted)' }}
+                                    >
+                                      {t(result.descriptionKey)}
+                                    </p>
+                                  )}
+                                  {result.items[0]?.cleanupAction && (
+                                    <p
+                                      className="mt-1 text-[11px]"
+                                      style={{ color: 'var(--text-muted)' }}
+                                    >
+                                      {result.items[0].cleanupAction === 'windows-components'
+                                        ? t('maintenanceComponentsNote', {
+                                            defaultValue:
+                                              'Removes older Windows component versions immediately. May take a while; savings are not included in totals.'
+                                          })
+                                        : t('maintenanceNativeNote', {
+                                            defaultValue:
+                                              'Uses the built-in cleanup tool. Savings are not included in totals.'
+                                          })}
+                                    </p>
+                                  )}
+                                </div>
+
+                                {/* Stats */}
+                                <span
+                                  className="rounded-md px-2 py-0.5 font-mono text-[11px] shrink-0"
+                                  style={{
+                                    background: 'var(--bg-subtle-2)',
+                                    color: 'var(--text-secondary)'
+                                  }}
+                                >
+                                  {t(result.itemCount === 1 ? 'itemCount' : 'itemCountPlural', {
+                                    count: formatNumber(result.itemCount)
+                                  })}
+                                </span>
+                                <span
+                                  className="font-mono text-[12px] font-medium shrink-0"
+                                  style={{ color: 'var(--text-muted)' }}
+                                >
+                                  {result.items.some((item) => item.cleanupAction)
+                                    ? t('maintenanceSizeUnknown', { defaultValue: 'Savings vary' })
+                                    : result.items.length > 0 &&
+                                        result.items.every((item) => item.entryCount !== undefined)
+                                      ? entryCountLabel(
+                                          result.items.reduce(
+                                            (sum, item) => sum + (item.entryCount ?? 0),
+                                            0
+                                          )
+                                        )
+                                      : formatBytes(result.totalSize)}
+                                </span>
+
+                                {/* Open location */}
+                                {result.items.length > 0 &&
+                                  isAbsolutePath(result.items[0].path) && (
+                                    <button
+                                      type="button"
+                                      title={t('openLocation')}
+                                      className="shrink-0 p-1 rounded transition-colors hover:bg-[var(--bg-hover-2)]"
+                                      onClick={(e) => {
+                                        e.stopPropagation()
+                                        window.fabric?.cleanerOpenLocation?.(result.items[0].path)
                                       }}
                                     >
-                                      <input
-                                        type="checkbox"
-                                        checked={checked}
-                                        disabled={isScanning || isCleaning || preparingClean}
-                                        onChange={() => {
-                                          if (isFiltering || searchScope === 'all')
-                                            store.setItemsSelected([item.id], !checked)
-                                          else store.toggleItem(item.id)
-                                        }}
-                                        className="sr-only peer"
+                                      <FolderOpen
+                                        className="h-3.5 w-3.5"
+                                        style={{ color: 'var(--text-muted)' }}
                                       />
-                                      <div
-                                        className="flex h-[16px] w-[16px] items-center justify-center rounded-[4px] shrink-0"
+                                    </button>
+                                  )}
+                              </div>
+
+                              {/* Expanded item list */}
+                              {isExpanded && (
+                                <div style={{ borderTop: '1px solid var(--border-subtle)' }}>
+                                  {result.items.slice(0, visibleLimit).map((item) => {
+                                    const checked = store.selectedItems.has(item.id)
+                                    const pathLabel =
+                                      item.path.split(/[/\\]/).slice(-2).join('/') || item.path
+                                    return (
+                                      <label
+                                        key={item.id}
+                                        className="flex items-center gap-3 px-4 py-2 pl-14 cursor-pointer transition-colors"
                                         style={{
                                           background: checked
-                                            ? 'var(--accent)'
-                                            : 'var(--bg-hover-2)',
-                                          border: checked
-                                            ? 'none'
-                                            : '1.5px solid var(--border-stronger)'
+                                            ? 'rgba(34, 211, 238,0.03)'
+                                            : 'transparent'
+                                        }}
+                                        onMouseEnter={(e) => {
+                                          e.currentTarget.style.background = checked
+                                            ? 'rgba(34, 211, 238,0.05)'
+                                            : 'var(--bg-subtle)'
+                                        }}
+                                        onMouseLeave={(e) => {
+                                          e.currentTarget.style.background = checked
+                                            ? 'rgba(34, 211, 238,0.03)'
+                                            : 'transparent'
                                         }}
                                       >
-                                        {checked && (
-                                          <svg
-                                            className="h-2.5 w-2.5"
-                                            viewBox="0 0 12 12"
-                                            fill="none"
-                                          >
-                                            <path
-                                              d="M2.5 6l2.5 2.5 4.5-5"
-                                              stroke="var(--text-on-accent)"
-                                              strokeWidth="2"
-                                              strokeLinecap="round"
-                                              strokeLinejoin="round"
-                                            />
-                                          </svg>
-                                        )}
-                                      </div>
-                                      <span
-                                        title={item.path}
-                                        className="flex-1 min-w-0 text-[12px] font-mono"
-                                        style={{ color: 'var(--text-secondary)' }}
-                                      >
-                                        {item.cleanupAction ? (
-                                          t('maintenanceOptional', {
-                                            defaultValue: 'Optional maintenance'
-                                          })
-                                        ) : (
-                                          <>
-                                            <span className="block truncate">
-                                              {highlight(pathLabel)}
-                                            </span>
-                                            <span
-                                              className="mt-0.5 block break-all select-text text-[10px]"
-                                              style={{ color: 'var(--text-muted)' }}
-                                            >
-                                              {highlight(item.path)}
-                                            </span>
-                                          </>
-                                        )}
-                                      </span>
-                                      <span
-                                        className="font-mono text-[11px] shrink-0"
-                                        style={{ color: 'var(--text-muted)' }}
-                                      >
-                                        {item.cleanupAction
-                                          ? t('maintenanceSizeUnknown', {
-                                              defaultValue: 'Savings vary'
-                                            })
-                                          : item.entryCount !== undefined
-                                            ? entryCountLabel(item.entryCount)
-                                            : formatBytes(item.size)}
-                                      </span>
-                                      <button
-                                        type="button"
-                                        title={t('copyPath')}
-                                        aria-label={t('copyPath')}
-                                        className="shrink-0 rounded p-1 hover:bg-[var(--bg-hover-2)]"
-                                        onClick={(event) => {
-                                          event.preventDefault()
-                                          event.stopPropagation()
-                                          void navigator.clipboard
-                                            .writeText(item.path)
-                                            .then(() => toast.success(t('pathCopied')))
-                                            .catch(() => toast.error(t('pathCopyFailed')))
-                                        }}
-                                      >
-                                        <Copy
-                                          className="h-3.5 w-3.5"
-                                          style={{ color: 'var(--text-muted)' }}
+                                        <input
+                                          type="checkbox"
+                                          checked={checked}
+                                          disabled={isScanning || isCleaning || preparingClean}
+                                          onChange={() => {
+                                            if (isFiltering || searchScope === 'all')
+                                              store.setItemsSelected([item.id], !checked)
+                                            else store.toggleItem(item.id)
+                                          }}
+                                          className="sr-only peer"
                                         />
-                                      </button>
-                                      {isAbsolutePath(item.path) && (
-                                        <button
-                                          type="button"
-                                          title={t('openLocation')}
-                                          className="shrink-0 p-0.5 rounded transition-colors hover:bg-[var(--bg-hover-2)]"
-                                          onClick={(e) => {
-                                            e.preventDefault()
-                                            e.stopPropagation()
-                                            window.fabric?.cleanerOpenLocation?.(item.path)
+                                        <div
+                                          className="flex h-[16px] w-[16px] items-center justify-center rounded-[4px] shrink-0"
+                                          style={{
+                                            background: checked
+                                              ? 'var(--accent)'
+                                              : 'var(--bg-hover-2)',
+                                            border: checked
+                                              ? 'none'
+                                              : '1.5px solid var(--border-stronger)'
                                           }}
                                         >
-                                          <FolderOpen
+                                          {checked && (
+                                            <svg
+                                              className="h-2.5 w-2.5"
+                                              viewBox="0 0 12 12"
+                                              fill="none"
+                                            >
+                                              <path
+                                                d="M2.5 6l2.5 2.5 4.5-5"
+                                                stroke="var(--text-on-accent)"
+                                                strokeWidth="2"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                              />
+                                            </svg>
+                                          )}
+                                        </div>
+                                        <span
+                                          title={item.path}
+                                          className="flex-1 min-w-0 text-[12px] font-mono"
+                                          style={{ color: 'var(--text-secondary)' }}
+                                        >
+                                          {item.cleanupAction ? (
+                                            t('maintenanceOptional', {
+                                              defaultValue: 'Optional maintenance'
+                                            })
+                                          ) : (
+                                            <>
+                                              <span className="block truncate">
+                                                {highlight(pathLabel)}
+                                              </span>
+                                              <span
+                                                className="mt-0.5 block break-all select-text text-[10px]"
+                                                style={{ color: 'var(--text-muted)' }}
+                                              >
+                                                {highlight(item.path)}
+                                              </span>
+                                            </>
+                                          )}
+                                        </span>
+                                        <span
+                                          className="font-mono text-[11px] shrink-0"
+                                          style={{ color: 'var(--text-muted)' }}
+                                        >
+                                          {item.cleanupAction
+                                            ? t('maintenanceSizeUnknown', {
+                                                defaultValue: 'Savings vary'
+                                              })
+                                            : item.entryCount !== undefined
+                                              ? entryCountLabel(item.entryCount)
+                                              : formatBytes(item.size)}
+                                        </span>
+                                        <button
+                                          type="button"
+                                          title={t('copyPath')}
+                                          aria-label={t('copyPath')}
+                                          className="shrink-0 rounded p-1 hover:bg-[var(--bg-hover-2)]"
+                                          onClick={(event) => {
+                                            event.preventDefault()
+                                            event.stopPropagation()
+                                            void navigator.clipboard
+                                              .writeText(item.path)
+                                              .then(() => toast.success(t('pathCopied')))
+                                              .catch(() => toast.error(t('pathCopyFailed')))
+                                          }}
+                                        >
+                                          <Copy
                                             className="h-3.5 w-3.5"
                                             style={{ color: 'var(--text-muted)' }}
                                           />
                                         </button>
-                                      )}
-                                    </label>
-                                  )
-                                })}
-                                {result.items.length > visibleLimit && (
-                                  <button
-                                    type="button"
-                                    onClick={() =>
-                                      setVisibleLimits((previous) => ({
-                                        ...previous,
-                                        [displayKey]: visibleLimit + 50
-                                      }))
-                                    }
-                                    className="w-full px-4 py-2.5 text-left pl-14 text-[12px] text-amber-500 hover:bg-[var(--bg-hover)]"
-                                  >
-                                    {t('showMoreItems', {
-                                      count: formatNumber(
-                                        Math.min(50, result.items.length - visibleLimit)
-                                      ),
-                                      remaining: formatNumber(result.items.length - visibleLimit)
-                                    })}
-                                  </button>
-                                )}
-                              </div>
-                            )}
-                          </div>
-                        )
-                      })}
+                                        {isAbsolutePath(item.path) && (
+                                          <button
+                                            type="button"
+                                            title={t('openLocation')}
+                                            className="shrink-0 p-0.5 rounded transition-colors hover:bg-[var(--bg-hover-2)]"
+                                            onClick={(e) => {
+                                              e.preventDefault()
+                                              e.stopPropagation()
+                                              window.fabric?.cleanerOpenLocation?.(item.path)
+                                            }}
+                                          >
+                                            <FolderOpen
+                                              className="h-3.5 w-3.5"
+                                              style={{ color: 'var(--text-muted)' }}
+                                            />
+                                          </button>
+                                        )}
+                                      </label>
+                                    )
+                                  })}
+                                  {result.items.length > visibleLimit && (
+                                    <button
+                                      type="button"
+                                      onClick={() =>
+                                        setVisibleLimits((previous) => ({
+                                          ...previous,
+                                          [displayKey]: visibleLimit + 50
+                                        }))
+                                      }
+                                      className="w-full px-4 py-2.5 text-left pl-14 text-[12px] text-amber-500 hover:bg-[var(--bg-hover)]"
+                                    >
+                                      {t('showMoreItems', {
+                                        count: formatNumber(
+                                          Math.min(50, result.items.length - visibleLimit)
+                                        ),
+                                        remaining: formatNumber(result.items.length - visibleLimit)
+                                      })}
+                                    </button>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          )
+                        })}
+                      </div>
                     </div>
-                  </div>
-                ))
-              })()}
-            </div>
-          )}
+                  ))
+                })()}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       {appCloseDialog}
       <ConfirmDialog

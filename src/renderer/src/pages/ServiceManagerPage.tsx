@@ -13,11 +13,14 @@ import {
   ChevronRight,
   Circle,
   Link2,
-  Play
+  Play,
+  Gauge,
+  ShieldCheck,
+  RotateCcw
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { PageHeader } from '@/components/layout/PageHeader'
-import { EmptyState } from '@/components/shared/EmptyState'
+import { ModuleStage } from '@/components/shared/ModuleStage'
 import { ErrorAlert } from '@/components/shared/ErrorAlert'
 import { ConfirmDialog } from '@/components/shared/ConfirmDialog'
 import { useServiceStore } from '@/stores/service-store'
@@ -94,6 +97,7 @@ const CATEGORY_LABEL_KEYS: Record<ServiceCategory | 'all', string> = {
 
 export function ServiceManagerPage({ embedded }: { embedded?: boolean }) {
   const { t } = useTranslation('hardening')
+  const { t: tx } = useTranslation('experience')
   const services = useServiceStore((s) => s.services)
   const scanning = useServiceStore((s) => s.scanning)
   const applying = useServiceStore((s) => s.applying)
@@ -534,23 +538,28 @@ export function ServiceManagerPage({ embedded }: { embedded?: boolean }) {
 
       {/* ── Empty state ──────────────────────────────────────── */}
       {!hasScanned && !scanning && (
-        <EmptyState
-          icon={Server}
-          title={t('serviceManager.emptyStateTitle')}
-          description={t('serviceManager.emptyStateDescription')}
-          action={
-            <button
-              onClick={handleScan}
-              className="pulse-primary-action pulse-scan-action flex items-center gap-2 rounded-xl px-5 py-2.5 text-[13px] font-semibold transition-all"
-              style={{
-                background: 'linear-gradient(135deg, #22d3ee 0%, #0891b2 100%)',
-                color: 'var(--text-on-accent)'
-              }}
-            >
-              <RefreshCw className="h-4 w-4" strokeWidth={1.8} />
-              {t('serviceManager.scanServicesButton')}
-            </button>
-          }
+        <ModuleStage
+          eyebrow={tx('stages.services.eyebrow')}
+          title={tx('stages.services.title')}
+          description={tx('stages.services.description')}
+          features={[
+            {
+              icon: Gauge,
+              title: tx('stages.services.features.startup.title'),
+              description: tx('stages.services.features.startup.description')
+            },
+            {
+              icon: ShieldCheck,
+              title: tx('stages.services.features.safe.title'),
+              description: tx('stages.services.features.safe.description')
+            },
+            {
+              icon: RotateCcw,
+              title: tx('stages.services.features.restore.title'),
+              description: tx('stages.services.features.restore.description')
+            }
+          ]}
+          action={{ label: tx('stages.services.action'), onClick: () => void handleScan() }}
         />
       )}
 

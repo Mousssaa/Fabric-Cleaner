@@ -1,0 +1,503 @@
+/* Smart Care: the home stage. Idle hero → orbital scan → five-tile bento. */
+
+.dashboard-view {
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+}
+.dashboard-view-toolbar {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 4px;
+}
+.dashboard-view-title {
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+}
+.dashboard-view-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.dashboard-view-switch {
+  display: inline-flex;
+  padding: 3px;
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  background: var(--card-bg);
+  box-shadow: inset 0 1px 0 var(--specular);
+  backdrop-filter: blur(20px) saturate(160%);
+}
+.dashboard-view-switch button {
+  min-height: 28px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 650;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+.dashboard-view-switch button:hover:not(:disabled) {
+  color: var(--text-primary);
+}
+.dashboard-view-switch button[aria-pressed='true'] {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--stage-a) 30%, transparent),
+    color-mix(in srgb, var(--stage-a) 12%, transparent)
+  );
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  color: var(--text-primary);
+}
+.dashboard-view-switch button:disabled {
+  cursor: not-allowed;
+}
+
+/* system posture pill */
+.system-posture {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 4px 3px 6px;
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  background: var(--card-bg);
+  box-shadow: inset 0 1px 0 var(--specular);
+  backdrop-filter: blur(20px) saturate(160%);
+}
+.system-posture-metric {
+  display: inline-flex;
+  min-height: 26px;
+  align-items: center;
+  gap: 5px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text-primary) 5%, transparent);
+  color: var(--text-muted);
+  font-size: 10.5px;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+}
+.system-posture-metric svg {
+  color: var(--stage-a);
+}
+.light .system-posture-metric svg {
+  color: var(--accent);
+}
+.system-posture-metric b {
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.system-posture-shield {
+  display: inline-flex;
+  min-height: 26px;
+  align-items: center;
+  gap: 6px;
+  margin-left: 2px;
+  padding: 0 10px;
+  border: 1px solid rgba(0, 245, 160, 0.3);
+  border-radius: 999px;
+  background: rgba(0, 245, 160, 0.1);
+  box-shadow: 0 0 14px rgba(0, 245, 160, 0.16);
+  color: #4dffc0;
+  font-size: 11px;
+  font-weight: 700;
+}
+.light .system-posture-shield {
+  color: #00825a;
+}
+
+/* ── stage ──────────────────────────────────────────────────────────── */
+.smart-care {
+  display: flex;
+  min-height: calc(100vh - 48px - 18px - 40px - 48px);
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+}
+.smart-care-hero {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 0 10px;
+  text-align: center;
+}
+.smart-care-core {
+  position: relative;
+  display: grid;
+  margin: -28px 0 -34px;
+  place-items: center;
+}
+.smart-care-core > svg {
+  filter: drop-shadow(0 30px 60px color-mix(in srgb, var(--stage-a) 26%, transparent));
+}
+.smart-care-hero h1 {
+  margin: 12px 0 10px;
+  color: var(--text-primary);
+  font-size: clamp(30px, 3.4vw, 42px);
+  font-weight: 750;
+  letter-spacing: -0.03em;
+  line-height: 1.06;
+}
+.smart-care-hero p {
+  max-width: 540px;
+  color: var(--text-muted);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* scanning: five module badges orbit the core */
+.smart-care-orbit-steps {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  pointer-events: none;
+}
+.smart-care-orbit-steps li {
+  --angle: calc(-90deg + var(--i) * 72deg);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: rotate(var(--angle)) translate(172px) rotate(calc(-1 * var(--angle)));
+}
+.smart-care-step-badge {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  place-items: center;
+  border: 1px solid var(--glass-border);
+  border-radius: 50%;
+  background: var(--card-bg);
+  box-shadow: inset 0 1px 0 var(--specular);
+  color: var(--text-faint);
+  backdrop-filter: blur(16px);
+  transition: all 0.35s ease;
+}
+.smart-care-orbit-steps li[data-state='active'] .smart-care-step-badge {
+  border-color: var(--stage-a);
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--stage-a) 18%, transparent),
+    0 0 22px color-mix(in srgb, var(--stage-a) 55%, transparent);
+  color: var(--stage-a);
+  transform: scale(1.15);
+}
+.smart-care-orbit-steps li[data-state='done'] .smart-care-step-badge {
+  border-color: rgba(0, 245, 160, 0.45);
+  background: rgba(0, 245, 160, 0.16);
+  color: #4dffc0;
+}
+.light .smart-care-orbit-steps li[data-state='done'] .smart-care-step-badge {
+  color: #00825a;
+}
+
+/* bottom dock with the orbit button */
+.smart-care-dock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  padding: 28px 0 8px;
+}
+.smart-care-dock-side {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: var(--text-muted);
+  font-size: 12.5px;
+}
+.smart-care-dock-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ── results: 5-tile glass bento ────────────────────────────────────── */
+.smart-care-results {
+  width: 100%;
+  max-width: 1120px;
+  padding-top: 6px;
+}
+.smart-care-results-heading {
+  margin-bottom: 18px;
+  text-align: center;
+}
+.smart-care-results-heading h1 {
+  margin-top: 8px;
+  color: var(--text-primary);
+  font-size: 30px;
+  font-weight: 750;
+  letter-spacing: -0.025em;
+}
+.smart-care-bento {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: minmax(170px, auto);
+  gap: 14px;
+}
+.smart-care-tile {
+  --tile: #00e5ff;
+  position: relative;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 18px 20px 16px;
+  border: 1px solid var(--glass-border);
+  border-radius: 18px;
+  background:
+    radial-gradient(
+      ellipse 90% 70% at 100% 0%,
+      color-mix(in srgb, var(--tile) 16%, transparent),
+      transparent 70%
+    ),
+    var(--card-bg);
+  box-shadow:
+    inset 0 1px 0 var(--specular),
+    var(--glass-shadow);
+  backdrop-filter: blur(28px) saturate(160%);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  animation: smart-care-rise 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease;
+}
+.smart-care-tile:nth-child(2) {
+  animation-delay: 0.05s;
+}
+.smart-care-tile:nth-child(3) {
+  animation-delay: 0.1s;
+}
+.smart-care-tile:nth-child(4) {
+  animation-delay: 0.15s;
+}
+.smart-care-tile:nth-child(5) {
+  animation-delay: 0.2s;
+}
+.smart-care-tile:hover {
+  border-color: color-mix(in srgb, var(--tile) 40%, transparent);
+  transform: translateY(-2px);
+}
+.smart-care-tile.is-featured {
+  grid-row: span 2;
+}
+.smart-care-tile-art {
+  position: absolute;
+  top: 36px;
+  right: -18px;
+  opacity: 0.95;
+  pointer-events: none;
+}
+[dir='rtl'] .smart-care-tile-art {
+  right: auto;
+  left: -18px;
+}
+.smart-care-tile > :not(.smart-care-tile-art) {
+  position: relative;
+}
+.smart-care-tile[data-module='cleanup'] {
+  --tile: #00c2ff;
+}
+.smart-care-tile[data-module='protection'] {
+  --tile: #00f5a0;
+}
+.smart-care-tile[data-module='performance'] {
+  --tile: #8f78ff;
+}
+.smart-care-tile[data-module='applications'] {
+  --tile: #38bdf8;
+}
+.smart-care-tile[data-module='spacelens'] {
+  --tile: #f59e0b;
+}
+.smart-care-tile-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.smart-care-tile-badge {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--tile) 32%, transparent);
+  border-radius: 11px;
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--tile) 26%, transparent),
+    color-mix(in srgb, var(--tile) 5%, transparent)
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 0 18px color-mix(in srgb, var(--tile) 24%, transparent);
+  color: var(--tile);
+}
+.light .smart-care-tile-badge {
+  color: color-mix(in srgb, var(--tile) 65%, #062033);
+}
+.smart-care-tile-badge svg {
+  width: 18px;
+  height: 18px;
+}
+.smart-care-tile-pill {
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+.smart-care-tile[data-status='good'] .smart-care-tile-pill {
+  border: 1px solid rgba(0, 245, 160, 0.3);
+  background: rgba(0, 245, 160, 0.1);
+  color: #4dffc0;
+}
+.smart-care-tile[data-status='attention'] .smart-care-tile-pill {
+  border: 1px solid rgba(255, 196, 0, 0.3);
+  background: rgba(255, 196, 0, 0.1);
+  color: #ffd25e;
+}
+.smart-care-tile[data-status='alert'] .smart-care-tile-pill {
+  border: 1px solid rgba(255, 90, 120, 0.35);
+  background: rgba(255, 90, 120, 0.12);
+  color: #ff8aa2;
+}
+.light .smart-care-tile[data-status='good'] .smart-care-tile-pill {
+  color: #00754f;
+}
+.light .smart-care-tile[data-status='attention'] .smart-care-tile-pill {
+  color: #8a5a00;
+}
+.light .smart-care-tile[data-status='alert'] .smart-care-tile-pill {
+  color: #b4123a;
+}
+.smart-care-tile h2 {
+  margin-top: 14px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 650;
+}
+.smart-care-tile-value {
+  display: block;
+  margin-top: 4px;
+  color: var(--text-primary);
+  font-size: 24px;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+.smart-care-tile.is-featured .smart-care-tile-value {
+  margin-top: auto;
+  padding-top: 18px;
+  background: linear-gradient(120deg, #ffffff, var(--tile));
+  -webkit-background-clip: text;
+  background-clip: text;
+  font-size: clamp(40px, 4.6vw, 58px);
+  -webkit-text-fill-color: transparent;
+}
+.light .smart-care-tile.is-featured .smart-care-tile-value {
+  background: linear-gradient(120deg, #06283a, #0089a8);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.smart-care-tile p {
+  margin-top: 4px;
+  color: var(--text-muted);
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+.smart-care-meter {
+  height: 6px;
+  margin-top: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text-primary) 10%, transparent);
+}
+.smart-care-meter span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #06b6d4, var(--tile));
+  box-shadow: 0 0 10px var(--tile);
+}
+.smart-care-tile-link {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+  padding: 12px 0 0;
+  border: 0;
+  background: transparent;
+  color: var(--tile);
+  font-size: 12.5px;
+  font-weight: 700;
+}
+.smart-care-tile:not(.is-featured) .smart-care-tile-link {
+  padding-top: 12px;
+}
+.light .smart-care-tile-link {
+  color: color-mix(in srgb, var(--tile) 60%, #062033);
+}
+.smart-care-tile-link svg {
+  transition: transform 0.2s ease;
+}
+.smart-care-tile-link:hover svg {
+  transform: translateX(3px);
+}
+[dir='rtl'] .smart-care-tile-link svg {
+  transform: scaleX(-1);
+}
+@keyframes smart-care-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (max-width: 1100px) {
+  .smart-care-bento {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 760px) {
+  .smart-care-bento {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .smart-care-tile.is-featured {
+    grid-row: auto;
+  }
+  .smart-care-dock {
+    flex-direction: column;
+    gap: 18px;
+  }
+  .dashboard-view-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .smart-care-tile {
+    animation: none;
+  }
+}

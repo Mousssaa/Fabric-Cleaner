@@ -555,11 +555,14 @@ const reads: Record<string, (...args: any[]) => unknown> = {
   malwareAllowlistList: () => [],
   malwareQuarantineList: () => [],
   malwareYaraInfo: () => ({
+    available: true,
+    engine: 'yara',
+    rulesLoaded: 7200,
+    version: 'preview',
+    updatedAt: new Date(now).toISOString(),
     source: 'bundled',
-    engine: 'yara-x',
-    ruleCount: 7200,
-    lastUpdated: new Date(now).toISOString(),
-    ready: true
+    cachedRules: 7200,
+    compileProgress: null
   }),
   cleanupReceipts: () => [],
   deletionLogQuery: () => ({ records: [], total: 0 }),

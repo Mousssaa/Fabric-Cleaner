@@ -6,12 +6,24 @@ import { Sidebar } from './Sidebar'
 import { AdminBanner } from './AdminBanner'
 import { useSettingsStore } from '@/stores/settings-store'
 import { usePlatform } from '@/hooks/usePlatform'
-import logoSrc from '@/assets/logo.svg'
+import { moduleForPath, type StageModule } from './modules'
+
+const moduleLabelKeys: Record<StageModule, string> = {
+  smartcare: 'smartCare',
+  cleanup: 'cleanupPillar',
+  protection: 'securityHeading',
+  performance: 'performance',
+  applications: 'applications',
+  spacelens: 'spaceLens',
+  activity: 'activityAndRecovery',
+  preferences: 'settings'
+}
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const { t } = useTranslation('common')
   const location = useLocation()
   const { platform } = usePlatform()
+  const stageModule = moduleForPath(location.pathname)
   const handleSkip = useCallback((e: React.MouseEvent | React.KeyboardEvent) => {
     e.preventDefault()
     const el = document.getElementById('main-content')
@@ -22,7 +34,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }, [])
 
   return (
-    <div className="app-shell h-screen overflow-hidden" data-platform={platform}>
+    <div
+      className="app-shell h-screen overflow-hidden"
+      data-platform={platform}
+      data-module={stageModule}
+    >
       <a href="#" className="skip-nav" onClick={handleSkip}>
         {t('skipToMainContent', 'Skip to main content')}
       </a>
@@ -31,22 +47,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         className="app-titlebar drag-region"
         aria-label={t('windowTitlebar', 'Fabric Cleaner window titlebar')}
       >
-        <div className="app-brand">
-          <img src={logoSrc} alt="" className="fc-emblem h-6 w-6" />
-          <div>
-            <div
-              className="text-[12px] font-bold leading-none"
-              style={{ color: 'var(--text-primary)' }}
-            >
-              Fabric Cleaner
-            </div>
-            <div
-              className="mt-1 text-[9.5px] font-semibold uppercase leading-none tracking-[0.08em]"
-              style={{ color: 'var(--text-faint)' }}
-            >
-              HakTrak Networks
-            </div>
-          </div>
+        <div className="app-location-pill" aria-hidden="true">
+          <i />
+          <span>{t(`sidebar:${moduleLabelKeys[stageModule]}`)}</span>
         </div>
         <div className="app-titlebar-drag flex-1" aria-hidden="true" />
         <div className="app-titlebar-actions no-drag flex h-full items-center">
