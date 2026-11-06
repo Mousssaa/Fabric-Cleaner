@@ -1,0 +1,12 @@
+{
+  "trayTooltip": "Kudu",
+  "openKudu": "פתח את Kudu",
+  "quit": "יציאה",
+  "scheduledTaskNotificationTitle": "Kudu - משימה מתוזמנת",
+  "scheduledTaskNotificationBody": "מפעיל את \"{{name}}\"...",
+  "scanCompleteNotificationTitle": "Kudu - הסריקה הושלמה",
+  "scanCompleteNotificationBody": "נמצאו {{itemCount}} פריטים ({{sizeMB}} MB) שניתן לנקות.",
+  "scheduledScanName": "סריקה מתוזמנת",
+  "rendererStartupFailureTitle": "לא ניתן להפעיל את Kudu",
+  "rendererStartupFailureMessage": "Kudu לא הצליח להפעיל את הממשק שלו ועליו להיסגר. יש לצרף את קובץ היומן שמופיע למטה בעת דיווח על הבעיה."
+}

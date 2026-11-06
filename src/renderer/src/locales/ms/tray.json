@@ -1,0 +1,12 @@
+{
+  "trayTooltip": "Kudu",
+  "openKudu": "Buka Kudu",
+  "quit": "Keluar",
+  "scheduledTaskNotificationTitle": "Kudu - Tugas Berjadual",
+  "scheduledTaskNotificationBody": "Menjalankan \"{{name}}\"...",
+  "scanCompleteNotificationTitle": "Kudu - Imbasan Selesai",
+  "scanCompleteNotificationBody": "Menemui {{itemCount}} item ({{sizeMB}} MB) yang boleh dibersihkan.",
+  "scheduledScanName": "Imbasan Berjadual",
+  "rendererStartupFailureTitle": "Kudu tidak dapat dimulakan",
+  "rendererStartupFailureMessage": "Kudu tidak dapat memulakan antara mukanya dan perlu ditutup. Sila sertakan fail log yang ditunjukkan di bawah semasa melaporkan masalah ini."
+}

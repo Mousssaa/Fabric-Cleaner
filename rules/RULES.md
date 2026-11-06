@@ -1,0 +1,228 @@
+# Contributing Cleaner Rules
+
+Kudu's cleaning targets are defined as JSON files in this directory. Adding support for a new app, game launcher, or cache location is as simple as editing a JSON file — no TypeScript or Electron knowledge required.
+
+This is a **source-code contribution guide**. These files are bundled at build time, so editing JSON beside an installed executable does not add a cleaning target. For personal folders, including portable-app caches on another local drive, use **Settings → Custom cleaning folders** and follow the [Custom cleaning folders guide](../CUSTOM-FOLDERS.md).
+
+Browse the [full cleaner directory](https://usekudu.com/cleaners) to see what's already covered and what's missing.
+
+## Directory Layout
+
+```
+rules/
+  schema/rules.schema.json    # JSON Schema (editor autocomplete + validation)
+  win32/                       # Windows rules
+  darwin/                      # macOS rules
+  linux/                       # Linux rules
+```
+
+Each platform has 8 files:
+
+| File | What it defines |
+|------|----------------|
+| `apps.json` | Application caches (Discord, VS Code, Spotify, etc.) |
+| `browsers.json` | Browser cache paths (Chrome, Firefox, Safari, etc.) |
+| `gaming.json` | Game launcher caches (Steam, Epic, EA, etc.) |
+| `gpu-cache.json` | GPU shader caches (NVIDIA, AMD, Intel, Mesa) |
+| `system.json` | System temp files, logs, crash dumps |
+| `databases.json` | SQLite databases to vacuum-optimize |
+| `steam.json` | Steam library paths and redistributable patterns |
+| `misc.json` | Protected event logs and trash path |
+
+## Quick Start: Use the CLI Generator
+
+The fastest way to add a new rule — no manual JSON editing needed:
+
+```bash
+npm run new-rule
+```
+
+This interactive tool will ask for the app name, platforms, and cache paths, then write the JSON entries for you. It auto-detects Chromium/Electron apps and generates the standard cache subdirectories.
+
+### Other Helpful Tools
+
+```bash
+npm run find-cache       # Discover uncovered cache directories on your machine
+npm run preview-rule     # Preview what a rule would clean (dry run)
+npm run parity-check     # See cross-platform coverage gaps
+npm run catalog          # Regenerate the rules catalog page
+```
+
+## Adding a New App Cleaner (Manual)
+
+If you prefer to edit the JSON files directly, here's how:
+
+### 1. Find the cache paths
+
+Find where the app stores its cache on each platform. Common locations:
+
+| Platform | Typical locations |
+|----------|------------------|
+| Windows | `%LOCALAPPDATA%\AppName\`, `%APPDATA%\AppName\` |
+| macOS | `~/Library/Caches/com.app.name`, `~/Library/Application Support/AppName/` |
+| Linux | `~/.cache/appname`, `~/.config/appname/` |
+
+**Only target cache, temp, and log directories.** Never include user data, settings, login tokens, or databases that store user content.
+
+### 2. Add the entry
+
+Add your app to `apps.json` for each platform where it exists. Example for a hypothetical "Acme Editor":
+
+```json
+{
+  "id": "acme-editor",
+  "name": "Acme Editor",
+  "paths": [
+    "${APPDATA}/AcmeEditor/Cache/Cache_Data",
+    "${APPDATA}/AcmeEditor/logs"
+  ]
+}
+```
+
+### 3. Template Variables
+
+Built-in rules should use template variables instead of machine-specific hardcoded locations. The loader resolves these at runtime. Literal absolute paths are also accepted by the resolver (for example, `Q:/PortableApps/ExampleApp/cache`), but personal paths belong in Custom cleaning folders rather than shared source rules. No additional drive-letter template variable is needed.
+
+**Windows (`win32/`):**
+| Variable | Resolves to |
+|----------|-------------|
+| `${HOME}` | `C:\Users\<username>` |
+| `${LOCALAPPDATA}` | `C:\Users\<username>\AppData\Local` |
+| `${APPDATA}` | `C:\Users\<username>\AppData\Roaming` |
+| `${WINDIR}` | `C:\Windows` |
+| `${PROGRAMDATA}` | `C:\ProgramData` |
+| `${PROGRAMFILES}` | `C:\Program Files` |
+| `${PROGRAMFILES_X86}` | `C:\Program Files (x86)` |
+| `${SYSTEMDRIVE}` | `C:` (the drive Windows is installed on) |
+| `${TMPDIR}` | System temp directory |
+
+**macOS (`darwin/`):**
+| Variable | Resolves to |
+|----------|-------------|
+| `${HOME}` | `/Users/<username>` |
+| `${LIBRARY}` | `~/Library` |
+| `${CACHES}` | `~/Library/Caches` |
+| `${APP_SUPPORT}` | `~/Library/Application Support` |
+| `${TMPDIR}` | System temp directory |
+
+**Linux (`linux/`):**
+| Variable | Resolves to |
+|----------|-------------|
+| `${HOME}` | `/home/<username>` |
+| `${CONFIG}` | `~/.config` |
+| `${CACHE}` | `~/.cache` |
+| `${LOCAL_SHARE}` | `~/.local/share` |
+| `${TMPDIR}` | System temp directory |
+
+### 4. JSON Format Rules
+
+- Use **forward slashes** (`/`) in all paths — the loader converts to backslashes on Windows automatically.
+- App IDs must be **lowercase with hyphens** (e.g. `my-app`, not `MyApp`).
+- Each app needs at least one path.
+- Add `"minAgeDays"` when a cache or log needs a longer retention window. Directory contents are checked recursively before a whole directory is offered.
+- Add `"childSubdir"` if caches are in versioned subdirectories (e.g. JetBrains stores caches in `JetBrains/<version>/caches`).
+- Add `"recursiveMatch"` only when cache paths have dynamic nesting. It returns exact target directory names beneath a required anchor and never follows directory links. For broad bases, provide `"anchorPaths"` so anchor discovery follows bounded relative patterns instead of recursively walking unrelated folders.
+- Add `"fileMatch"` only for a small allowlist of exact direct filenames. It can inspect immediate child directories by suffix, but never traverses their nested state.
+
+### 5. Editor Autocomplete
+
+Every JSON file includes a `$schema` reference. If your editor supports JSON Schema (VS Code, IntelliJ, etc.), you'll get autocomplete and inline validation automatically.
+
+### 6. Validate Your Changes
+
+```bash
+npm run validate:rules
+```
+
+This checks all rule files against the schema, verifies template variables are valid for each platform, and catches duplicate IDs. This also runs automatically in CI on every PR.
+
+### 7. Run Tests
+
+```bash
+npm test
+```
+
+The test suite includes schema validation tests that verify every rule file.
+
+## Field Reference
+
+### App/Gaming/GPU Cache Entry (`apps.json`, `gaming.json`, `gpu-cache.json`)
+
+```json
+{
+  "id": "app-name",           // Required. Lowercase, hyphens ok.
+  "name": "Display Name",     // Required. Shown in the UI.
+  "paths": ["${VAR}/path"],   // Required. At least one path.
+  "group": "AI Tools",        // Optional. Groups related cleaner rules in the UI.
+  "minAgeDays": 7,            // Optional. Preserve newer entries and inspect nested contents.
+  "childSubdir": "caches",    // Optional. Scan path/*/childSubdir.
+  "recursiveMatch": {          // Optional alternative to childSubdir.
+    "anchor": "EBWebView",    // Targets must be beneath this exact directory.
+    "anchorPaths": ["*/EBWebView", "Packages/*/LocalState/EBWebView"],
+                                // Optional bounded anchor discovery; * matches one directory.
+    "targets": ["Cache", "Code Cache", "GPUCache"],
+    "excludedAncestors": ["Local Storage", "IndexedDB"],
+    "maxDepth": 12             // Optional; defaults to 12, maximum 32.
+  },
+  "fileMatch": {               // Optional alternative for exact direct files.
+    "names": ["installer.exe", "current.blockmap"],
+    "childDirSuffix": "-updater", // Optional; inspect matching immediate children.
+    "minAgeDays": 14,          // Required for file matches.
+    "skipIfChildExists": ["pending"]
+  },
+  "description": "Why safe"   // Optional. Explain what's cleaned.
+}
+```
+
+`childSubdir`, `recursiveMatch`, and `fileMatch` are mutually exclusive. Recursive targets and file-match names must be single names, not paths or globs; this prevents a broad base path from becoming directly cleanable. Each `anchorPaths` value is relative to a configured base, may use `*` for exactly one directory segment, and must end with the configured anchor name. A file match considers direct files only, and `skipIfChildExists` rejects the whole candidate directory when protected state such as `pending` is present.
+
+### System Clean Target (`system.json`)
+
+Linux `journal-vacuum` replaces raw deletion of `/var/log/journal`. It requires elevation and uses `journalctl` to remove archived persistent journals older than 30 days or in excess of a 1 GB archived-log budget. The size limit can remove archives younger than 30 days. Active files are preserved, with no forced rotation; runtime journals are outside the fixed directory scope. Like other native maintenance, it is optional, respects the exclusion gate, and never reports the whole journal size as reclaimed space.
+
+The `docker-build-prune` managed app action targets only the active local Docker engine builder, shown with its context name. It invokes native pruning for dangling build cache unused for seven days, with a 10 GB retained-cache target. It does not clean custom Buildx builders, remote engines, containers, volumes, or images. Context, socket, and engine identity are checked again before pruning. It is unselected by default, requires CLI `--include-maintenance`, and is unavailable to cloud cleanup or when exclusions are configured. Native reclaimed bytes are not estimated from the full cache size.
+
+App and system targets may set `cacheReset: true` for performance caches such as Prefetch and compiled shaders. These remain visible but unselected in an optional reset group, with a slower-next-launch notice. CLI cleanup requires `--include-cache-resets`; cloud cleanup excludes them. Ordinary cache rules retain their existing selection behavior.
+
+```json
+{
+  "path": "${VAR}/path",        // Required.
+  "subcategory": "Label",       // Required. Shown in the UI.
+  "needsAdmin": true,           // Optional. Requires elevation.
+  "childSubdir": "cache",       // Optional. Scan path/*/childSubdir.
+  "deepRecencyCheck": true,      // Optional. Protect recent descendants through cleanup.
+  "description": "Details"      // Optional.
+}
+```
+
+### Database Target (`databases.json`)
+
+```json
+{
+  "label": "App Name",                  // Required. Display label.
+  "basePath": "${VAR}/path",             // Required. Base directory.
+  "dbFiles": ["History", "Cookies"],     // Required. DB filenames or "$shared" ref.
+  "multiProfile": true,                  // Optional. Scan profile subdirs.
+  "profilePattern": ["*.default*"]       // Optional. Glob for profiles.
+}
+```
+
+Use `"dbFiles": "$chromium"` to reference the `sharedDbFileSets` instead of repeating the same list.
+
+## Safety Guidelines
+
+### AI and developer tool storage
+
+- Hugging Face cleanup covers only the optional Xet transfer cache, with a seven-day retention window and `cacheReset: true`. The Hub cache contains the models and datasets used for offline loading and must not be included in ordinary cleanup. See [Hugging Face cache documentation](https://huggingface.co/docs/huggingface_hub/guides/manage-cache).
+- LM Studio's legacy `~/.cache/lm-studio` directory is an application home, not a disposable cache. Never target it wholesale: it can contain models, conversations, and settings. Server logs are scoped to `server-logs` in the legacy or current `~/.lmstudio` home. Custom home locations are not discovered by these rules. See [LM Studio home resolution](https://github.com/lmstudio-ai/lmstudio-js/blob/main/packages/lms-common-server/src/findLMStudioHome.ts).
+- Insomnia's `responses` directory holds saved response bodies referenced by its database. Preserve it alongside collections, environments, and credentials; only target separate runtime caches and diagnostic logs. See [Insomnia response storage](https://github.com/Kong/insomnia/blob/develop/packages/insomnia/src/main/network/libcurl-promise.ts).
+- Windows Ollama logs use an exact `fileMatch` allowlist under `%LOCALAPPDATA%/Ollama`, retaining files modified within one day. File-match retention is rechecked before deletion. macOS uses `~/.ollama/logs`; Linux has no app-file rule because standard installations log to the system journal or stdout. See [Ollama troubleshooting](https://docs.ollama.com/troubleshooting).
+
+### General rules
+
+- **Only clean cache, temp, and log data.** Never target user documents, settings, passwords, bookmarks, or session tokens.
+- **Mark system paths as `needsAdmin: true`** if they require elevated privileges.
+- **Use retention windows for active apps and services.** Prefer `minAgeDays` for logs, updater artifacts, and caches whose containing directories may stay active.
+- **Use exact file allowlists for updater artifacts.** Never target an updater directory wholesale or descend into a `pending` directory.
+- **Test on a real system** before submitting — verify the paths actually exist and contain only disposable data.
+- **When in doubt, don't include it.** It's better to miss a cache directory than to delete something important.

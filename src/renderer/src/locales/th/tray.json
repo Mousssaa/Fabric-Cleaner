@@ -1,0 +1,12 @@
+{
+  "trayTooltip": "Kudu",
+  "openKudu": "เปิด Kudu",
+  "quit": "ออก",
+  "scheduledTaskNotificationTitle": "Kudu - งานที่กำหนดเวลาไว้",
+  "scheduledTaskNotificationBody": "กำลังเรียกใช้ \"{{name}}\"...",
+  "scanCompleteNotificationTitle": "Kudu - การสแกนเสร็จสมบูรณ์",
+  "scanCompleteNotificationBody": "พบ {{itemCount}} รายการ ({{sizeMB}} MB) ที่สามารถล้างได้",
+  "scheduledScanName": "การสแกนตามกำหนดเวลา",
+  "rendererStartupFailureTitle": "ไม่สามารถเริ่ม Kudu ได้",
+  "rendererStartupFailureMessage": "Kudu ไม่สามารถเริ่มส่วนติดต่อผู้ใช้ได้และจำเป็นต้องปิด โปรดแนบไฟล์บันทึกที่แสดงด้านล่างเมื่อรายงานปัญหานี้"
+}
