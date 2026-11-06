@@ -435,7 +435,7 @@ export function StartupPage() {
   const safetyLoading = useStartupStore((s) => s.safetyLoading)
   const expandedItemId = useStartupStore((s) => s.expandedItemId)
 
-  // Reputation ratings came from Kudu Cloud. Fabric Cloud is local-first, so
+  // Reputation ratings came from Kudu Cloud. Fabric Cleaner is local-first, so
   // they stay off until a threat intelligence provider is wired in.
   const isCloudLinked = false as boolean
 
