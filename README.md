@@ -1,68 +1,70 @@
 <p align="center">
-  <a href="https://usekudu.com"><img src="logo.png" alt="Kudu" width="128" /></a>
+  <img src="resources/brand/fabric-cleaner.svg" alt="Fabric Cleaner" width="112" />
 </p>
 
-<h1 align="center">Kudu</h1>
+<h1 align="center">Fabric Cleaner</h1>
 
 <p align="center">
-  Free, open-source system cleaner and security scanner for Windows, macOS, and Linux.
-</p>
-
-<p align="center">
-  <a href="https://github.com/adventdevinc/kudu/releases"><img src="https://img.shields.io/github/v/release/adventdevinc/kudu?style=flat-square" alt="Release" /></a>
-  <a href="https://github.com/adventdevinc/kudu/releases"><img src="https://img.shields.io/github/downloads/adventdevinc/kudu/total?style=flat-square&label=Downloads" alt="Downloads" /></a>
-  <a href="https://github.com/adventdevinc/kudu/actions"><img src="https://img.shields.io/github/actions/workflow/status/adventdevinc/kudu/release.yml?style=flat-square&label=Build" alt="Build" /></a>
-  <a href="LICENSE"><img src="https://img.shields.io/github/license/adventdevinc/kudu?style=flat-square" alt="License" /></a>
+  Local-first system cleaner and security toolkit for Windows, macOS, and Linux.<br />
+  By <strong>HakTrak Networks</strong>.
 </p>
 
 <p align="center">
-  <a href="https://github.com/adventdevinc/kudu/releases"><b>Download</b></a> &nbsp;&middot;&nbsp;
-  <a href="https://usekudu.com"><b>Website</b></a> &nbsp;&middot;&nbsp;
-  <a href="https://usekudu.com/cleaners"><b>Cleaners</b></a> &nbsp;&middot;&nbsp;
-  <a href="CLI.md"><b>CLI</b></a>
-</p>
-
-<p align="center">
-  <img src="resources/kudu-animated.gif" alt="Kudu Demo" width="800" />
+  <a href="CLI.md"><b>CLI</b></a> &nbsp;&middot;&nbsp;
+  <a href="rules/RULES.md"><b>Cleaner rules</b></a> &nbsp;&middot;&nbsp;
+  <a href="docs/PRODUCT_NAMING_AND_STATUS.md"><b>Naming &amp; status</b></a>
 </p>
 
 ## Overview
 
-Kudu reclaims disk space, removes malware, and protects your privacy — without ads, bundled software, or upsells. Everything runs locally, and every line of code is open for you to audit.
+Fabric Cleaner reclaims disk space, scans for malware, and hardens privacy settings. Every core feature runs on your device, offline, with no account and no API keys.
 
-It covers system, browser, app, and game cache cleaning; registry and startup management; a disk analyzer; a malware scanner; privacy controls; a software updater; performance monitoring; scheduled scans; and a scriptable [CLI](CLI.md). See the [website](https://usekudu.com) for the full feature list and the [cleaner directory](https://usekudu.com/cleaners) for every supported app.
+- **Cleaning:** system, browser, app, and game caches; registry and startup management; disk analyzer; duplicate finder; uninstaller; scheduled scans; and a scriptable [CLI](CLI.md).
+- **Trash-first:** cleanup goes to the system Trash / Recycle Bin by default through a single `ExecutionEngine` that refuses protected system paths and symbolic links. Permanent deletion is an explicit setting.
+- **Local malware scanning:** YARA-X with rules bundled in `resources/yara-rules/` plus any `.yar` files you add to the user rules folder.
+- **Local Threat Monitor:** watches network connections against blocklists you import from a file. Nothing is downloaded.
+- **Least privilege:** Windows builds run `asInvoker`; administrator rights are requested only for actions that need them.
+- **Threat intelligence, prepared:** Settings → _Threat Intelligence APIs_ holds VirusTotal and LeakRadar credentials (encrypted with the OS keychain). No requests are sent to either service in this release.
 
-Available in 31 languages.
+Available in 31 languages, with English and Arabic maintained first.
 
-## Install
+## Build from source
 
-Download the latest release for your platform from [GitHub Releases](https://github.com/adventdevinc/kudu/releases).
+Requires Node.js 22 or later.
 
-| Platform | Formats                                    |
-| -------- | ------------------------------------------ |
-| Windows  | `.exe` installer, portable ZIP or EXE (x64, ARM64) |
-| macOS    | `.dmg` (Intel and Apple Silicon)           |
-| Linux    | `.AppImage` or `.deb` (x64, arm64)         |
+```bash
+npm ci
+npm run dev         # development mode
+npm run typecheck
+npm run lint
+npm test
+npm run build       # production bundle
+npm run package     # installers via electron-builder
+```
 
-The installer is recommended for automatic updates and scheduled scans on startup. Portable builds keep settings in AppData and are updated manually.
+Packaging is configured in [electron-builder.yml](electron-builder.yml). Release builds run from the manual `release.yml` workflow; nothing publishes automatically.
 
-Windows ARM64 builds target Windows 11 on ARM. See [ARM64 build and validation details](docs/windows-arm64.md).
+## Project layout
 
-## Contributing
+| Path                                    | Contents                                       |
+| --------------------------------------- | ---------------------------------------------- |
+| `src/main/`                             | Electron main process, IPC handlers, services  |
+| `src/main/services/execution-engine.ts` | Trash-first, protected-path file disposal      |
+| `src/main/services/intelligence/`       | VirusTotal, LeakRadar and gateway adapter stubs |
+| `src/main/security/ipc-guard.ts`        | IPC sender validation                          |
+| `src/preload/`                          | `window.fabric` bridge (context isolated)      |
+| `src/renderer/`                         | React UI                                       |
+| `resources/yara-rules/`                 | Bundled YARA rules                             |
+| `resources/brand/`                      | Fabric Cleaner and HakTrak Networks emblems    |
+| `docs/`                                 | Architecture, audit, and status notes          |
 
-Issues, pull requests, and feature suggestions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for setup and conventions.
+## Credits
 
-Cleaning rules are plain JSON — no code required to add support for a new app. Start with the [Cleaner Rules Guide](rules/RULES.md).
-
-For your own cache folders, including portable apps on another local drive, use **Settings → Custom cleaning folders**. See the [custom-folder guide](CUSTOM-FOLDERS.md) for preview, selection, and Trash recovery instructions.
-
-## Support
-
-Kudu's desktop tools are free for everyone. If it saves you time, consider [sponsoring development](https://usekudu.com/sponsors) or starring the repo.
+Fabric Cleaner is built on [Kudu](https://github.com/AdventDevInc/kudu) by Advent Development Inc., released under the MIT License. The original copyright notice is kept in [LICENSE](LICENSE), as the license requires. Fabric Cleaner's changes are by HakTrak Networks.
 
 ## Disclaimer
 
-Kudu removes files from your system by design. Review items before removal; the software is provided "as is" without warranty, and we accept no liability for data loss or system instability.
+Fabric Cleaner removes files from your system by design. Review items before removal. The software is provided "as is" without warranty, and no liability is accepted for data loss or system instability.
 
 ## License
 

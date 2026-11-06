@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Sparkles, Rocket, Check, ChevronRight, ChevronLeft, Globe } from 'lucide-react'
 import { LANGUAGES } from '@/lib/languages'
 import { usePlatform } from '@/hooks/usePlatform'
-import logoSrc from '@/assets/logo.png'
+import logoSrc from '@/assets/logo.svg'
 
 interface OnboardingProps {
   /** Records that onboarding is done; awaited before anything that can stall. */
@@ -192,7 +192,7 @@ function WelcomeStep({ onBack, onNext }: { onBack: () => void; onNext: () => voi
   return (
     <StepWrapper>
       <div className="flex flex-col items-center text-center">
-        <img src={logoSrc} alt="Fabric Cleaner" className="mb-5 h-20 w-20 rounded-2xl" />
+        <img src={logoSrc} alt="Fabric Cleaner" className="fc-emblem mb-5 h-20 w-20" />
         <h2 className="mb-2 text-[22px] font-bold text-zinc-100">{t('welcomeTitle')}</h2>
         <p className="mb-2 text-[13px] leading-relaxed text-zinc-400">
           {isWin ? t('welcomeDescriptionWindows') : t('welcomeDescriptionOther')}

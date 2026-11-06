@@ -265,7 +265,7 @@ export function DuplicateFinderPage() {
                     style={{
                       background:
                         store.minFileSize === p.value
-                          ? 'rgba(245,158,11,0.1)'
+                          ? 'rgba(34, 211, 238,0.1)'
                           : 'var(--bg-subtle-2)'
                     }}
                   >
@@ -294,7 +294,7 @@ export function DuplicateFinderPage() {
                   )}
                   style={{
                     background:
-                      store.maxFileSize === null ? 'rgba(245,158,11,0.1)' : 'var(--bg-subtle-2)'
+                      store.maxFileSize === null ? 'rgba(34, 211, 238,0.1)' : 'var(--bg-subtle-2)'
                   }}
                 >
                   {t('noLimit')}
@@ -311,7 +311,7 @@ export function DuplicateFinderPage() {
                     )}
                     style={{
                       background:
-                        store.maxFileSize === v ? 'rgba(245,158,11,0.1)' : 'var(--bg-subtle-2)'
+                        store.maxFileSize === v ? 'rgba(34, 211, 238,0.1)' : 'var(--bg-subtle-2)'
                     }}
                   >
                     {formatBytes(v, 0)}
@@ -343,7 +343,7 @@ export function DuplicateFinderPage() {
                     )}
                     style={{
                       background:
-                        activeExtPreset === preset ? 'rgba(245,158,11,0.1)' : 'var(--bg-subtle-2)'
+                        activeExtPreset === preset ? 'rgba(34, 211, 238,0.1)' : 'var(--bg-subtle-2)'
                     }}
                   >
                     {t(preset === 'all' ? 'allFiles' : preset)}
@@ -535,7 +535,7 @@ export function DuplicateFinderPage() {
                     )}
                     style={
                       store.deleteMode === 'recycle'
-                        ? { background: 'rgba(245,158,11,0.1)' }
+                        ? { background: 'rgba(34, 211, 238,0.1)' }
                         : undefined
                     }
                   >
@@ -576,8 +576,8 @@ export function DuplicateFinderPage() {
                       background:
                         store.deleteMode === 'permanent'
                           ? 'rgba(239,68,68,0.12)'
-                          : 'rgba(245,158,11,0.12)',
-                      color: store.deleteMode === 'permanent' ? '#ef4444' : '#f59e0b'
+                          : 'rgba(34, 211, 238,0.12)',
+                      color: store.deleteMode === 'permanent' ? '#ef4444' : '#22d3ee'
                     }}
                   >
                     <Trash2 className="h-4 w-4" />

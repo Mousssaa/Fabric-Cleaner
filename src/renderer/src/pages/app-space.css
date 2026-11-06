@@ -16,7 +16,7 @@
   cursor: pointer;
 }
 .app-space-primary {
-  background: var(--accent, #f59e0b);
+  background: var(--accent, #22d3ee);
   color: #17120a;
 }
 .app-space-primary:disabled,
@@ -40,8 +40,8 @@
   display: inline-flex;
   padding: 22px;
   border-radius: 24px;
-  background: rgba(245, 158, 11, 0.09);
-  color: #d97706;
+  background: rgba(34, 211, 238, 0.09);
+  color: #0891b2;
 }
 .app-space-intro h2 {
   margin: 22px 0 12px;
@@ -78,7 +78,7 @@
 .app-space-stats section {
   padding: 22px;
   border: 1px solid var(--border-medium);
-  border-radius: 18px;
+  border-radius: var(--radius-card);
   background: var(--card-bg);
 }
 .app-space-stats span,
@@ -125,7 +125,7 @@
 .app-space-list,
 .app-space-detail {
   border: 1px solid var(--border-medium);
-  border-radius: 18px;
+  border-radius: var(--radius-card);
   background: var(--card-bg);
   overflow: hidden;
 }
@@ -194,8 +194,8 @@
   background: var(--bg-hover);
 }
 .app-space-row[data-selected='true'] {
-  background: rgba(245, 158, 11, 0.07);
-  box-shadow: inset 3px 0 #d97706;
+  background: rgba(34, 211, 238, 0.07);
+  box-shadow: inset 3px 0 #0891b2;
 }
 .app-space-name {
   display: flex;
@@ -314,7 +314,7 @@
 .app-space-page button:focus-visible,
 .app-space-page input:focus-visible,
 .app-space-page select:focus-visible {
-  outline: 2px solid #d97706;
+  outline: 2px solid #0891b2;
   outline-offset: 3px;
 }
 @media (max-width: 1100px) {

@@ -168,21 +168,22 @@ function initGui(): void {
 
     if (process.platform === 'darwin') {
       // Build a multi-resolution image so the icon is sharp on Retina displays.
-      // Uses pre-rendered 16×16 (@1x) and 32×32 (@2x) PNGs instead of
-      // down-scaling the 1024×1024 app icon at runtime.
-      const dir = getIconsDir()
+      // Uses a dedicated monochrome template glyph (16×16 @1x, 32×32 @2x) so
+      // macOS can tint it for light/dark menu bars; the full-colour app icon
+      // would render as a solid silhouette when marked as a template.
+      const dir = join(getIconsDir(), 'tray')
       const trayIcon = nativeImage.createEmpty()
       trayIcon.addRepresentation({
         scaleFactor: 1.0,
         width: 16,
         height: 16,
-        buffer: readFileSync(join(dir, '16x16.png'))
+        buffer: readFileSync(join(dir, 'macTemplate.png'))
       })
       trayIcon.addRepresentation({
         scaleFactor: 2.0,
         width: 32,
         height: 32,
-        buffer: readFileSync(join(dir, '32x32.png'))
+        buffer: readFileSync(join(dir, 'macTemplate@2x.png'))
       })
       trayIcon.setTemplateImage(true)
       return trayIcon

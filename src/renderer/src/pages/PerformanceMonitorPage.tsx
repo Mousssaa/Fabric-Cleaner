@@ -118,7 +118,7 @@ export function PerformanceMonitorPage() {
                     timeRange === opt.value ? 'text-amber-400' : 'text-zinc-500 hover:text-zinc-300'
                   )}
                   style={
-                    timeRange === opt.value ? { background: 'rgba(245,158,11,0.1)' } : undefined
+                    timeRange === opt.value ? { background: 'rgba(34, 211, 238,0.1)' } : undefined
                   }
                 >
                   {opt.label}

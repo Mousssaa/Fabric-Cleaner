@@ -260,7 +260,7 @@ function AdvancedDashboard({ onBusyChange }: { onBusyChange: (busy: boolean) => 
     const allTypes = new Set(entries.map((e) => e.type))
 
     const historyTools = [
-      { key: 'cleaner' as const, label: t('toolLabelCleaner'), icon: Search, color: '#f59e0b' },
+      { key: 'cleaner' as const, label: t('toolLabelCleaner'), icon: Search, color: '#22d3ee' },
       ...(features.registry
         ? [
             {

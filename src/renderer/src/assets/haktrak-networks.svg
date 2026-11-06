@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="HakTrak Networks">
+  <path d="M32 3l25 14.5v29L32 61 7 46.5v-29z" fill="#0c141e" stroke="#22d3ee" stroke-opacity=".55" stroke-width="2" stroke-linejoin="round"/>
+  <g stroke="#22d3ee" stroke-width="3.2" stroke-linecap="round">
+    <path d="M22 20v24M42 20v24M22 32h20"/>
+  </g>
+  <g fill="#e6fbff">
+    <circle cx="22" cy="20" r="3.4"/><circle cx="22" cy="44" r="3.4"/>
+    <circle cx="42" cy="20" r="3.4"/><circle cx="42" cy="44" r="3.4"/>
+    <circle cx="32" cy="32" r="3.4"/>
+  </g>
+</svg>

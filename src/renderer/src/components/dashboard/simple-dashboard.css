@@ -66,11 +66,11 @@
 }
 .simple-goal {
   text-align: start;
-  border: 1px solid #3c403a;
-  background: #232822;
-  border-radius: 21px;
+  border: 1px solid #1d3a47;
+  background: linear-gradient(160deg, #102330 0%, #0e1822 100%);
+  border-radius: var(--radius-card);
   padding: 30px;
-  color: #afbaa2;
+  color: #7fd8ea;
   transition:
     transform 0.18s,
     border-color 0.18s,
@@ -78,14 +78,14 @@
   min-width: 0;
 }
 .simple-goal[data-goal='speed'] {
-  background: #292724;
-  color: #c4b59d;
-  border-color: #413c35;
+  background: linear-gradient(160deg, #191b33 0%, #10131f 100%);
+  color: #a5b4fc;
+  border-color: #2b2f55;
 }
 .simple-goal[data-goal='protection'] {
-  background: #212a2b;
-  color: #a9c0bc;
-  border-color: #334345;
+  background: linear-gradient(160deg, #0f2a26 0%, #0d1a1b 100%);
+  color: #6ee7c7;
+  border-color: #1c4a42;
 }
 .simple-goal-top {
   display: flex;
@@ -112,13 +112,13 @@
   margin-top: 10px;
   font-size: 13px;
   line-height: 1.7;
-  color: #a7afa1;
+  color: #9fb4c4;
 }
 .simple-goal[data-goal='speed'] p {
-  color: #b3ada3;
+  color: #aab0d6;
 }
 .simple-goal[data-goal='protection'] p {
-  color: #9fb3b0;
+  color: #9cc7bd;
 }
 .simple-goal-count {
   display: block;
@@ -194,7 +194,7 @@
   padding: 27px;
   background: var(--card-bg);
   border: 1px solid var(--border-medium);
-  border-radius: 18px;
+  border-radius: var(--radius-card);
 }
 .simple-tool-heading {
   display: flex;
@@ -304,34 +304,34 @@
   background: #fff;
 }
 .light .simple-goal {
-  background: #efeee3;
-  border-color: #e2e3d5;
-  color: #7b8669;
+  background: #e8f6fa;
+  border-color: #c7e7f0;
+  color: #0e7490;
 }
 .light .simple-goal[data-goal='speed'] {
-  background: #eeebe6;
-  border-color: #e4ded5;
-  color: #948470;
+  background: #eef0fc;
+  border-color: #d5daf6;
+  color: #4f46e5;
 }
 .light .simple-goal[data-goal='protection'] {
-  background: #e9eeea;
-  border-color: #dce5dd;
-  color: #788e82;
+  background: #e7f6f1;
+  border-color: #c3e8dc;
+  color: #047857;
 }
 .light .simple-goal-icon {
   background: #ffffff80;
 }
 .light .simple-goal h2 {
-  color: #30362e;
+  color: #0f1b2a;
 }
 .light .simple-goal p {
-  color: #727969;
+  color: #3d4d61;
 }
 .light .simple-goal[data-goal='speed'] p {
-  color: #7f796f;
+  color: #3d4d61;
 }
 .light .simple-goal[data-goal='protection'] p {
-  color: #6f8079;
+  color: #3d4d61;
 }
 .light .simple-goal:hover,
 .light .simple-goal[aria-expanded='true'] {

@@ -12,7 +12,8 @@ import {
 } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { useAppUpdateStore } from '@/stores/app-update-store'
-import logoSrc from '@/assets/logo.png'
+import logoSrc from '@/assets/logo.svg'
+import haktrakSrc from '@/assets/haktrak-networks.svg'
 import { usePlatform } from '@/hooks/usePlatform'
 
 declare const __APP_VERSION__: string
@@ -28,7 +29,7 @@ export function AboutPage() {
 
       <div className="glass-card rounded-2xl p-6">
         <div className="flex items-center gap-4">
-          <img src={logoSrc} alt="Fabric Cleaner" className="h-14 w-14 rounded-xl" />
+          <img src={logoSrc} alt="Fabric Cleaner" className="fc-emblem h-14 w-14" />
           <div>
             <p className="text-[16px] font-semibold text-white">
               {t('appVersion', { version: __APP_VERSION__ })}
@@ -36,6 +37,15 @@ export function AboutPage() {
             <p className="mt-0.5 text-[12px]" style={{ color: 'var(--text-muted)' }}>
               {t('license')}
             </p>
+          </div>
+          <div className="ms-auto flex items-center gap-2" aria-label="HakTrak Networks">
+            <img src={haktrakSrc} alt="" className="fc-emblem h-8 w-8" />
+            <span
+              className="text-[11px] font-semibold uppercase tracking-[0.08em]"
+              style={{ color: 'var(--text-muted)' }}
+            >
+              HakTrak Networks
+            </span>
           </div>
         </div>
 

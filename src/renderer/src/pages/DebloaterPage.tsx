@@ -31,7 +31,7 @@ const categoryColors: Record<
     text: '#14b8a6',
     labelKey: 'debloater.categoryCommunication'
   },
-  utility: { bg: 'rgba(245,158,11,0.1)', text: '#f59e0b', labelKey: 'debloater.categoryUtility' }
+  utility: { bg: 'rgba(34, 211, 238,0.1)', text: '#22d3ee', labelKey: 'debloater.categoryUtility' }
 }
 
 export function DebloaterPage({ embedded }: { embedded?: boolean }) {
@@ -295,7 +295,7 @@ export function DebloaterPage({ embedded }: { embedded?: boolean }) {
                 onClick={() => store.getState().setFilter(f.value)}
                 className="rounded-full px-3.5 py-1.5 text-[12px] font-medium transition-colors"
                 style={{
-                  background: filter === f.value ? 'rgba(245,158,11,0.1)' : 'var(--bg-subtle-2)',
+                  background: filter === f.value ? 'rgba(34, 211, 238,0.1)' : 'var(--bg-subtle-2)',
                   color: filter === f.value ? 'var(--accent)' : 'var(--text-muted)'
                 }}
               >

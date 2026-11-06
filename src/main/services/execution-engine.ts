@@ -167,9 +167,7 @@ export interface DisposeOptions {
   mode: DisposalMode
   origin?: DeletionOrigin
   /** Permanent deleter (file-utils safeDelete). Injected to avoid an import cycle. */
-  permanentDelete: (
-    path: string
-  ) => Promise<{
+  permanentDelete: (path: string) => Promise<{
     success: boolean
     reason?: string
     failures?: Array<{ path: string; reason: string }>

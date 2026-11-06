@@ -7,13 +7,13 @@
 | Latest release | Yes |
 | Older versions | No |
 
-We recommend always running the latest version of Kudu.
+We recommend always running the latest version of Fabric Cleaner.
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in Kudu, **please do not open a public issue.**
+If you discover a security vulnerability in Fabric Cleaner, **please do not open a public issue.**
 
-Instead, report it privately via [GitHub Security Advisories](https://github.com/adventdevinc/kudu/security/advisories/new).
+Instead, report it privately via [GitHub Security Advisories](https://github.com/Mousssaa/Fabric-Cleaner/security/advisories/new).
 
 Please include:
 
@@ -26,13 +26,13 @@ We will acknowledge your report within 48 hours and aim to release a fix as quic
 
 ## Scope
 
-This policy covers the Kudu desktop application and its source code. It does not cover third-party dependencies — please report those to the respective maintainers.
+This policy covers the Fabric Cleaner desktop application and its source code. It does not cover third-party dependencies — please report those to the respective maintainers.
 
 ## Security Design
 
-Kudu is a system cleaner that operates with elevated permissions. We take this responsibility seriously:
+Fabric Cleaner is a system cleaner that can request elevated permissions for specific actions. We take this responsibility seriously:
 
-- **No telemetry** — Kudu does not phone home or collect any user data.
+- **No telemetry** — Fabric Cleaner does not phone home or collect any user data.
 - **No network requests** — Scans and cleaning operations are entirely local. Network access is only used for update checks and optional cloud features you explicitly enable.
 - **Open source** — Every operation is auditable. We encourage security researchers to review our code.
 - **VirusTotal scanned** — Every release binary is automatically submitted to VirusTotal and results are linked in the release notes.

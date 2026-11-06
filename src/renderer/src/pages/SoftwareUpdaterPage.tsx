@@ -50,9 +50,9 @@ const SEVERITY_STYLES_BASE = {
     labelKey: 'softwareUpdater.severityMajor'
   },
   minor: {
-    bg: 'rgba(245,158,11,0.08)',
-    border: 'rgba(245,158,11,0.18)',
-    text: '#fbbf24',
+    bg: 'rgba(34, 211, 238,0.08)',
+    border: 'rgba(34, 211, 238,0.18)',
+    text: '#67e8f9',
     labelKey: 'softwareUpdater.severityMinor'
   },
   patch: {
@@ -354,7 +354,7 @@ export function SoftwareUpdaterPage({ embedded }: { embedded?: boolean }) {
           disabled={isBusy}
           className="pulse-primary-action pulse-scan-action flex items-center gap-2 rounded-xl px-5 py-2.5 text-[13px] font-semibold transition-all disabled:opacity-40"
           style={{
-            background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+            background: 'linear-gradient(135deg, #22d3ee 0%, #0891b2 100%)',
             color: 'var(--text-on-accent)'
           }}
         >
@@ -620,8 +620,8 @@ export function SoftwareUpdaterPage({ embedded }: { embedded?: boolean }) {
         <div
           className="mb-5 flex items-start gap-3 rounded-2xl px-5 py-4"
           style={{
-            background: 'rgba(245,158,11,0.04)',
-            border: '1px solid rgba(245,158,11,0.12)'
+            background: 'rgba(34, 211, 238,0.04)',
+            border: '1px solid rgba(34, 211, 238,0.12)'
           }}
         >
           <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-400" strokeWidth={1.8} />
@@ -685,7 +685,7 @@ export function SoftwareUpdaterPage({ embedded }: { embedded?: boolean }) {
         <div
           className="mb-5 rounded-2xl p-4"
           style={{
-            background: 'rgba(245,158,11,0.04)',
+            background: 'rgba(34, 211, 238,0.04)',
             border: '1px solid var(--accent-muted-bg)'
           }}
         >
@@ -712,7 +712,7 @@ export function SoftwareUpdaterPage({ embedded }: { embedded?: boolean }) {
               className="h-full rounded-full transition-all duration-300"
               style={{
                 width: `${progress.percent}%`,
-                background: 'linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%)'
+                background: 'linear-gradient(90deg, #22d3ee 0%, #67e8f9 100%)'
               }}
             />
           </div>
@@ -858,7 +858,7 @@ export function SoftwareUpdaterPage({ embedded }: { embedded?: boolean }) {
               disabled={isBusy}
               className="pulse-primary-action pulse-scan-action flex items-center gap-2 rounded-xl px-5 py-2.5 text-[13px] font-semibold transition-all disabled:opacity-40"
               style={{
-                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                background: 'linear-gradient(135deg, #22d3ee 0%, #0891b2 100%)',
                 color: 'var(--text-on-accent)'
               }}
             >
@@ -1004,8 +1004,8 @@ function AppRow({
     <div
       className="flex items-center gap-4 rounded-2xl px-5 py-4 transition-colors"
       style={{
-        background: app.selected ? 'rgba(245,158,11,0.03)' : 'var(--bg-subtle)',
-        border: `1px solid ${app.selected ? 'rgba(245,158,11,0.1)' : 'var(--border-subtle)'}`
+        background: app.selected ? 'rgba(34, 211, 238,0.03)' : 'var(--bg-subtle)',
+        border: `1px solid ${app.selected ? 'rgba(34, 211, 238,0.1)' : 'var(--border-subtle)'}`
       }}
     >
       {/* Checkbox */}

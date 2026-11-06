@@ -797,9 +797,9 @@ export function CleanerPage() {
               }
               className="pulse-primary-action flex items-center gap-2 rounded-xl px-5 py-2.5 text-[13px] font-semibold transition-all disabled:opacity-30"
               style={{
-                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                background: 'linear-gradient(135deg, #22d3ee 0%, #0891b2 100%)',
                 color: 'var(--text-on-accent)',
-                boxShadow: hasResults ? '0 4px 20px rgba(245,158,11,0.2)' : 'none'
+                boxShadow: hasResults ? '0 4px 20px rgba(34, 211, 238,0.2)' : 'none'
               }}
             >
               {preparingClean ? (
@@ -913,7 +913,7 @@ export function CleanerPage() {
               className="mb-5 flex items-center gap-3 rounded-2xl px-4 py-3"
               style={{
                 background: 'var(--accent-muted-bg)',
-                border: '1px solid rgba(245,158,11,0.12)'
+                border: '1px solid rgba(34, 211, 238,0.12)'
               }}
             >
               <AlertTriangle className="h-4 w-4 shrink-0 text-amber-400" strokeWidth={1.8} />
@@ -956,7 +956,7 @@ export function CleanerPage() {
                   <button
                     onClick={handleRelaunch}
                     className="shrink-0 rounded-lg px-3 py-1.5 text-[12px] font-medium text-amber-400 transition-colors hover:bg-amber-500/15"
-                    style={{ border: '1px solid rgba(245,158,11,0.2)' }}
+                    style={{ border: '1px solid rgba(34, 211, 238,0.2)' }}
                   >
                     {t('relaunchAsAdmin')}
                   </button>
@@ -1042,7 +1042,7 @@ export function CleanerPage() {
                   disabled={isCleaning || preparingClean}
                   className="pulse-primary-action pulse-scan-action flex items-center gap-2 rounded-xl px-5 py-2.5 text-[13px] font-semibold transition-all disabled:opacity-40"
                   style={{
-                    background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                    background: 'linear-gradient(135deg, #22d3ee 0%, #0891b2 100%)',
                     color: 'var(--text-on-accent)'
                   }}
                 >
@@ -1483,17 +1483,17 @@ export function CleanerPage() {
                                       className="flex items-center gap-3 px-4 py-2 pl-14 cursor-pointer transition-colors"
                                       style={{
                                         background: checked
-                                          ? 'rgba(245,158,11,0.03)'
+                                          ? 'rgba(34, 211, 238,0.03)'
                                           : 'transparent'
                                       }}
                                       onMouseEnter={(e) => {
                                         e.currentTarget.style.background = checked
-                                          ? 'rgba(245,158,11,0.05)'
+                                          ? 'rgba(34, 211, 238,0.05)'
                                           : 'var(--bg-subtle)'
                                       }}
                                       onMouseLeave={(e) => {
                                         e.currentTarget.style.background = checked
-                                          ? 'rgba(245,158,11,0.03)'
+                                          ? 'rgba(34, 211, 238,0.03)'
                                           : 'transparent'
                                       }}
                                     >

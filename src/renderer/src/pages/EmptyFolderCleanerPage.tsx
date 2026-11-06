@@ -380,7 +380,7 @@ export function EmptyFolderCleanerPage() {
                       background:
                         store.deleteMode === 'permanent'
                           ? 'rgba(239,68,68,0.12)'
-                          : 'rgba(245,158,11,0.12)',
+                          : 'rgba(34, 211, 238,0.12)',
                       color: store.deleteMode === 'permanent' ? '#ef4444' : 'var(--accent)'
                     }}
                   >

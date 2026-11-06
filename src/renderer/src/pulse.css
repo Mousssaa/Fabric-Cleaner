@@ -1,120 +1,4 @@
-/* Pulse: charcoal surfaces, warm amber actions, calm mint telemetry. */
-:root {
-  --page-bg: #101519;
-  --sidebar-bg: #11171b;
-  --titlebar-bg: #11171b;
-  --card-bg: #171e23;
-  --bg-subtle: #ffffff04;
-  --bg-subtle-2: #ffffff08;
-  --bg-hover: #ffffff0c;
-  --bg-hover-2: #ffffff12;
-  --bg-active: #ffffff18;
-  --bg-elevated: #202b32;
-  --bg-overlay: #293239;
-  --flyout-bg: #1c252c;
-  --toast-bg: #1c252c;
-  --text-primary: #eef0f2;
-  --text-secondary: #b4bec8;
-  --text-muted: #9ba8b6;
-  --text-dim: #919eac;
-  --text-faint: #9199a2;
-  --text-ghost: #9ba8b6;
-  --text-ghost-2: #b3bec6;
-  --text-on-accent: #251e12;
-  --toast-text: #eef0f2;
-  --brand-solid: #f2b354;
-  --brand-ink: #251e12;
-  --brand-surface: #f2b3540d;
-  --brand-border: #f2b35429;
-  --nav-active-bg: #f2b35415;
-  --nav-active-fg: #f0bd6d;
-  --nav-inactive-fg: #bac3ca;
-  --nav-icon-fg: #a4b0b9;
-  --nav-section-fg: #9199a2;
-  --border-subtle: #ffffff08;
-  --border-default: #222d34;
-  --border-medium: #293239;
-  --border-strong: #34414a;
-  --border-stronger: #ffffff28;
-  --accent: #f2b354;
-  --accent-hover: #f6c577;
-  --accent-muted-bg: #f2b3540d;
-  --accent-muted-border: #f2b35430;
-  --success: #8cd4b0;
-  --warning: #f0bd6d;
-  --danger: #f18d87;
-  --info: #9cb8d6;
-  --gauge-track: #ffffff0c;
-  --grid-line: #ffffff0a;
-  --glass-bg: #171e23;
-  --glass-border: #ffffff0d;
-  --glass-inset: #ffffff03;
-  --glass-shadow: 0 2px 6px #00000008;
-  --glass-hover-bg: #1c252c;
-  --glass-hover-border: #ffffff22;
-  --glass-hover-shadow: 0 4px 15px #0000000c;
-  --scrollbar-thumb: #9cabb52b;
-  --scrollbar-thumb-hover: #9cabb54d;
-  --selection-bg: #f2b35438;
-}
-.light {
-  --page-bg: #f2f4f5;
-  --sidebar-bg: #edf0f2;
-  --titlebar-bg: #edf0f2;
-  --card-bg: #fff;
-  --glass-bg: #fff;
-  --bg-subtle: #172c3a04;
-  --bg-subtle-2: #172c3a08;
-  --bg-hover: #172c3a0c;
-  --bg-hover-2: #172c3a12;
-  --bg-active: #172c3a18;
-  --bg-elevated: #e4eaee;
-  --bg-overlay: #d9e2e8;
-  --flyout-bg: #fff;
-  --toast-bg: #fff;
-  --text-primary: #23313a;
-  --text-secondary: #435661;
-  --text-muted: #536873;
-  --text-dim: #586d79;
-  --text-faint: #586d79;
-  --text-ghost: #536873;
-  --text-ghost-2: #435661;
-  --text-on-accent: #251e12;
-  --toast-text: #23313a;
-  --brand-solid: #946316;
-  --brand-ink: #fff;
-  --brand-surface: #e9aa370d;
-  --brand-border: #a7712230;
-  --nav-active-bg: #f2b35435;
-  --nav-active-fg: #76521c;
-  --nav-inactive-fg: #435661;
-  --nav-icon-fg: #536873;
-  --nav-section-fg: #586d79;
-  --border-subtle: #172c3a09;
-  --border-default: #172c3a12;
-  --border-medium: #172c3a18;
-  --border-strong: #172c3a25;
-  --border-stronger: #172c3a36;
-  --accent: #efb353;
-  --accent-hover: #e9a73c;
-  --accent-muted-bg: #efb35316;
-  --accent-muted-border: #a7712240;
-  --success: #357352;
-  --warning: #8b5f17;
-  --danger: #b93e38;
-  --info: #3d709e;
-  --gauge-track: #172c3a0c;
-  --grid-line: #172c3a10;
-  --glass-border: #172c3a12;
-  --glass-inset: #fff;
-  --glass-shadow: 0 2px 6px #172c3a03;
-  --glass-hover-bg: #fff;
-  --glass-hover-border: #172c3a28;
-  --glass-hover-shadow: 0 4px 15px #172c3a08;
-  --scrollbar-thumb: #172c3a25;
-  --scrollbar-thumb-hover: #172c3a40;
-  --selection-bg: #efb35345;
-}
+/* Pulse layout layer. Colour tokens live in globals.css (Fabric "Cyber Slate"). */
 .app-titlebar,
 .fc-sidebar {
   backdrop-filter: none;
@@ -834,7 +718,7 @@
   display: grid;
   place-items: center;
   border: 1px solid color-mix(in srgb, var(--art-color) 32%, transparent);
-  border-radius: 20px;
+  border-radius: var(--radius-card);
   background: var(--card-bg);
   color: var(--art-color);
   box-shadow:
@@ -958,7 +842,7 @@
   display: none;
 }
 .empty-state > div:first-child {
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   box-shadow: none;
   width: 68px;
   height: 68px;
@@ -1405,7 +1289,7 @@
   align-items: center;
   padding: 30px;
   border: 1px solid var(--border-medium);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   background: var(--card-bg);
 }
 .pulse-game-symbol {
@@ -1413,7 +1297,7 @@
   border: 1px solid var(--border-medium);
   background: var(--bg-subtle);
   color: var(--success);
-  border-radius: 20px;
+  border-radius: var(--radius-card);
 }
 .pulse-game-copy {
   flex: 1;
@@ -1763,7 +1647,7 @@
   gap: 16px;
   padding: 25px;
   min-height: 290px;
-  background: radial-gradient(ellipse at 100% 0%, #f2b35408, transparent 70%), var(--card-bg);
+  background: radial-gradient(ellipse at 100% 0%, #22d3ee08, transparent 70%), var(--card-bg);
   border-color: var(--border-medium);
 }
 .pulse-cleanup-hero .pulse-icon-tile {

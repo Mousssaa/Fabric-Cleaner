@@ -86,7 +86,7 @@ export function ProcessTable() {
 
   function cpuBarColor(pct: number): string {
     if (pct >= 50) return '#ef4444'
-    if (pct >= 20) return '#f59e0b'
+    if (pct >= 20) return '#22d3ee'
     return '#22c55e'
   }
 

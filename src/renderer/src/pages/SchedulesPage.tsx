@@ -733,7 +733,7 @@ function PresetPicker({
               className="w-full rounded-xl p-4 text-left transition-colors"
               style={{ background: 'var(--bg-subtle)', border: '1px solid var(--border-default)' }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(245,158,11,0.3)'
+                e.currentTarget.style.borderColor = 'rgba(34, 211, 238,0.3)'
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.borderColor = 'var(--border-default)'
@@ -751,7 +751,7 @@ function PresetPicker({
             className="w-full rounded-xl p-4 text-left transition-colors"
             style={{ background: 'var(--bg-subtle)', border: '1px solid var(--border-default)' }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = 'rgba(245,158,11,0.3)'
+              e.currentTarget.style.borderColor = 'rgba(34, 211, 238,0.3)'
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.borderColor = 'var(--border-default)'
@@ -1154,7 +1154,7 @@ function ScheduleDialog({
             className="mb-6 flex items-start gap-3 rounded-xl p-3"
             style={{
               background: 'var(--accent-muted-bg)',
-              border: '1px solid rgba(245,158,11,0.12)'
+              border: '1px solid rgba(34, 211, 238,0.12)'
             }}
           >
             <AlertTriangle
@@ -1162,7 +1162,7 @@ function ScheduleDialog({
               style={{ color: 'var(--accent)' }}
               strokeWidth={1.8}
             />
-            <p className="text-[12px] leading-relaxed" style={{ color: '#d97706' }}>
+            <p className="text-[12px] leading-relaxed" style={{ color: '#0891b2' }}>
               {t('dialog.autoApplyWarning')}
             </p>
           </div>

@@ -690,7 +690,7 @@ export function DriverManagerPage({ embedded }: { embedded?: boolean }) {
               disabled={isBusy}
               className="pulse-primary-action pulse-scan-action flex items-center gap-2 rounded-xl px-5 py-2.5 text-[13px] font-semibold transition-all disabled:opacity-40"
               style={{
-                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                background: 'linear-gradient(135deg, #22d3ee 0%, #0891b2 100%)',
                 color: 'var(--text-on-accent)'
               }}
             >
@@ -926,7 +926,7 @@ export function DriverManagerPage({ embedded }: { embedded?: boolean }) {
               {totalStaleSize > 0 && (
                 <span
                   className="rounded-md px-2 py-0.5 text-[10px] font-medium"
-                  style={{ background: 'rgba(245,158,11,0.1)', color: '#f59e0b' }}
+                  style={{ background: 'rgba(34, 211, 238,0.1)', color: '#22d3ee' }}
                 >
                   {formatBytes(totalStaleSize)}
                 </span>
@@ -958,8 +958,8 @@ export function DriverManagerPage({ embedded }: { embedded?: boolean }) {
                 key={pkg.id}
                 className="flex items-center gap-4 rounded-2xl px-5 py-4 transition-colors cursor-pointer"
                 style={{
-                  background: pkg.selected ? 'rgba(245,158,11,0.04)' : 'var(--bg-subtle)',
-                  border: `1px solid ${pkg.selected ? 'rgba(245,158,11,0.1)' : 'var(--border-subtle)'}`
+                  background: pkg.selected ? 'rgba(34, 211, 238,0.04)' : 'var(--bg-subtle)',
+                  border: `1px solid ${pkg.selected ? 'rgba(34, 211, 238,0.1)' : 'var(--border-subtle)'}`
                 }}
               >
                 <div className="w-6">
@@ -974,11 +974,11 @@ export function DriverManagerPage({ embedded }: { embedded?: boolean }) {
                 </div>
                 <div
                   className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
-                  style={{ background: 'rgba(245,158,11,0.1)' }}
+                  style={{ background: 'rgba(34, 211, 238,0.1)' }}
                 >
                   <AlertTriangle
                     className="h-5 w-5"
-                    style={{ color: '#f59e0b' }}
+                    style={{ color: '#22d3ee' }}
                     strokeWidth={1.8}
                   />
                 </div>

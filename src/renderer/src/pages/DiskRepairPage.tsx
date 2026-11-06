@@ -193,7 +193,7 @@ export function DiskRepairPage() {
             <div className="flex items-center gap-3 flex-1 min-w-0">
               <div
                 className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
-                style={{ background: 'rgba(245,158,11,0.1)' }}
+                style={{ background: 'rgba(34, 211, 238,0.1)' }}
               >
                 <ShieldCheck className="h-5 w-5 text-amber-400" strokeWidth={1.8} />
               </div>
@@ -215,7 +215,7 @@ export function DiskRepairPage() {
               disabled={repairRunning}
               className="flex shrink-0 items-center gap-2 rounded-xl px-5 py-2.5 text-[13px] font-semibold transition-all disabled:opacity-40"
               style={{
-                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                background: 'linear-gradient(135deg, #22d3ee 0%, #0891b2 100%)',
                 color: 'var(--text-on-accent)'
               }}
             >
@@ -283,7 +283,7 @@ export function DiskRepairPage() {
             <div className="flex items-center gap-3 flex-1 min-w-0">
               <div
                 className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
-                style={{ background: 'rgba(245,158,11,0.1)' }}
+                style={{ background: 'rgba(34, 211, 238,0.1)' }}
               >
                 <Wrench className="h-5 w-5 text-amber-400" strokeWidth={1.8} />
               </div>
@@ -305,7 +305,7 @@ export function DiskRepairPage() {
               disabled={repairRunning}
               className="flex shrink-0 items-center gap-2 rounded-xl px-5 py-2.5 text-[13px] font-semibold transition-all disabled:opacity-40"
               style={{
-                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                background: 'linear-gradient(135deg, #22d3ee 0%, #0891b2 100%)',
                 color: 'var(--text-on-accent)'
               }}
             >
@@ -373,7 +373,7 @@ export function DiskRepairPage() {
             <div className="flex items-center gap-3 flex-1 min-w-0">
               <div
                 className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
-                style={{ background: 'rgba(245,158,11,0.1)' }}
+                style={{ background: 'rgba(34, 211, 238,0.1)' }}
               >
                 <HardDrive className="h-5 w-5 text-amber-400" strokeWidth={1.8} />
               </div>
@@ -395,7 +395,7 @@ export function DiskRepairPage() {
               disabled={repairRunning}
               className="flex shrink-0 items-center gap-2 rounded-xl px-5 py-2.5 text-[13px] font-semibold transition-all disabled:opacity-40"
               style={{
-                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                background: 'linear-gradient(135deg, #22d3ee 0%, #0891b2 100%)',
                 color: 'var(--text-on-accent)'
               }}
             >

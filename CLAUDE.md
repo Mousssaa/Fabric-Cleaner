@@ -1,4 +1,4 @@
-# Kudu
+# Fabric Cleaner
 
 A modern, open-source system cleaner for Windows, macOS, and Linux built with Electron.
 

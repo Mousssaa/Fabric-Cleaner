@@ -53,7 +53,7 @@ const riskKeyMap: Record<RegistryEntry['risk'], string> = {
 
 const typeColors: Record<CardType, { bg: string; text: string }> = {
   obsolete: { bg: 'var(--bg-hover)', text: 'var(--text-muted)' },
-  invalid: { bg: 'rgba(245,158,11,0.1)', text: '#f59e0b' },
+  invalid: { bg: 'rgba(34, 211, 238,0.1)', text: '#22d3ee' },
   orphaned: { bg: 'rgba(59,130,246,0.1)', text: '#3b82f6' },
   broken: { bg: 'rgba(239,68,68,0.1)', text: '#ef4444' },
   vulnerability: { bg: 'rgba(168,85,247,0.1)', text: '#a855f7' },
@@ -66,7 +66,7 @@ const typeColors: Record<CardType, { bg: string; text: string }> = {
 
 const riskColors: Record<RegistryEntry['risk'], string> = {
   low: '#22c55e',
-  medium: '#f59e0b',
+  medium: '#22d3ee',
   high: '#ef4444'
 }
 
@@ -86,7 +86,7 @@ const cards: CardDef[] = [
     icon: Trash2,
     titleKey: 'cardRegistryCleanup',
     descriptionKey: 'cardRegistryCleanupDescription',
-    color: { bg: 'rgba(245,158,11,0.1)', text: '#f59e0b' }
+    color: { bg: 'rgba(34, 211, 238,0.1)', text: '#22d3ee' }
   },
   {
     types: ['vulnerability'],
@@ -351,7 +351,7 @@ function RegistryPageContent() {
               disabled={selectedCount === 0 || busy}
               className="flex items-center gap-2 rounded-xl px-5 py-2.5 text-[13px] font-semibold transition-all disabled:opacity-30"
               style={{
-                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                background: 'linear-gradient(135deg, #22d3ee 0%, #0891b2 100%)',
                 color: 'var(--text-on-accent)'
               }}
             >
@@ -419,7 +419,7 @@ function RegistryPageContent() {
               className="h-full rounded-full transition-all duration-200 ease-out"
               style={{
                 width: `${fixProgress.total > 0 ? (fixProgress.current / fixProgress.total) * 100 : 0}%`,
-                background: 'linear-gradient(90deg, #f59e0b 0%, #d97706 100%)'
+                background: 'linear-gradient(90deg, #22d3ee 0%, #0891b2 100%)'
               }}
             />
           </div>
@@ -502,7 +502,7 @@ function RegistryPageContent() {
               disabled={fixing}
               className="pulse-primary-action pulse-scan-action flex items-center gap-2 rounded-xl px-5 py-2.5 text-[13px] font-semibold transition-all disabled:opacity-40"
               style={{
-                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                background: 'linear-gradient(135deg, #22d3ee 0%, #0891b2 100%)',
                 color: 'var(--text-on-accent)'
               }}
             >
@@ -606,7 +606,7 @@ function RegistryPageContent() {
                           {mediumRiskCount > 0 && highRiskCount === 0 && (
                             <span
                               className="rounded-full px-2 py-0.5 text-[10px] font-semibold"
-                              style={{ background: 'rgba(245,158,11,0.1)', color: '#f59e0b' }}
+                              style={{ background: 'rgba(34, 211, 238,0.1)', color: '#22d3ee' }}
                             >
                               {t('mediumRisk', { count: mediumRiskCount })}
                             </span>
@@ -623,7 +623,7 @@ function RegistryPageContent() {
                               healthPercent! >= 80
                                 ? '#22c55e'
                                 : healthPercent! >= 50
-                                  ? '#f59e0b'
+                                  ? '#22d3ee'
                                   : '#ef4444'
                           }}
                         >
