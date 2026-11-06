@@ -61,10 +61,10 @@ export function DriverManagerPage({ embedded }: { embedded?: boolean }) {
 
   // Listen for progress events
   useEffect(() => {
-    const cleanupDriver = window.kudu.onDriverProgress((data: DriverScanProgress) => {
+    const cleanupDriver = window.fabric.onDriverProgress((data: DriverScanProgress) => {
       useDriverStore.getState().setScanProgress(data)
     })
-    const cleanupUpdate = window.kudu.onDriverUpdateProgress((data: DriverUpdateProgress) => {
+    const cleanupUpdate = window.fabric.onDriverUpdateProgress((data: DriverUpdateProgress) => {
       useDriverStore.getState().setUpdateProgress(data)
     })
     return () => {
@@ -95,8 +95,8 @@ export function DriverManagerPage({ embedded }: { embedded?: boolean }) {
 
     // Run both scans in parallel
     const [staleResult, updateResult] = await Promise.allSettled([
-      window.kudu.driverScan(),
-      window.kudu.driverUpdateScan()
+      window.fabric.driverScan(),
+      window.fabric.driverUpdateScan()
     ])
 
     const s = useDriverStore.getState()
@@ -192,7 +192,7 @@ export function DriverManagerPage({ embedded }: { embedded?: boolean }) {
       store.setUpdateProgress(null)
       const ids = selectedUpdates.map((u) => u.updateId)
       try {
-        const result = await window.kudu.driverUpdateInstall(ids)
+        const result = await window.fabric.driverUpdateInstall(ids)
         useDriverStore.getState().setInstallResult(result)
       } catch (err) {
         console.error('Driver install failed:', err)
@@ -213,7 +213,7 @@ export function DriverManagerPage({ embedded }: { embedded?: boolean }) {
       s2.setCleaning(true)
       const names = selectedStale.map((p) => p.publishedName)
       try {
-        const result = await window.kudu.driverClean(names)
+        const result = await window.fabric.driverClean(names)
         useDriverStore.getState().setCleanResult(result)
 
         // History tracking
@@ -267,8 +267,8 @@ export function DriverManagerPage({ embedded }: { embedded?: boolean }) {
       finalStore.setScanning(true)
       finalStore.setUpdateScanning(true)
       const [staleResult, updateResult] = await Promise.allSettled([
-        window.kudu.driverScan(),
-        window.kudu.driverUpdateScan()
+        window.fabric.driverScan(),
+        window.fabric.driverUpdateScan()
       ])
       const s = useDriverStore.getState()
       if (staleResult.status === 'fulfilled') {
@@ -297,7 +297,7 @@ export function DriverManagerPage({ embedded }: { embedded?: boolean }) {
   // ─── Ignore / restore a driver update ─────────────────────
   // Optimistic: move the row immediately, then persist and hide/unhide the
   // update in Windows Update itself. Hiding needs elevation; if that part
-  // fails the update stays ignored in Kudu and the user is told. If the
+  // fails the update stays ignored in Fabric Cleaner and the user is told. If the
   // request itself rejects (settings could not be written) the move is rolled
   // back so the UI never claims a state that was not persisted. The row is
   // marked pending until the request finishes so it can't be flipped back
@@ -310,7 +310,7 @@ export function DriverManagerPage({ embedded }: { embedded?: boolean }) {
       if (!upd.updateId) return
       store.setIgnorePending(upd.id, true)
       try {
-        const result = await window.kudu.driverUpdateIgnore(upd.updateId, true)
+        const result = await window.fabric.driverUpdateIgnore(upd.updateId, true)
         if (result.windowsUpdateHidden) {
           toast.success(t('driverManager.ignoredToast', { name: upd.deviceName }), {
             description: t('driverManager.ignoredToastHidden')
@@ -338,7 +338,7 @@ export function DriverManagerPage({ embedded }: { embedded?: boolean }) {
       if (!upd.updateId) return
       store.setIgnorePending(upd.id, true)
       try {
-        const result = await window.kudu.driverUpdateIgnore(upd.updateId, false)
+        const result = await window.fabric.driverUpdateIgnore(upd.updateId, false)
         if (!result.windowsUpdateHidden) {
           toast.warning(t('driverManager.restoredToast', { name: upd.deviceName }), {
             description: t('driverManager.restoredToastNotUnhidden')
@@ -690,7 +690,7 @@ export function DriverManagerPage({ embedded }: { embedded?: boolean }) {
               disabled={isBusy}
               className="pulse-primary-action pulse-scan-action flex items-center gap-2 rounded-xl px-5 py-2.5 text-[13px] font-semibold transition-all disabled:opacity-40"
               style={{
-                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                background: 'linear-gradient(135deg, #22d3ee 0%, #0891b2 100%)',
                 color: 'var(--text-on-accent)'
               }}
             >
@@ -926,7 +926,7 @@ export function DriverManagerPage({ embedded }: { embedded?: boolean }) {
               {totalStaleSize > 0 && (
                 <span
                   className="rounded-md px-2 py-0.5 text-[10px] font-medium"
-                  style={{ background: 'rgba(245,158,11,0.1)', color: '#f59e0b' }}
+                  style={{ background: 'rgba(34, 211, 238,0.1)', color: '#22d3ee' }}
                 >
                   {formatBytes(totalStaleSize)}
                 </span>
@@ -958,8 +958,8 @@ export function DriverManagerPage({ embedded }: { embedded?: boolean }) {
                 key={pkg.id}
                 className="flex items-center gap-4 rounded-2xl px-5 py-4 transition-colors cursor-pointer"
                 style={{
-                  background: pkg.selected ? 'rgba(245,158,11,0.04)' : 'var(--bg-subtle)',
-                  border: `1px solid ${pkg.selected ? 'rgba(245,158,11,0.1)' : 'var(--border-subtle)'}`
+                  background: pkg.selected ? 'rgba(34, 211, 238,0.04)' : 'var(--bg-subtle)',
+                  border: `1px solid ${pkg.selected ? 'rgba(34, 211, 238,0.1)' : 'var(--border-subtle)'}`
                 }}
               >
                 <div className="w-6">
@@ -974,11 +974,11 @@ export function DriverManagerPage({ embedded }: { embedded?: boolean }) {
                 </div>
                 <div
                   className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
-                  style={{ background: 'rgba(245,158,11,0.1)' }}
+                  style={{ background: 'rgba(34, 211, 238,0.1)' }}
                 >
                   <AlertTriangle
                     className="h-5 w-5"
-                    style={{ color: '#f59e0b' }}
+                    style={{ color: '#22d3ee' }}
                     strokeWidth={1.8}
                   />
                 </div>

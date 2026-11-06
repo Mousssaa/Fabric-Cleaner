@@ -2,9 +2,9 @@ import { homedir } from 'os'
 import { join, isAbsolute } from 'path'
 import { getSettings } from './settings-store'
 
-/** Default location for Kudu backups (registry, shell extensions, etc.) */
+/** Default location for Fabric Cleaner backups (registry, shell extensions, etc.) */
 export function getDefaultBackupDir(): string {
-  return join(homedir(), 'Documents', 'Kudu Backups')
+  return join(homedir(), 'Documents', 'Fabric Cleaner Backups')
 }
 
 /**

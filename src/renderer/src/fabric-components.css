@@ -1,0 +1,312 @@
+/* ══════════════════════════════════════════════
+   Fabric Cleaner shared controls
+   Buttons, inputs, status badges, Threat Intelligence settings and the
+   local Threat Monitor controls. All colours come from theme tokens so
+   dark and light modes stay in sync.
+   ══════════════════════════════════════════════ */
+
+/* ── buttons ─────────────────────────────────── */
+.fc-button {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 14px;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-control);
+  background: var(--bg-subtle-2);
+  color: var(--text-primary);
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+.fc-button:hover:not(:disabled) {
+  border-color: var(--border-stronger);
+  background: var(--bg-hover-2);
+}
+.fc-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.fc-button-primary {
+  border-color: transparent;
+  background: var(--accent);
+  color: var(--text-on-accent);
+}
+.fc-button-primary:hover:not(:disabled) {
+  border-color: transparent;
+  background: var(--accent-hover);
+}
+
+.fc-icon-button {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  place-items: center;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-control);
+  background: var(--bg-subtle);
+  color: var(--text-muted);
+  transition: 0.15s ease;
+}
+.fc-icon-button:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+/* ── inputs ──────────────────────────────────── */
+.fc-input {
+  width: 100%;
+  min-height: 34px;
+  padding: 0 11px;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-control);
+  background: var(--page-bg);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+.fc-input::placeholder {
+  color: var(--text-faint);
+  font-family: var(--font-sans);
+}
+.fc-input:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-muted-bg);
+}
+.fc-input:disabled {
+  opacity: 0.55;
+}
+
+/* ── status badges ───────────────────────────── */
+.status-badge {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-pill);
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+.status-badge::before {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  border-radius: 50%;
+  background: currentColor;
+  content: '';
+}
+.status-badge.is-idle {
+  color: var(--text-muted);
+}
+.status-badge.is-pending {
+  border-color: color-mix(in srgb, var(--warning) 35%, transparent);
+  background: color-mix(in srgb, var(--warning) 10%, transparent);
+  color: var(--warning);
+}
+.status-badge.is-ready,
+.status-badge.is-active {
+  border-color: var(--accent-muted-border);
+  background: var(--accent-muted-bg);
+  color: var(--accent);
+}
+.status-badge.is-active::before {
+  box-shadow: 0 0 0 3px var(--accent-muted-bg);
+}
+
+/* ── Threat Intelligence settings ────────────── */
+.intel-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.intel-mode,
+.intel-provider {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-card);
+  background: var(--bg-subtle);
+}
+.intel-mode-header,
+.intel-provider-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.intel-mode-header,
+.intel-provider-name {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.intel-provider-name svg,
+.intel-mode-header svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: var(--accent);
+}
+.intel-title {
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 650;
+}
+.intel-desc {
+  margin-top: 2px;
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+.intel-mode-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 8px;
+}
+.intel-mode-option {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 10px 12px;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-control);
+  background: var(--card-bg);
+  color: var(--text-primary);
+  text-align: start;
+  transition: 0.15s ease;
+}
+.intel-mode-option strong {
+  font-size: 12.5px;
+  font-weight: 650;
+}
+.intel-mode-option small {
+  color: var(--text-muted);
+  font-size: 11.5px;
+  line-height: 1.4;
+}
+.intel-mode-option:hover {
+  border-color: var(--border-stronger);
+}
+.intel-mode-option.is-selected {
+  border-color: var(--accent);
+  background: var(--accent-muted-bg);
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+[dir='rtl'] .intel-mode-option.is-selected {
+  box-shadow: inset -3px 0 0 var(--accent);
+}
+.intel-provider-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.intel-enable {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+}
+.intel-enable input {
+  accent-color: var(--accent);
+}
+.intel-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 10px;
+}
+.intel-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.intel-field > span {
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.intel-secret {
+  display: flex;
+  gap: 6px;
+}
+.intel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.intel-note,
+.intel-warning {
+  padding: 9px 11px;
+  border-radius: var(--radius-control);
+  font-size: 11.5px;
+  line-height: 1.5;
+}
+.intel-note {
+  border: 1px solid var(--border-default);
+  background: var(--card-bg);
+  color: var(--text-muted);
+}
+.intel-warning {
+  border: 1px solid color-mix(in srgb, var(--warning) 30%, transparent);
+  background: color-mix(in srgb, var(--warning) 9%, transparent);
+  color: var(--warning);
+}
+
+/* ── local Threat Monitor ────────────────────── */
+.threat-local-controls {
+  display: flex;
+  margin-bottom: 16px;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-card);
+  background: var(--glass-bg);
+}
+.threat-local-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+}
+.threat-local-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.threat-local-note {
+  color: var(--text-muted);
+  font-size: 11.5px;
+  line-height: 1.5;
+}
+
+/* ── brand emblem ────────────────────────────── */
+.fc-emblem {
+  display: block;
+  flex: 0 0 auto;
+}

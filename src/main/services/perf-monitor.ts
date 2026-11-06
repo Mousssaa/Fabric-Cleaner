@@ -176,7 +176,7 @@ export class PerfMonitorService {
         return {
           success: false,
           error: requiresAdmin
-            ? 'Access denied. Run Kudu as Administrator to end this process.'
+            ? 'Access denied. Run Fabric Cleaner as Administrator to end this process.'
             : `Failed to end process: ${message}`,
           requiresAdmin
         }
@@ -409,7 +409,7 @@ export class PerfMonitorService {
         windows ? collectWindowsMemory() : Promise.resolve(undefined)
       ])
       // systeminformation can swallow provider failures into a resolved empty list.
-      // A running Kudu host always has processes; do not erase a good sample.
+      // A running Fabric Cleaner host always has processes; do not erase a good sample.
       if (!inventory.processes.length) throw new Error('Process inventory unavailable')
 
       const result: PerfProcessList = {

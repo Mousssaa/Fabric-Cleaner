@@ -5,7 +5,7 @@
   "scanning": "Analyserer...",
   "refresh": "Opdater analyse",
   "introTitle": "Dine apps, med forklaring på pladsforbruget.",
-  "introDescription": "Sammenlign rapporterede installationsstørrelser med de filer, Kudu kan tilbyde til gennemgang før oprydning. Find de største muligheder, før du rydder op.",
+  "introDescription": "Sammenlign rapporterede installationsstørrelser med de filer, Fabric Cleaner kan tilbyde til gennemgang før oprydning. Find de største muligheder, før du rydder op.",
   "privacy": "Analysen forbliver på denne enhed. Intet fjernes under analysen.",
   "installed": "Installeret størrelse",
   "cache": "Filer til gennemgang",

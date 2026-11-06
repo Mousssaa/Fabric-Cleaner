@@ -17,7 +17,6 @@
     "items": "elementer ryddet op",
     "cleanups": "oprydninger gennemført",
     "tagline": "Mindre rod. Mere plads til det, der betyder noget.",
-    "footer": "Ryddet op med Kudu · Gratis og open source",
     "privacy": "Genereret lokalt. Kun totaler og generelle kategorier er inkluderet — ingen filstier eller computeridentifikatorer.",
     "save": "Gem PNG",
     "copyImage": "Kopiér billede",
@@ -26,12 +25,12 @@
     "copied": "Kopieret til udklipsholderen",
     "exportError": "Billedet kunne ikke eksporteres. Prøv Gem PNG i stedet for at dele eller kopiere.",
     "copyError": "Billedteksten kunne ikke kopieres. Kontrollér tilladelser til udklipsholderen.",
-    "caption": "Jeg frigjorde {{space}} og ryddede op i {{items}} elementer med Kudu. Gratis og open source. Del dine resultater, og hjælp Kudu med at vokse for os alle. https://usekudu.com",
-    "communityTitle": "Hjælp Kudu med at vokse, for os alle.",
-    "communityDescription": "Når du deler din oprydning, hjælper du flere med at opdage Kudu og styrker fællesskabet bag et gratis, open source-oprydningsværktøj. Hver deling gør en forskel.",
+    "caption": "Jeg frigjorde {{space}} og ryddede op i {{items}} elementer med Fabric Cleaner. Gratis og open source. Del dine resultater, og hjælp Fabric Cleaner med at vokse for os alle. https://github.com/Mousssaa/Fabric-Cleaner",
+    "communityTitle": "Hjælp Fabric Cleaner med at vokse, for os alle.",
+    "communityDescription": "Når du deler din oprydning, hjælper du flere med at opdage Fabric Cleaner og styrker fællesskabet bag et gratis, open source-oprydningsværktøj. Hver deling gør en forskel.",
     "platforms": "Del til en platform",
     "openPlatform": "Del på {{platform}} (åbnes i browseren)",
-    "postTitle": "Jeg frigjorde {{space}} med Kudu, et gratis, open source-oprydningsværktøj",
+    "postTitle": "Jeg frigjorde {{space}} med Fabric Cleaner, et gratis, open source-oprydningsværktøj",
     "discord": "Kopiér til Discord",
     "discordCopied": "Kort og billedtekst er kopieret. Indsæt dem i din Discord-chat eller -kanal.",
     "destinations": "Platformsknapper åbner et kladde- eller delingsvindue. Indsæt kortet med Kopiér billede, eller vedhæft den gemte PNG, og publicér derefter, når du er klar.",
@@ -77,6 +76,5 @@
   "close": "Luk",
   "dismiss": "Afvis",
   "skipToMainContent": "Gå til hovedindhold",
-  "windowTitlebar": "Kudu vinduestitellinje",
-  "checkingCloudConnection": "Tjekker Kudu Cloud-forbindelse…"
+  "windowTitlebar": "Fabric Cleaner vinduestitellinje"
 }

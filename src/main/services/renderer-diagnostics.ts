@@ -14,7 +14,7 @@ import { logError, logInfo } from './logger'
  * from the auto-updater trying to push to an already-dead renderer.
  *
  * These listeners capture the actual cause (renderer crash, preload throw,
- * resource load failure, hang) into %APPDATA%/Kudu/logs/kudu.log so future
+ * resource load failure, hang) into %APPDATA%/Fabric Cleaner/logs/fabric-cleaner.log so future
  * reports come with diagnostic data attached. In packaged builds we also pop
  * DevTools detached on a crash so the user can grab the console output.
  */
@@ -34,10 +34,10 @@ export function attachRendererDiagnostics(
     failureReported = true
     const detail = [
       cause,
-      `Kudu=${app.getVersion()} Electron=${process.versions.electron}`,
+      `Fabric Cleaner=${app.getVersion()} Electron=${process.versions.electron}`,
       `OS=${process.platform} ${release()} arch=${process.arch}`,
       `sandbox=${preferences.sandbox} contextIsolation=${preferences.contextIsolation} nodeIntegration=${preferences.nodeIntegration}`,
-      `log=${join(app.getPath('userData'), 'logs', 'kudu.log')}`
+      `log=${join(app.getPath('userData'), 'logs', 'fabric-cleaner.log')}`
     ].join('\n')
     logError(`Renderer startup failure:\n${detail}`)
     void dialog

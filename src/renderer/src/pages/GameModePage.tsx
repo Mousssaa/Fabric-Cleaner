@@ -211,7 +211,7 @@ const CATEGORIES: CategoryDef[] = [
     descKey: 'categorySystemDesc',
     icon: Monitor,
     color: '#f0b65b',
-    glow: 'rgba(245,158,11,0.12)'
+    glow: 'rgba(34, 211, 238,0.12)'
   },
   {
     id: 'network',
@@ -304,12 +304,12 @@ export function GameModePage() {
     store.getState().setLastResult(null)
 
     progressCleanupRef.current =
-      window.kudu?.onGameModeProgress?.((data) => {
+      window.fabric?.onGameModeProgress?.((data) => {
         useGameModeStore.getState().setProgress(data)
       }) ?? null
 
     try {
-      const result = await window.kudu.gameModeActivate(config)
+      const result = await window.fabric.gameModeActivate(config)
       // Only mark as active if at least one optimization succeeded
       if (result.succeeded > 0) {
         store.getState().setActive(true, result.snapshot?.activatedAt ?? new Date().toISOString())
@@ -337,12 +337,12 @@ export function GameModePage() {
     store.getState().setLastResult(null)
 
     progressCleanupRef.current =
-      window.kudu?.onGameModeProgress?.((data) => {
+      window.fabric?.onGameModeProgress?.((data) => {
         useGameModeStore.getState().setProgress(data)
       }) ?? null
 
     try {
-      const result = await window.kudu.gameModeDeactivate()
+      const result = await window.fabric.gameModeDeactivate()
       store.getState().setActive(false, null)
       const reason = result.errors[0]?.reason ?? null
       store.getState().setPendingRestore(result.failed > 0, reason)
@@ -369,7 +369,7 @@ export function GameModePage() {
 
   const handleDiscardPending = useCallback(async () => {
     try {
-      const result = await window.kudu.gameModeDiscardPending()
+      const result = await window.fabric.gameModeDiscardPending()
       if (!result.discarded) {
         toast.error(result.reason ?? t('discardFailed'))
         return
@@ -614,8 +614,8 @@ export function GameModePage() {
           <div
             className="flex items-start gap-3 rounded-lg px-4 py-3 text-[12px]"
             style={{
-              background: 'rgba(245,158,11,0.08)',
-              border: '1px solid rgba(245,158,11,0.2)',
+              background: 'rgba(34, 211, 238,0.08)',
+              border: '1px solid rgba(34, 211, 238,0.2)',
               color: '#f0b65b'
             }}
           >
@@ -633,9 +633,9 @@ export function GameModePage() {
                 disabled={isBusy}
                 className="rounded-md px-3 py-1.5 text-[11px] font-semibold transition-colors disabled:opacity-40"
                 style={{
-                  background: 'rgba(245,158,11,0.15)',
+                  background: 'rgba(34, 211, 238,0.15)',
                   color: '#f0b65b',
-                  border: '1px solid rgba(245,158,11,0.3)'
+                  border: '1px solid rgba(34, 211, 238,0.3)'
                 }}
               >
                 {isBusy ? t('retryingCleanup') : t('retryCleanup')}
@@ -654,7 +654,7 @@ export function GameModePage() {
                 style={{
                   background: 'transparent',
                   color: '#f0b65b',
-                  border: '1px solid rgba(245,158,11,0.3)'
+                  border: '1px solid rgba(34, 211, 238,0.3)'
                 }}
               >
                 {confirmDiscard ? t('discardConfirm') : t('discardPending')}

@@ -77,7 +77,7 @@ export function NetworkCleanupPage() {
     store.setSelectedIds(new Set())
     store.setCleanResult(null)
     try {
-      const result = await window.kudu.networkScan()
+      const result = await window.fabric.networkScan()
       const s = useNetworkStore.getState()
       s.setItems(result)
       const preSelected = new Set(result.filter((i) => i.selected).map((i) => i.id))
@@ -96,7 +96,7 @@ export function NetworkCleanupPage() {
     const cleanStart = Date.now()
     try {
       const { selectedIds: currentSelectedIds, items: currentItems } = useNetworkStore.getState()
-      const result = await window.kudu.networkClean([...currentSelectedIds])
+      const result = await window.fabric.networkClean([...currentSelectedIds])
       const s = useNetworkStore.getState()
       s.setCleanResult(result)
       // Remove cleaned items from list
@@ -134,7 +134,7 @@ export function NetworkCleanupPage() {
       // Re-scan after cleaning to show the actual current state —
       // without this, items like DNS/ARP appear removed but come back on next manual scan
       try {
-        const freshItems = await window.kudu.networkScan()
+        const freshItems = await window.fabric.networkScan()
         const ns = useNetworkStore.getState()
         ns.setItems(freshItems)
         ns.setSelectedIds(new Set())
@@ -173,9 +173,9 @@ export function NetworkCleanupPage() {
               disabled={!hasItems || isScanning || isCleaning || selectedIds.size === 0}
               className="flex items-center gap-2 rounded-xl px-5 py-2.5 text-[13px] font-semibold transition-all disabled:opacity-30"
               style={{
-                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                background: 'linear-gradient(135deg, #22d3ee 0%, #0891b2 100%)',
                 color: 'var(--text-on-accent)',
-                boxShadow: hasItems ? '0 4px 20px rgba(245,158,11,0.2)' : 'none'
+                boxShadow: hasItems ? '0 4px 20px rgba(34, 211, 238,0.2)' : 'none'
               }}
             >
               <Sparkles className="h-4 w-4" strokeWidth={2} />
@@ -319,7 +319,7 @@ export function NetworkCleanupPage() {
                   disabled={isCleaning}
                   className="pulse-primary-action pulse-scan-action flex items-center gap-2 rounded-xl px-5 py-2.5 text-[13px] font-semibold transition-all disabled:opacity-40"
                   style={{
-                    background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                    background: 'linear-gradient(135deg, #22d3ee 0%, #0891b2 100%)',
                     color: 'var(--text-on-accent)'
                   }}
                 >
@@ -370,7 +370,7 @@ export function NetworkCleanupPage() {
                         checked && 'ring-1 ring-amber-500/20'
                       )}
                       style={{
-                        background: checked ? 'rgba(245,158,11,0.04)' : 'var(--card-bg)',
+                        background: checked ? 'rgba(34, 211, 238,0.04)' : 'var(--card-bg)',
                         border: '1px solid var(--border-default)'
                       }}
                       onMouseEnter={(e) => {
@@ -380,7 +380,7 @@ export function NetworkCleanupPage() {
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.background = checked
-                          ? 'rgba(245,158,11,0.04)'
+                          ? 'rgba(34, 211, 238,0.04)'
                           : 'var(--card-bg)'
                       }}
                     >

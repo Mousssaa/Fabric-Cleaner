@@ -78,7 +78,7 @@ function paths(result: { items: Array<{ path: string }> }): string[] {
 }
 
 beforeEach(() => {
-  testDir = mkdtempSync(join(tmpdir(), 'kudu-recency-'))
+  testDir = mkdtempSync(join(tmpdir(), 'fc-recency-'))
   state.exclusions = []
   state.items = []
 })
@@ -90,12 +90,15 @@ afterEach(() => {
 describe('scanDirectory recency guard', () => {
   it('rechecks the age of allowlisted logs before cleaning them', async () => {
     const log = file('ollama/server.log', 3 * 24 * 60)
-    const scan = await scanAppRule({
-      id: 'ollama-logs',
-      name: 'Ollama Logs',
-      paths: [join(testDir, 'ollama')],
-      fileMatch: { names: ['server.log'], minAgeDays: 1 }
-    }, 'app')
+    const scan = await scanAppRule(
+      {
+        id: 'ollama-logs',
+        name: 'Ollama Logs',
+        paths: [join(testDir, 'ollama')],
+        fileMatch: { names: ['server.log'], minAgeDays: 1 }
+      },
+      'app'
+    )
     expect(paths(scan)).toEqual([log])
     state.items = scan.items
 

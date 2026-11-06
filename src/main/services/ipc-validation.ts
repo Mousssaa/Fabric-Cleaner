@@ -37,7 +37,6 @@ export function validateSettingsPartial(input: unknown): Record<string, unknown>
     'windowsPackageManagers',
     'schedule',
     'schedules',
-    'cloud',
     'gameMode',
     'registryIgnoredTweaks'
   ])
@@ -177,8 +176,7 @@ export function validateSettingsPartial(input: unknown): Record<string, unknown>
       'cleaner:databases',
       'registry',
       'drivers',
-      'software-update',
-      'cve-scan'
+      'software-update'
     ])
     const validFrequencies = new Set(['daily', 'weekly', 'monthly'])
     const validStatuses = new Set(['success', 'partial', 'failed', 'never', 'skipped'])
@@ -248,6 +246,7 @@ export function validateSettingsPartial(input: unknown): Record<string, unknown>
     const allowedCleanerKeys = new Set([
       'skipRecentMinutes',
       'secureDelete',
+      'disposalMode',
       'closeBrowsersBeforeClean',
       'createRestorePoint',
       'protectRecycleBin',
@@ -264,46 +263,13 @@ export function validateSettingsPartial(input: unknown): Record<string, unknown>
     )
       return null
     if ('secureDelete' in c && typeof c.secureDelete !== 'boolean') return null
+    if ('disposalMode' in c && c.disposalMode !== 'trash' && c.disposalMode !== 'permanent')
+      return null
     if ('closeBrowsersBeforeClean' in c && typeof c.closeBrowsersBeforeClean !== 'boolean')
       return null
     if ('createRestorePoint' in c && typeof c.createRestorePoint !== 'boolean') return null
     if ('protectRecycleBin' in c && typeof c.protectRecycleBin !== 'boolean') return null
     if ('keepDeletionLog' in c && typeof c.keepDeletionLog !== 'boolean') return null
-  }
-
-  // Validate cloud has expected shape if present
-  if ('cloud' in obj && obj.cloud !== undefined) {
-    const c = obj.cloud as Record<string, unknown>
-    if (typeof c !== 'object' || c === null || Array.isArray(c)) return null
-    const allowedCloudKeys = new Set([
-      'apiKey',
-      'telemetryIntervalSec',
-      'shareDiskHealth',
-      'shareProcessList',
-      'shareThreatMonitor',
-      'allowRemotePower',
-      'allowRemoteCleanup',
-      'allowRemoteInstalls',
-      'allowRemoteConfig'
-    ])
-    for (const key of Object.keys(c)) {
-      if (!allowedCloudKeys.has(key)) return null
-    }
-    if ('apiKey' in c && (typeof c.apiKey !== 'string' || c.apiKey.length > 200)) return null
-    if (
-      'telemetryIntervalSec' in c &&
-      (typeof c.telemetryIntervalSec !== 'number' ||
-        c.telemetryIntervalSec < 10 ||
-        c.telemetryIntervalSec > 3600)
-    )
-      return null
-    if ('shareDiskHealth' in c && typeof c.shareDiskHealth !== 'boolean') return null
-    if ('shareProcessList' in c && typeof c.shareProcessList !== 'boolean') return null
-    if ('shareThreatMonitor' in c && typeof c.shareThreatMonitor !== 'boolean') return null
-    if ('allowRemotePower' in c && typeof c.allowRemotePower !== 'boolean') return null
-    if ('allowRemoteCleanup' in c && typeof c.allowRemoteCleanup !== 'boolean') return null
-    if ('allowRemoteInstalls' in c && typeof c.allowRemoteInstalls !== 'boolean') return null
-    if ('allowRemoteConfig' in c && typeof c.allowRemoteConfig !== 'boolean') return null
   }
 
   // Validate registryIgnoredTweaks is an array of tweak-signature strings if present

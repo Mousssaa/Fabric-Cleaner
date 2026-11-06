@@ -1,16 +1,16 @@
-# Contributing to Kudu
+# Contributing to Fabric Cleaner
 
-Thanks for your interest in contributing! Kudu is a community-driven project and we welcome all contributions — bug reports, feature requests, documentation improvements, and code.
+Thanks for your interest in contributing! Fabric Cleaner is a community-driven project and we welcome all contributions — bug reports, feature requests, documentation improvements, and code.
 
 ## Getting Started
 
-**Choose a local, non-synced checkout location**, such as `~/Projects/kudu`. On macOS, avoid Desktop and Documents when iCloud's "Desktop & Documents Folders" sync is enabled. Repeated dev-server reloads were reported from a synced Desktop checkout and stopped after moving it outside the synced folders ([#553](https://github.com/AdventDevInc/kudu/issues/553)). The exact source of the file events has not been confirmed; other sync providers have not been tested.
+**Choose a local, non-synced checkout location**, such as `~/Projects/fabric-cleaner`. On macOS, avoid Desktop and Documents when iCloud's "Desktop & Documents Folders" sync is enabled. Repeated dev-server reloads were reported from a synced Desktop checkout and stopped after moving it outside the synced folders ([#553](https://github.com/AdventDevInc/kudu/issues/553)). The exact source of the file events has not been confirmed; other sync providers have not been tested.
 
 1. Fork the repository
 2. Clone your fork and create a branch:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/kudu.git
-   cd kudu
+   git clone https://github.com/YOUR_USERNAME/Fabric-Cleaner.git
+   cd Fabric-Cleaner
    git checkout -b my-feature
    ```
 3. Install dependencies (use the Node version in `.nvmrc`):
@@ -27,7 +27,7 @@ Thanks for your interest in contributing! Kudu is a community-driven project and
 If `npm run dev` repeatedly reloads the app from an iCloud-synced Desktop or Documents checkout:
 
 1. Stop the dev server with `Ctrl+C`.
-2. Move the checkout outside the synced folders, for example to `~/Projects/kudu` (ensure that location is not synced).
+2. Move the checkout outside the synced folders, for example to `~/Projects/fabric-cleaner` (ensure that location is not synced).
 3. Open a terminal in the new checkout location and restart with `npm run dev`.
 
 A clean `git status` and unchanged file modification times do not rule out watcher events: the report observed events for `src/renderer/src/locales/**/*.json` despite both.
@@ -100,11 +100,11 @@ A maintainer will review within a few days. We may ask for changes — that's no
 
 ## Reporting Bugs
 
-Use the [bug report template](https://github.com/adventdevinc/kudu/issues/new?template=bug_report.md). Include your OS, Kudu version, and steps to reproduce.
+Use the [bug report template](https://github.com/Mousssaa/Fabric-Cleaner/issues/new?template=bug_report.md). Include your OS, Fabric Cleaner version, and steps to reproduce.
 
 ## Suggesting Features
 
-Use the [feature request template](https://github.com/adventdevinc/kudu/issues/new?template=feature_request.md).
+Use the [feature request template](https://github.com/Mousssaa/Fabric-Cleaner/issues/new?template=feature_request.md).
 
 ## Code of Conduct
 

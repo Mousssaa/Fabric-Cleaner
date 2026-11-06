@@ -1,0 +1,89 @@
+import { ipcMain } from 'electron'
+import type { IpcMainEvent, IpcMainInvokeEvent, WebFrameMain } from 'electron'
+import { pathToFileURL } from 'url'
+import { join } from 'path'
+
+/**
+ * Centralised IPC sender validation.
+ *
+ * Every `ipcMain.handle` / `ipcMain.on` registration made after
+ * `installIpcSenderGuard()` runs is wrapped so the handler only executes for
+ * messages sent by the app's own top-level renderer document. Messages from
+ * sub-frames, navigated-away pages or any other origin are rejected before
+ * the handler sees the payload. Payload validation stays in each handler
+ * (see services/ipc-validation.ts).
+ */
+
+type AnyEvent = IpcMainEvent | IpcMainInvokeEvent
+
+let trustedRendererUrl: URL | null = null
+let installed = false
+
+/** Resolve what the renderer is loaded from: the dev server or the bundled index.html. */
+export function resolveTrustedRendererUrl(
+  devServerUrl: string | undefined,
+  rendererDir: string
+): URL {
+  if (devServerUrl) return new URL(devServerUrl)
+  return pathToFileURL(join(rendererDir, 'index.html'))
+}
+
+/** True when `frameUrl` is the app's own renderer document (ignoring hash/query). */
+export function isTrustedRendererUrl(frameUrl: string, trusted: URL): boolean {
+  let url: URL
+  try {
+    url = new URL(frameUrl)
+  } catch {
+    return false
+  }
+  if (trusted.protocol === 'file:') {
+    return url.protocol === 'file:' && url.pathname === trusted.pathname
+  }
+  return url.origin === trusted.origin
+}
+
+export function isTrustedSender(event: AnyEvent): boolean {
+  if (!trustedRendererUrl) return false
+  let frame: WebFrameMain | null | undefined
+  try {
+    frame = event.senderFrame
+  } catch {
+    return false
+  }
+  // Only the top-level frame of our own window may talk to the main process.
+  if (!frame || frame.parent) return false
+  return isTrustedRendererUrl(frame.url, trustedRendererUrl)
+}
+
+export function installIpcSenderGuard(trusted: URL): void {
+  trustedRendererUrl = trusted
+  if (installed) return
+  installed = true
+
+  const originalHandle = ipcMain.handle.bind(ipcMain)
+  const originalOn = ipcMain.on.bind(ipcMain)
+  const originalOnce = ipcMain.once.bind(ipcMain)
+
+  ipcMain.handle = ((channel: string, listener: (e: IpcMainInvokeEvent, ...a: any[]) => any) =>
+    originalHandle(channel, (event, ...args) => {
+      if (!isTrustedSender(event)) {
+        throw new Error(`Rejected IPC "${channel}" from an untrusted sender`)
+      }
+      return listener(event, ...args)
+    })) as typeof ipcMain.handle
+
+  const wrapListener =
+    (channel: string, listener: (e: IpcMainEvent, ...a: any[]) => void) =>
+    (event: IpcMainEvent, ...args: any[]) => {
+      if (!isTrustedSender(event)) {
+        console.warn(`[ipc-guard] Rejected IPC "${channel}" from an untrusted sender`)
+        return
+      }
+      listener(event, ...args)
+    }
+
+  ipcMain.on = ((channel: string, listener: (e: IpcMainEvent, ...a: any[]) => void) =>
+    originalOn(channel, wrapListener(channel, listener))) as typeof ipcMain.on
+  ipcMain.once = ((channel: string, listener: (e: IpcMainEvent, ...a: any[]) => void) =>
+    originalOnce(channel, wrapListener(channel, listener))) as typeof ipcMain.once
+}

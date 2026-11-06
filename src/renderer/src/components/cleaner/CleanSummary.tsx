@@ -136,7 +136,7 @@ function CategoryBar({
           animate={{ width: `${pct}%` }}
           transition={{ delay: delay + 0.15, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="absolute inset-y-0 left-0 rounded-full"
-          style={{ background: 'linear-gradient(90deg, #f59e0b, #d97706)' }}
+          style={{ background: 'linear-gradient(90deg, #22d3ee, #0891b2)' }}
         />
       </div>
       <span
@@ -224,8 +224,8 @@ export function CleanSummary({ summary, onRelaunchAsAdmin, platform }: CleanSumm
             icon={Files}
             value={summary.filesDeleted}
             label={t('summaryFilesDeleted')}
-            color="#f59e0b"
-            iconBg="rgba(245,158,11,0.10)"
+            color="#22d3ee"
+            iconBg="rgba(34, 211, 238,0.10)"
             delay={0.3}
           />
           <MetricCard
@@ -299,7 +299,7 @@ export function CleanSummary({ summary, onRelaunchAsAdmin, platform }: CleanSumm
               <button
                 onClick={onRelaunchAsAdmin}
                 className="shrink-0 rounded-lg px-3 py-1.5 text-[12px] font-medium text-amber-400 transition-colors hover:bg-amber-500/15"
-                style={{ border: '1px solid rgba(245,158,11,0.2)' }}
+                style={{ border: '1px solid rgba(34, 211, 238,0.2)' }}
               >
                 {t('relaunchAsAdmin')}
               </button>

@@ -53,7 +53,7 @@ export const useDiskStore = create<DiskState>((set, get) => ({
     if (get().drivesLoading) return
     set({ drivesLoading: true, error: null })
     try {
-      const drives = await window.kudu.diskDrives()
+      const drives = await window.fabric.diskDrives()
       const selectedDrive = drives.some((d) => d.letter === get().selectedDrive)
         ? get().selectedDrive
         : (drives.find((d) => d.isSystem)?.letter ?? drives[0]?.letter ?? get().selectedDrive)
@@ -66,7 +66,7 @@ export const useDiskStore = create<DiskState>((set, get) => ({
     if (get().analyzing || get().fileTypesLoading || get().drivesLoading) return
     set({ analyzing: true, data: null, breadcrumb: [], error: null, fileTypes: [] })
     try {
-      const data = await window.kudu.diskAnalyze(get().selectedDrive)
+      const data = await window.fabric.diskAnalyze(get().selectedDrive)
       set({ data, breadcrumb: [data] })
     } finally {
       set({ analyzing: false })
@@ -76,7 +76,7 @@ export const useDiskStore = create<DiskState>((set, get) => ({
     if (get().analyzing || get().fileTypesLoading || get().drivesLoading) return
     set({ fileTypesLoading: true, error: null, fileTypes: [] })
     try {
-      const fileTypes = await window.kudu.diskFileTypes(get().selectedDrive)
+      const fileTypes = await window.fabric.diskFileTypes(get().selectedDrive)
       set({ fileTypes })
     } finally {
       set({ fileTypesLoading: false })

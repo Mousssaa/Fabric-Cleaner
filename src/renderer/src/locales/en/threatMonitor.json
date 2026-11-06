@@ -1,30 +1,13 @@
 {
   "pageTitle": "Threat Monitor",
-  "pageDescription": "Real-time monitoring of network connections against known threat lists.",
-  "checkingConnection": "Checking Kudu Cloud connection…",
-  "cloudNotConfigured": {
-    "title": "Kudu Cloud Pro required",
-    "description": "Connect this device to Kudu Cloud Pro to receive the current threat blacklist and monitor suspicious network activity.",
-    "action": "View Kudu Cloud"
-  },
-  "connectionError": {
-    "title": "Cloud connection needs attention",
-    "description": "This device has a saved Cloud key, but it is no longer authorized. Review the connection and link it again.",
-    "action": "Review Cloud connection"
-  },
-  "planRequired": {
-    "title": "Kudu Cloud Pro required",
-    "description": "Threat monitoring is a Pro feature. Upgrade your Cloud plan to receive the live threat blacklist on this device.",
-    "action": "View Cloud plans"
-  },
+  "pageDescription": "Compare this device's live network connections and DNS cache against a blocklist you import. Runs fully on this device.",
   "loading": "Loading...",
   "inactive": {
-    "title": "Threat monitor inactive",
-    "description": "Cloud is connected, but no threat blacklist is available yet. Check your Pro plan or try again after the Cloud agent reconnects.",
-    "action": "Review Cloud plan"
+    "title": "No blocklist imported",
+    "description": "Import a local blocklist (domains, IP addresses or CIDR ranges, one per line, or JSON) to start monitoring. Nothing is downloaded or sent anywhere."
   },
   "statusBar": {
-    "blacklistVersion": "Blacklist",
+    "blacklistVersion": "Blocklist",
     "connectionsScanned": "Connections scanned {{time}}",
     "dnsScanned": "DNS scanned {{time}}",
     "threatsDetected": "{{count}} threat detected",
@@ -37,5 +20,20 @@
   },
   "flaggedConnections": "Flagged Connections",
   "flaggedDnsEntries": "Flagged DNS Entries",
-  "connectionPid": "PID {{pid}}"
+  "connectionPid": "PID {{pid}}",
+  "local": {
+    "running": "Monitoring",
+    "stopped": "Stopped",
+    "noBlocklist": "No local blocklist",
+    "blocklistSummary": "{{domains}} domains · {{ips}} IPs · {{cidrs}} ranges",
+    "import": "Import blocklist",
+    "start": "Start monitoring",
+    "stop": "Stop",
+    "clear": "Remove blocklist",
+    "importSuccess": "Blocklist imported",
+    "importFailed": "Could not import that blocklist",
+    "readyTitle": "Ready to monitor",
+    "readyDescription": "A blocklist is loaded. Start monitoring to check connections every 30 seconds and the DNS cache every minute.",
+    "privacyNote": "Local mode: connection data never leaves this device."
+  }
 }

@@ -5,7 +5,7 @@
   "scanning": "Elemzés...",
   "refresh": "Elemzés frissítése",
   "introTitle": "Az alkalmazásai, a tárhelyhasználat részleteivel.",
-  "introDescription": "Hasonlítsa össze a jelentett telepítési méreteket azokkal a fájlokkal, amelyeket a Kudu felkínálhat tisztítási ellenőrzésre. Tisztítás előtt találja meg a legnagyobb lehetőségeket.",
+  "introDescription": "Hasonlítsa össze a jelentett telepítési méreteket azokkal a fájlokkal, amelyeket a Fabric Cleaner felkínálhat tisztítási ellenőrzésre. Tisztítás előtt találja meg a legnagyobb lehetőségeket.",
   "privacy": "Az elemzés ezen az eszközön marad. Az elemzés során semmi sem kerül eltávolításra.",
   "installed": "Telepített méret",
   "cache": "Ellenőrizhető fájlok",

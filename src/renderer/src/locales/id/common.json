@@ -17,7 +17,6 @@
     "items": "item dibersihkan",
     "cleanups": "pembersihan selesai",
     "tagline": "Lebih sedikit kekacauan. Lebih banyak ruang untuk yang penting.",
-    "footer": "Dibersihkan dengan Kudu · Gratis & open source",
     "privacy": "Dibuat secara lokal. Hanya total dan kategori umum yang disertakan — tanpa jalur file atau pengenal komputer.",
     "save": "Simpan PNG",
     "copyImage": "Salin gambar",
@@ -26,12 +25,12 @@
     "copied": "Disalin ke clipboard",
     "exportError": "Tidak dapat mengekspor gambar. Coba Simpan PNG alih-alih membagikan atau menyalin.",
     "copyError": "Tidak dapat menyalin keterangan. Periksa izin clipboard.",
-    "caption": "Saya memulihkan {{space}} dan membersihkan {{items}} item dengan Kudu. Gratis & open source. Bagikan hasil Anda dan bantu Kudu berkembang untuk kita semua. https://usekudu.com",
-    "communityTitle": "Bantu Kudu berkembang, untuk kita semua.",
-    "communityDescription": "Membagikan hasil pembersihan Anda membantu lebih banyak orang menemukan Kudu dan mengembangkan komunitas di balik pembersih gratis dan open-source ini. Setiap bagikan membawa perubahan.",
+    "caption": "Saya memulihkan {{space}} dan membersihkan {{items}} item dengan Fabric Cleaner. Gratis & open source. Bagikan hasil Anda dan bantu Fabric Cleaner berkembang untuk kita semua. https://github.com/Mousssaa/Fabric-Cleaner",
+    "communityTitle": "Bantu Fabric Cleaner berkembang, untuk kita semua.",
+    "communityDescription": "Membagikan hasil pembersihan Anda membantu lebih banyak orang menemukan Fabric Cleaner dan mengembangkan komunitas di balik pembersih gratis dan open-source ini. Setiap bagikan membawa perubahan.",
     "platforms": "Bagikan ke platform",
     "openPlatform": "Bagikan di {{platform}} (membuka di browser)",
-    "postTitle": "Saya memulihkan {{space}} dengan Kudu, pembersih gratis dan open-source",
+    "postTitle": "Saya memulihkan {{space}} dengan Fabric Cleaner, pembersih gratis dan open-source",
     "discord": "Salin untuk Discord",
     "discordCopied": "Kartu dan keterangan disalin. Tempelkan ke obrolan atau saluran Discord Anda.",
     "destinations": "Tombol platform membuka draf atau layar berbagi. Tempelkan kartu menggunakan Salin gambar, atau lampirkan PNG yang disimpan, lalu kirim saat Anda siap.",
@@ -77,6 +76,5 @@
   "close": "Tutup",
   "dismiss": "Tutup",
   "skipToMainContent": "Lompat ke konten utama",
-  "windowTitlebar": "Bilah judul jendela Kudu",
-  "checkingCloudConnection": "Memeriksa koneksi Kudu Cloud…"
+  "windowTitlebar": "Bilah judul jendela Fabric Cleaner"
 }

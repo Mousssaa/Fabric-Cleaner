@@ -64,7 +64,7 @@ describe('renderer startup diagnostics', () => {
     })
     expect(options.detail).toContain('exitCode=-1073740756 (0xC000042C)')
     expect(options.detail).toContain('sandbox=true contextIsolation=true nodeIntegration=false')
-    expect(options.detail).toContain(join('/test/profile', 'logs', 'kudu.log'))
+    expect(options.detail).toContain(join('/test/profile', 'logs', 'fabric-cleaner.log'))
     expect(mocks.logError).toHaveBeenCalledWith(expect.stringContaining(options.detail))
     expect(wc.openDevTools).not.toHaveBeenCalled()
     expect(mocks.app.quit).not.toHaveBeenCalled()

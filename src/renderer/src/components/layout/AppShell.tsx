@@ -6,7 +6,7 @@ import { Sidebar } from './Sidebar'
 import { AdminBanner } from './AdminBanner'
 import { useSettingsStore } from '@/stores/settings-store'
 import { usePlatform } from '@/hooks/usePlatform'
-import logoSrc from '@/assets/logo.png'
+import logoSrc from '@/assets/logo.svg'
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const { t } = useTranslation('common')
@@ -29,16 +29,22 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       <header
         className="app-titlebar drag-region"
-        aria-label={t('windowTitlebar', 'Kudu window titlebar')}
+        aria-label={t('windowTitlebar', 'Fabric Cleaner window titlebar')}
       >
         <div className="app-brand">
-          <img src={logoSrc} alt="" className="h-6 w-6 rounded-full" />
+          <img src={logoSrc} alt="" className="fc-emblem h-6 w-6" />
           <div>
             <div
               className="text-[12px] font-bold leading-none"
               style={{ color: 'var(--text-primary)' }}
             >
-              Kudu
+              Fabric Cleaner
+            </div>
+            <div
+              className="mt-1 text-[9.5px] font-semibold uppercase leading-none tracking-[0.08em]"
+              style={{ color: 'var(--text-faint)' }}
+            >
+              HakTrak Networks
             </div>
           </div>
         </div>
@@ -112,7 +118,7 @@ function AppearanceMenu() {
 
   const selectTheme = (nextTheme: ThemeMode) => {
     updateSettings({ theme: nextTheme })
-    window.kudu?.settingsSet?.({ theme: nextTheme }).catch(() => {})
+    window.fabric?.settingsSet?.({ theme: nextTheme }).catch(() => {})
     setOpen(false)
   }
 

@@ -65,9 +65,12 @@ describe('checkForUpdates UX', () => {
     markerExists.mockReturnValue(false)
     vi.stubEnv('APPIMAGE', '')
     vi.stubEnv('PORTABLE_EXECUTABLE_DIR', '')
+    // These cases cover the published-feed behaviour; the release gate is
+    // tested separately below.
+    vi.stubEnv('FABRIC_CLEANER_ENABLE_UPDATES', '1')
     Object.defineProperty(process, 'platform', { value: 'win32', configurable: true })
     Object.defineProperty(process, 'resourcesPath', {
-      value: 'C:\\Kudu\\resources',
+      value: 'C:\\Fabric Cleaner\\resources',
       configurable: true
     })
   })
@@ -85,7 +88,7 @@ describe('checkForUpdates UX', () => {
 
   it('runs electron-updater when APPIMAGE is set on Linux', async () => {
     Object.defineProperty(process, 'platform', { value: 'linux', configurable: true })
-    process.env.APPIMAGE = '/home/u/Kudu-x86_64.AppImage'
+    process.env.APPIMAGE = '/home/u/Fabric-Cleaner-x86_64.AppImage'
     const { checkForUpdates } = await import('./auto-updater')
     await checkForUpdates()
     expect(checkForUpdatesMock).toHaveBeenCalled()
@@ -94,7 +97,7 @@ describe('checkForUpdates UX', () => {
   it.each(['exe', 'zip'])(
     'blocks every installer update entry point for portable %s',
     async (format) => {
-      if (format === 'exe') vi.stubEnv('PORTABLE_EXECUTABLE_DIR', 'D:\\Kudu')
+      if (format === 'exe') vi.stubEnv('PORTABLE_EXECUTABLE_DIR', 'D:\\Fabric Cleaner')
       else markerExists.mockReturnValue(true)
       const updater = await import('./auto-updater')
       const { autoUpdater } = await import('electron-updater')
@@ -144,4 +147,47 @@ describe('checkForUpdates UX', () => {
       if (failure !== 'disposed during send') expect(send).not.toHaveBeenCalled()
     }
   )
+})
+
+describe('release gate before a public update feed exists', () => {
+  beforeEach(() => {
+    vi.resetModules()
+    vi.clearAllMocks()
+    send.mockReset()
+    isDestroyed.mockReturnValue(false)
+    isCrashed.mockReturnValue(false)
+    markerExists.mockReturnValue(false)
+    vi.stubEnv('APPIMAGE', '')
+    vi.stubEnv('PORTABLE_EXECUTABLE_DIR', '')
+    vi.stubEnv('FABRIC_CLEANER_ENABLE_UPDATES', '')
+    Object.defineProperty(process, 'platform', { value: 'win32', configurable: true })
+  })
+
+  it('makes no background or periodic update requests on startup', async () => {
+    vi.useFakeTimers()
+    try {
+      const updater = await import('./auto-updater')
+      updater.initAutoUpdater()
+      updater.updateCheckInterval(1)
+      vi.advanceTimersByTime(3 * 60 * 60 * 1000)
+      expect(onMock).not.toHaveBeenCalled()
+      expect(checkForUpdatesMock).not.toHaveBeenCalled()
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
+  it('answers a manual check with a clear status instead of a network error', async () => {
+    const updater = await import('./auto-updater')
+    await expect(updater.checkForUpdates()).resolves.toBeUndefined()
+    await expect(updater.downloadUpdate()).resolves.toBeUndefined()
+    expect(checkForUpdatesMock).not.toHaveBeenCalled()
+    expect(send).toHaveBeenCalledWith(
+      'updater:status',
+      expect.objectContaining({
+        state: 'error',
+        error: expect.stringMatching(/not available yet/i)
+      })
+    )
+  })
 })

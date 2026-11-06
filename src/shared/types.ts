@@ -472,7 +472,7 @@ export interface YaraRulesInfo {
   rulesLoaded: number
   version: string | null
   updatedAt: string | null
-  source: 'cloud' | 'none'
+  source: 'bundled' | 'local' | 'none'
   cachedRules: number
   compileProgress: { loaded: number; total: number } | null
 }
@@ -589,7 +589,7 @@ export interface DriverUpdateScanResult {
 
 export interface DriverUpdateIgnoreResult {
   // Whether the update was also hidden/unhidden in Windows Update itself.
-  // False when the WU call failed (e.g. not elevated); the Kudu-side
+  // False when the WU call failed (e.g. not elevated); the Fabric-Cleaner-side
   // ignore still applies.
   windowsUpdateHidden: boolean
   error?: string
@@ -781,7 +781,6 @@ export type ScheduleTaskType =
   | 'registry'
   | 'drivers'
   | 'software-update'
-  | 'cve-scan'
 
 export type ScheduleRunStatus = 'success' | 'partial' | 'failed' | 'never' | 'skipped'
 
@@ -807,7 +806,7 @@ export interface ScheduleEntry {
   createdAt: string
 }
 
-export interface KuduSettings {
+export interface FabricSettings {
   theme: 'dark' | 'light' | 'system'
   dashboardView?: 'simple' | 'advanced'
   language: string
@@ -839,6 +838,12 @@ export interface KuduSettings {
   cleaner: {
     skipRecentMinutes: number
     secureDelete: boolean
+    /**
+     * How cleanup removes items. `trash` (default) moves them to the OS Trash /
+     * Recycle Bin so they can be restored; `permanent` deletes them outright.
+     * Secure delete always implies permanent removal.
+     */
+    disposalMode?: 'trash' | 'permanent'
     closeBrowsersBeforeClean: boolean
     createRestorePoint: boolean
     protectRecycleBin: boolean
@@ -868,17 +873,6 @@ export interface KuduSettings {
     hour: number
   }
   schedules: ScheduleEntry[]
-  cloud: {
-    apiKey: string
-    telemetryIntervalSec: number
-    shareDiskHealth: boolean
-    shareProcessList: boolean
-    shareThreatMonitor: boolean
-    allowRemotePower: boolean
-    allowRemoteCleanup: boolean
-    allowRemoteInstalls: boolean
-    allowRemoteConfig: boolean
-  }
   /**
    * Preferred Windows package manager for Software Updater.
    * @deprecated Superseded by `windowsPackageManagers` (multi-manager aggregation).
@@ -1121,10 +1115,10 @@ export type FirewallAction = 'disable' | 'delete'
 // ─── Software Updater ──────────────────────────────────────
 export type UpdateSeverity = 'major' | 'minor' | 'patch' | 'unknown'
 
-/** Package managers Kudu can aggregate on Windows. */
+/** Package managers Fabric Cleaner can aggregate on Windows. */
 export type WindowsPackageManager = 'winget' | 'choco' | 'scoop' | 'npm'
 
-/** All package-manager names Kudu can report, across every platform. */
+/** All package-manager names Fabric Cleaner can report, across every platform. */
 export type PackageManagerName =
   'winget' | 'choco' | 'scoop' | 'npm' | 'brew' | 'apt' | 'dnf' | 'pacman'
 
@@ -1207,7 +1201,7 @@ export interface UpdateResult {
    * (e.g. choco + scoop "git"); it is omitted on single-manager platforms.
    * `suggestedCommands` carries the commands a user can run themselves when
    * the updater cannot apply the update (see `wingetRemedies` and
-   * `manualRemedies` in software-updater.ts); absent when Kudu has nothing
+   * `manualRemedies` in software-updater.ts); absent when Fabric Cleaner has nothing
    * better to offer than what it already tried.
    */
   errors: {
@@ -1311,6 +1305,17 @@ export interface ThreatSnapshot {
   blacklistVersion: string | null
   lastConnectionScanAt: string | null
   lastDnsScanAt: string | null
+}
+
+export interface LocalThreatMonitorStatus {
+  running: boolean
+  blocklist: {
+    version: string
+    updatedAt: string
+    domains: number
+    ips: number
+    cidrs: number
+  } | null
 }
 
 // ─── CVE Vulnerability Scanner ────────────────────────────
@@ -1637,4 +1642,13 @@ export interface AppSpaceReport {
 export interface AppSpaceReview {
   token: string
   results: ScanResult[]
+}
+
+/** Outcome of asking the OS to relaunch Fabric Cleaner with elevated rights. */
+export interface ElevationRelaunchResult {
+  relaunched: boolean
+  /** The user cancelled the UAC / polkit prompt (or it could not be shown). */
+  declined: boolean
+  /** Elevation relaunch is not available on this platform. */
+  unsupported?: boolean
 }

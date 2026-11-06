@@ -46,7 +46,6 @@ import type { DriveInfo, ScanResult, CleanResult } from '@shared/types'
 import { CleanerType } from '@shared/enums'
 import { usePlatform } from '@/hooks/usePlatform'
 import { SimpleDashboard } from '@/components/dashboard/SimpleDashboard'
-import { DashboardCloud } from '@/components/dashboard/DashboardCloud'
 
 type OneClickPhase = 'idle' | 'scanning' | 'cleaning' | 'done'
 
@@ -70,38 +69,38 @@ const CLEANER_SCAN_FNS: {
 }[] = [
   {
     type: CleanerType.System,
-    scan: () => window.kudu.systemScan(),
-    clean: (ids) => window.kudu.systemClean(ids)
+    scan: () => window.fabric.systemScan(),
+    clean: (ids) => window.fabric.systemClean(ids)
   },
   {
     type: CleanerType.Browser,
-    scan: () => window.kudu.browserScan(),
-    clean: (ids) => window.kudu.browserClean(ids, true)
+    scan: () => window.fabric.browserScan(),
+    clean: (ids) => window.fabric.browserClean(ids, true)
   },
   {
     type: CleanerType.App,
-    scan: () => window.kudu.appScan(),
-    clean: (ids) => window.kudu.appClean(ids)
+    scan: () => window.fabric.appScan(),
+    clean: (ids) => window.fabric.appClean(ids)
   },
   {
     type: CleanerType.Gaming,
-    scan: () => window.kudu.gamingScan(),
-    clean: (ids) => window.kudu.gamingClean(ids)
+    scan: () => window.fabric.gamingScan(),
+    clean: (ids) => window.fabric.gamingClean(ids)
   },
   {
     type: CleanerType.RecycleBin,
-    scan: () => window.kudu.recycleBinScan(),
-    clean: () => window.kudu.recycleBinClean()
+    scan: () => window.fabric.recycleBinScan(),
+    clean: () => window.fabric.recycleBinClean()
   },
   {
     type: CleanerType.Environment,
-    scan: () => window.kudu.environmentScan(),
-    clean: (ids) => window.kudu.environmentClean(ids)
+    scan: () => window.fabric.environmentScan(),
+    clean: (ids) => window.fabric.environmentClean(ids)
   },
   {
     type: CleanerType.Database,
-    scan: () => window.kudu.databaseScan(),
-    clean: (ids) => window.kudu.databaseClean(ids)
+    scan: () => window.fabric.databaseScan(),
+    clean: (ids) => window.fabric.databaseClean(ids)
   }
 ]
 
@@ -123,7 +122,7 @@ export function DashboardPage() {
     saveInFlight.current = true
     setSaving(true)
     try {
-      await window.kudu.settingsSet({ dashboardView: next })
+      await window.fabric.settingsSet({ dashboardView: next })
       updateSettings({ dashboardView: next })
     } catch {
       toast.error(t('simple.saveFailed'))
@@ -221,7 +220,7 @@ function AdvancedDashboard({ onBusyChange }: { onBusyChange: (busy: boolean) => 
 
   const refreshDrives = useCallback(() => {
     setDriveStatus('loading')
-    window.kudu
+    window.fabric
       ?.diskDrives?.()
       .then((nextDrives) => {
         setDrives(nextDrives)
@@ -244,7 +243,7 @@ function AdvancedDashboard({ onBusyChange }: { onBusyChange: (busy: boolean) => 
     startupLoadAttemptedRef.current = true
     const startupStore = useStartupStore.getState()
     startupStore.setLoading(true)
-    window.kudu
+    window.fabric
       .startupList()
       .then((items) => startupStore.setItems(items))
       .catch(() => startupStore.setError(t('toastStartupCheckFailed')))
@@ -261,7 +260,7 @@ function AdvancedDashboard({ onBusyChange }: { onBusyChange: (busy: boolean) => 
     const allTypes = new Set(entries.map((e) => e.type))
 
     const historyTools = [
-      { key: 'cleaner' as const, label: t('toolLabelCleaner'), icon: Search, color: '#f59e0b' },
+      { key: 'cleaner' as const, label: t('toolLabelCleaner'), icon: Search, color: '#22d3ee' },
       ...(features.registry
         ? [
             {
@@ -398,12 +397,12 @@ function AdvancedDashboard({ onBusyChange }: { onBusyChange: (busy: boolean) => 
   const runRegistry = useCallback(async (): Promise<number> => {
     try {
       setPhaseLabel(t('phaseLabelScanningRegistry'))
-      const entries = await window.kudu.registryScan()
+      const entries = await window.fabric.registryScan()
       if (!Array.isArray(entries)) return 0
       const selectedIds = entries.filter((e) => e?.selected).map((e) => e.id)
       if (selectedIds.length === 0) return 0
       setPhaseLabel(t('phaseLabelFixingRegistry'))
-      const res = await window.kudu.registryFix(selectedIds)
+      const res = await window.fabric.registryFix(selectedIds)
       return res?.fixed ?? 0
     } catch {
       toast.error(t('toastRegistryScanFailed'))
@@ -418,7 +417,7 @@ function AdvancedDashboard({ onBusyChange }: { onBusyChange: (busy: boolean) => 
     malwareStore.setActionResult(null)
     try {
       setPhaseLabel(t('phaseLabelScanningMalware'))
-      const result = await window.kudu.malwareScan()
+      const result = await window.fabric.malwareScan()
       malwareStore.setScanResult(result)
       malwareStore.setThreats(result.threats)
       malwareStore.setActionResult(null)
@@ -434,7 +433,7 @@ function AdvancedDashboard({ onBusyChange }: { onBusyChange: (busy: boolean) => 
         details: t.details
       }))
       try {
-        const actionResult = await window.kudu.malwareQuarantine(paths, meta)
+        const actionResult = await window.fabric.malwareQuarantine(paths, meta)
         const failedPaths = new Set(actionResult.errors.map((error) => error.path))
         const knownUnresolved = result.threats.filter((threat) => failedPaths.has(threat.path))
         malwareStore.setActionResult(actionResult)
@@ -460,7 +459,7 @@ function AdvancedDashboard({ onBusyChange }: { onBusyChange: (busy: boolean) => 
   const runPrivacyCheck = useCallback(async (): Promise<{ score: number; issues: number }> => {
     try {
       setPhaseLabel(t('phaseLabelCheckingPrivacy'))
-      const state = await window.kudu.privacyScan()
+      const state = await window.fabric.privacyScan()
       return { score: state.score, issues: state.total - state.protected }
     } catch {
       toast.error(t('toastPrivacyCheckFailed'))
@@ -471,7 +470,7 @@ function AdvancedDashboard({ onBusyChange }: { onBusyChange: (busy: boolean) => 
   const runStartupCheck = useCallback(async (): Promise<number> => {
     try {
       setPhaseLabel(t('phaseLabelCheckingStartup'))
-      const items = await window.kudu.startupList()
+      const items = await window.fabric.startupList()
       useStartupStore.getState().setItems(items)
       return items.filter((i) => i.enabled && i.impact === 'high').length
     } catch {
@@ -483,7 +482,7 @@ function AdvancedDashboard({ onBusyChange }: { onBusyChange: (busy: boolean) => 
   const runSoftwareUpdateCheck = useCallback(async (): Promise<number> => {
     try {
       setPhaseLabel(t('phaseLabelCheckingSoftwareUpdates'))
-      const result = await window.kudu.softwareUpdateCheck()
+      const result = await window.fabric.softwareUpdateCheck()
       const updaterStore = useUpdaterStore.getState()
       updaterStore.setApps(result.apps)
       updaterStore.setUpToDate(result.upToDate)
@@ -501,11 +500,11 @@ function AdvancedDashboard({ onBusyChange }: { onBusyChange: (busy: boolean) => 
   const runDrivers = useCallback(async (): Promise<{ removed: number; space: number }> => {
     try {
       setPhaseLabel(t('phaseLabelScanningDrivers'))
-      const scanResult = await window.kudu.driverScan()
+      const scanResult = await window.fabric.driverScan()
       const stalePackages = scanResult.packages.filter((p) => !p.isCurrent && p.selected)
       if (stalePackages.length === 0) return { removed: 0, space: 0 }
       setPhaseLabel(t('phaseLabelRemovingStaleDrivers'))
-      const cleanResult = await window.kudu.driverClean(stalePackages.map((p) => p.publishedName))
+      const cleanResult = await window.fabric.driverClean(stalePackages.map((p) => p.publishedName))
       return { removed: cleanResult.removed, space: cleanResult.spaceRecovered }
     } catch {
       toast.error(t('toastDriverCleanupFailed'))
@@ -961,19 +960,17 @@ function AdvancedDashboard({ onBusyChange }: { onBusyChange: (busy: boolean) => 
           </section>
         </div>
         <aside className="pulse-home-rail">
-          <DashboardCloud variant="rail">
-            <article className="pulse-action-card is-primary pulse-cleanup-hero">
-              <span className="pulse-icon-tile">
-                <Sparkles size={21} />
-              </span>
-              <h3>{tx('home.cleanTitle')}</h3>
-              <p>{tx('home.cleanDescription')}</p>
-              <button className="pulse-button pulse-primary" onClick={() => navigate('/cleaner')}>
-                {tx('home.cleanAction')}
-                <ArrowRight size={16} />
-              </button>
-            </article>
-          </DashboardCloud>
+          <article className="pulse-action-card is-primary pulse-cleanup-hero">
+            <span className="pulse-icon-tile">
+              <Sparkles size={21} />
+            </span>
+            <h3>{tx('home.cleanTitle')}</h3>
+            <p>{tx('home.cleanDescription')}</p>
+            <button className="pulse-button pulse-primary" onClick={() => navigate('/cleaner')}>
+              {tx('home.cleanAction')}
+              <ArrowRight size={16} />
+            </button>
+          </article>
           <section className="pulse-card pulse-attention">
             <div className="pulse-card-heading">
               <h2>{tx('home.attention')}</h2>
@@ -1098,7 +1095,7 @@ function AdvancedDashboard({ onBusyChange }: { onBusyChange: (busy: boolean) => 
         </button>
       </section>
       {isRunning && (
-        <div className="kudu-operation" role="status">
+        <div className="fc-operation" role="status">
           <div>
             <Loader2 className="h-4 w-4 shrink-0 animate-spin" strokeWidth={2} />
             <span>{phaseLabel || t('progressWorking')}</span>
@@ -1109,7 +1106,7 @@ function AdvancedDashboard({ onBusyChange }: { onBusyChange: (busy: boolean) => 
             )}
           </div>
           {stepProgress.total > 0 && (
-            <div className="kudu-operation-track">
+            <div className="fc-operation-track">
               <i style={{ width: `${(stepProgress.current / stepProgress.total) * 100}%` }} />
             </div>
           )}
@@ -1119,7 +1116,7 @@ function AdvancedDashboard({ onBusyChange }: { onBusyChange: (busy: boolean) => 
       {phase === 'done' && result && (
         <div
           className={cn(
-            'kudu-operation',
+            'fc-operation',
             result.threatsFound > result.threatsQuarantined ? 'is-warning' : 'is-complete'
           )}
           role="status"

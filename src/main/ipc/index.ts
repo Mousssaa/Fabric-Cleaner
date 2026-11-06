@@ -1,3 +1,6 @@
+import type { ElevationRelaunchResult } from '../../shared/types'
+import { registerThreatMonitorIpc } from './threat-monitor.ipc'
+import { registerIntelligenceIpc } from './intelligence.ipc'
 import { registerDownloadsReviewIpc } from './downloads-review.ipc'
 import { registerCustomFoldersIpc } from './custom-folders.ipc'
 import { registerAppSpaceIpc } from './app-space.ipc'
@@ -29,7 +32,6 @@ import { registerMalwareScannerIpc } from './malware-scanner.ipc'
 import { registerPrivacyShieldIpc } from './privacy-shield.ipc'
 import { registerUninstallLeftoversIpc } from './uninstall-leftovers.ipc'
 import { registerDriverManagerIpc } from './driver-manager.ipc'
-import { registerPerformanceDiagnosticsIpc } from './performance-diagnostics.ipc'
 import { registerPerfMonitorIpc } from './perf-monitor.ipc'
 import { registerProgramUninstallerIpc } from './program-uninstaller.ipc'
 import { registerServiceManagerIpc } from './service-manager.ipc'
@@ -40,13 +42,10 @@ import { registerEnvironmentCleanerIpc } from './environment-cleaner.ipc'
 import { registerPrivacyTracesIpc } from './privacy-traces.ipc'
 import { showOpenDialog } from './open-dialog'
 import { registerDatabaseOptimizerIpc } from './database-optimizer.ipc'
-import { registerCloudAgentIpc } from './cloud-agent.ipc'
 import { registerLargeFileFinderIpc } from './large-file-finder.ipc'
 import { registerEmptyFolderCleanerIpc } from './empty-folder-cleaner.ipc'
 import { registerFileShredderIpc } from './file-shredder.ipc'
 import { registerGameModeIpc, refreshGameDetector } from './game-mode.ipc'
-import { registerCveScannerIpc } from './cve-scanner.ipc'
-import { registerBreachMonitorIpc } from './breach-monitor.ipc'
 import { registerStartupSafetyIpc } from './startup-safety.ipc'
 import { registerProgramSafetyIpc } from './program-safety.ipc'
 import {
@@ -59,7 +58,6 @@ import {
 import { getBackupDir } from '../services/backup-dir'
 import { isAdmin } from '../services/elevation'
 import { getHistory, addHistoryEntry, clearHistory } from '../services/history-store'
-import { getCloudHistory, clearCloudHistory } from '../services/cloud-history-store'
 import {
   queryDeletions,
   queryAllDeletions,
@@ -86,6 +84,8 @@ import { findCleanerBlockers, closeCleanerApps } from '../services/cleaner-block
 export type WindowGetter = () => BrowserWindow | null
 
 export function registerCleanerIpc(getWindow: WindowGetter): void {
+  registerThreatMonitorIpc(getWindow)
+  registerIntelligenceIpc()
   registerCustomFoldersIpc(getWindow)
   registerDownloadsReviewIpc()
   registerAppSpaceIpc()
@@ -117,14 +117,10 @@ export function registerCleanerIpc(getWindow: WindowGetter): void {
   registerPrivacyShieldIpc(getWindow)
   registerDriverManagerIpc(getWindow)
   registerPerfMonitorIpc(getWindow)
-  registerPerformanceDiagnosticsIpc()
   registerProgramUninstallerIpc(getWindow)
   registerServiceManagerIpc(getWindow)
   registerFirewallAuditIpc(getWindow)
   registerSoftwareUpdaterIpc(getWindow)
-  registerCloudAgentIpc()
-  registerCveScannerIpc()
-  registerBreachMonitorIpc()
   registerStartupSafetyIpc()
   registerProgramSafetyIpc()
   registerFileShredderIpc(getWindow)
@@ -179,7 +175,7 @@ export function registerCleanerIpc(getWindow: WindowGetter): void {
     }
     if (typeof validated.language === 'string') {
       await flushSettings()
-      app.emit('kudu:language-changed')
+      app.emit('fabric-cleaner:language-changed')
     }
     // Restart game detector when gameMode settings change
     if ('gameMode' in validated) {
@@ -193,7 +189,7 @@ export function registerCleanerIpc(getWindow: WindowGetter): void {
   ipcMain.handle(IPC.SETTINGS_SELECT_BACKUP_DIR, async () => {
     const win = getWindow()
     const opts: Electron.OpenDialogOptions = {
-      title: 'Choose Kudu backup folder',
+      title: 'Choose Fabric Cleaner backup folder',
       properties: ['openDirectory', 'createDirectory'],
       defaultPath: getBackupDir()
     }
@@ -225,7 +221,11 @@ export function registerCleanerIpc(getWindow: WindowGetter): void {
 
   // Elevation
   ipcMain.handle(IPC.ELEVATION_CHECK, () => isAdmin())
-  ipcMain.handle(IPC.ELEVATION_RELAUNCH, () => {
+  // Least privilege: Fabric Cleaner runs as the invoking user (asInvoker).
+  // Privileged features ask for elevation here. The promise reports whether
+  // the user declined so the UI can explain that the app keeps running with
+  // standard privileges.
+  ipcMain.handle(IPC.ELEVATION_RELAUNCH, (): Promise<ElevationRelaunchResult> => {
     const exePath = app.getPath('exe')
     const userDataDir = app.getPath('userData')
 
@@ -235,17 +235,22 @@ export function registerCleanerIpc(getWindow: WindowGetter): void {
       // declines UAC, then returns.  If the user declines, PowerShell exits
       // with an error and we don't quit.
       const psScript = `Start-Process -FilePath '${exePath.replace(/'/g, "''")}' -Verb RunAs`
-      execFile(
-        'powershell.exe',
-        ['-NoProfile', '-Command', psUtf8(psScript)],
-        { windowsHide: true },
-        (err) => {
-          if (!err) {
-            app.releaseSingleInstanceLock()
-            app.exit(0)
+      return new Promise((resolve) => {
+        execFile(
+          'powershell.exe',
+          ['-NoProfile', '-Command', psUtf8(psScript)],
+          { windowsHide: true },
+          (err) => {
+            if (!err) {
+              resolve({ relaunched: true, declined: false })
+              app.releaseSingleInstanceLock()
+              app.exit(0)
+            } else {
+              resolve({ relaunched: false, declined: true })
+            }
           }
-        }
-      )
+        )
+      })
     } else if (process.platform === 'linux') {
       // pkexec strips the environment for security.  We forward display
       // variables (for GUI) and HOME (so Chromium resolves cache/config
@@ -259,24 +264,30 @@ export function registerCleanerIpc(getWindow: WindowGetter): void {
       // single-instance lock before starting the elevated process.
       const relaunchPath = getLinuxRelaunchExecutable(exePath)
       const command = buildLinuxElevationCommand(relaunchPath, userDataDir)
-      execFile('pkexec', ['/bin/sh', '-c', command], (err) => {
-        if (!err) {
-          app.releaseSingleInstanceLock()
-          app.exit(0)
-        }
-        // If err, user declined or pkexec unavailable — don't quit
+      return new Promise((resolve) => {
+        execFile('pkexec', ['/bin/sh', '-c', command], (err) => {
+          if (!err) {
+            resolve({ relaunched: true, declined: false })
+            app.releaseSingleInstanceLock()
+            app.exit(0)
+          } else {
+            // User declined or pkexec unavailable — keep running unprivileged
+            resolve({ relaunched: false, declined: true })
+          }
+        })
       })
     }
     // macOS: relaunch-as-admin is not supported — the osascript elevation
     // flow doesn't work reliably.  The renderer hides the relaunch UI on
     // darwin so this path should never be reached.
+    return Promise.resolve({ relaunched: false, declined: false, unsupported: true })
   })
 
   // System Restore Point
   ipcMain.handle(IPC.RESTORE_POINT_CREATE, (_event, description: string) => {
     if (typeof description !== 'string') description = ''
     // Sanitize: restrict to safe characters and cap length
-    const sanitized = (description || 'Kudu pre-clean restore point')
+    const sanitized = (description || 'Fabric Cleaner pre-clean restore point')
       .replace(/[^A-Za-z0-9 ._\-()]/g, '')
       .slice(0, 200)
     return createRestorePoint(sanitized)
@@ -318,7 +329,7 @@ export function registerCleanerIpc(getWindow: WindowGetter): void {
     const win = getWindow()
     const opts: Electron.SaveDialogOptions = {
       title: 'Export deleted files',
-      defaultPath: 'kudu-deleted-files.csv',
+      defaultPath: 'fc-deleted-files.csv',
       filters: [{ name: 'CSV', extensions: ['csv'] }]
     }
     const result =
@@ -355,10 +366,6 @@ export function registerCleanerIpc(getWindow: WindowGetter): void {
   })
 
   ipcMain.handle(IPC.DELETION_LOG_CLEAR, () => clearDeletionLog())
-
-  // Cloud action history
-  ipcMain.handle(IPC.CLOUD_HISTORY_GET, () => getCloudHistory())
-  ipcMain.handle(IPC.CLOUD_HISTORY_CLEAR, () => clearCloudHistory())
 
   // Auto-updater
   ipcMain.handle(IPC.UPDATER_CHECK, () => checkForUpdates())

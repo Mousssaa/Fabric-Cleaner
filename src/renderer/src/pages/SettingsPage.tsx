@@ -1,17 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
-import {
-  Plus,
-  X,
-  FolderOpen,
-  Sun,
-  Moon,
-  Monitor,
-  Cloud,
-  ChevronRight,
-  RotateCcw
-} from 'lucide-react'
+import { Plus, X, FolderOpen, Sun, Moon, Monitor, RotateCcw } from 'lucide-react'
 import { toast } from 'sonner'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { cn } from '@/lib/utils'
@@ -20,18 +9,16 @@ import { usePlatform } from '@/hooks/usePlatform'
 import { LANGUAGES } from '@/lib/languages'
 import i18next from 'i18next'
 import { CustomFoldersPanel } from '@/components/cleaner/CustomFoldersPanel'
+import { ThreatIntelligenceSettings } from '@/components/settings/ThreatIntelligenceSettings'
 
 export function SettingsPage() {
   const { t } = useTranslation('settings')
   const { features, platform, isPortable } = usePlatform()
   const { settings, updateSettings, setSettings } = useSettingsStore()
   const [newExclusion, setNewExclusion] = useState('')
-  const navigate = useNavigate()
-
-  const isLinked = !!settings.cloud.apiKey
 
   useEffect(() => {
-    window.kudu
+    window.fabric
       ?.settingsGet?.()
       .then(setSettings)
       .catch(() => {})
@@ -39,13 +26,13 @@ export function SettingsPage() {
 
   const save = (partial: Partial<typeof settings>) => {
     updateSettings(partial)
-    window.kudu?.settingsSet?.(partial).catch(() => {})
+    window.fabric?.settingsSet?.(partial).catch(() => {})
   }
 
   const saveStartup = async (enabled: boolean) => {
     save({ runAtStartup: enabled })
     try {
-      await window.kudu?.applyStartup?.(enabled)
+      await window.fabric?.applyStartup?.(enabled)
     } catch {
       // Revert the toggle — the OS rejected the change
       save({ runAtStartup: !enabled })
@@ -53,7 +40,7 @@ export function SettingsPage() {
         description: t('startupSettingFailedDesc'),
         action: {
           label: t('startupSettingFailedAction'),
-          onClick: () => window.open('https://usekudu.com/help/startup-failed', '_blank')
+          onClick: () => window.open('https://github.com/Mousssaa/Fabric-Cleaner/issues', '_blank')
         }
       })
     }
@@ -61,7 +48,7 @@ export function SettingsPage() {
 
   const saveTray = (enabled: boolean) => {
     save({ minimizeToTray: enabled })
-    window.kudu?.applyTray?.(enabled)
+    window.fabric?.applyTray?.(enabled)
   }
 
   const addExclusion = () => {
@@ -94,7 +81,7 @@ export function SettingsPage() {
       <nav className="pulse-settings-nav" aria-label={t('pageTitle')}>
         {[
           'sectionGeneral',
-          'sectionCloudDashboard',
+          'sectionThreatIntelligence',
           'sectionBackups',
           'sectionCleaningPreferences',
           'sectionCustomFolders',
@@ -141,7 +128,7 @@ export function SettingsPage() {
             <Row
               label={t('runAtStartupLabel')}
               desc={t('portableStartupDesc', {
-                defaultValue: 'Run at startup requires the installed version of Kudu.'
+                defaultValue: 'Run at startup requires the installed version of Fabric Cleaner.'
               })}
             >
               <span className="text-[12px] text-zinc-500">
@@ -211,48 +198,15 @@ export function SettingsPage() {
           )}
         </Section>
 
-        <Section id="sectionCloudDashboard" title={t('sectionCloudDashboard')}>
-          <button
-            onClick={() => navigate('/cloud')}
-            className="flex w-full items-center gap-4 rounded-xl p-4 text-left transition-all"
-            style={{
-              background: 'var(--accent-muted-bg)',
-              border: '1px solid var(--accent-muted-border)'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = 'rgba(245,158,11,0.3)'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = 'var(--accent-muted-border)'
-            }}
-          >
-            <div
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
-              style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)' }}
-            >
-              <Cloud className="h-5 w-5 text-black" strokeWidth={2} />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-[13px] font-medium text-zinc-200">
-                {isLinked ? t('cloudLinkedCardTitle') : t('cloudUnlinkedCardTitle')}
-              </p>
-              <p className="mt-0.5 text-[12px]" style={{ color: 'var(--text-muted)' }}>
-                {isLinked ? t('cloudLinkedCardDesc') : t('cloudUnlinkedCardDesc')}
-              </p>
-            </div>
-            <ChevronRight
-              className="h-4 w-4 shrink-0"
-              style={{ color: 'var(--text-muted)' }}
-              strokeWidth={1.8}
-            />
-          </button>
+        <Section id="sectionThreatIntelligence" title={t('sectionThreatIntelligence')}>
+          <ThreatIntelligenceSettings />
         </Section>
 
         <Section id="sectionBackups" title={t('sectionBackups', 'Backups')}>
           <BackupFolderRow
             path={settings.backupPath}
             onPick={async () => {
-              const picked = await window.kudu?.settingsSelectBackupDir?.()
+              const picked = await window.fabric?.settingsSelectBackupDir?.()
               if (picked) {
                 save({ backupPath: picked })
                 toast.success(t('backupFolderUpdatedToast', 'Backup folder updated'), {
@@ -264,7 +218,7 @@ export function SettingsPage() {
               }
             }}
             onOpen={() => {
-              window.kudu?.settingsOpenBackupDir?.().catch(() => {})
+              window.fabric?.settingsOpenBackupDir?.().catch(() => {})
             }}
             onReset={() => save({ backupPath: '' })}
           />
@@ -298,6 +252,29 @@ export function SettingsPage() {
               checked={settings.cleaner.protectRecycleBin}
               onChange={(v) => save({ cleaner: { ...settings.cleaner, protectRecycleBin: v } })}
             />
+          </Row>
+          <Row label={t('disposalModeLabel')} desc={t('disposalModeDesc')}>
+            <select
+              value={
+                settings.cleaner.secureDelete
+                  ? 'permanent'
+                  : (settings.cleaner.disposalMode ?? 'trash')
+              }
+              disabled={settings.cleaner.secureDelete}
+              onChange={(e) =>
+                save({
+                  cleaner: {
+                    ...settings.cleaner,
+                    disposalMode: e.target.value === 'permanent' ? 'permanent' : 'trash'
+                  }
+                })
+              }
+              className={selectStyle}
+              style={selectBorder}
+            >
+              <option value="trash">{t('disposalModeTrash')}</option>
+              <option value="permanent">{t('disposalModePermanent')}</option>
+            </select>
           </Row>
           <Row label={t('secureDeleteLabel')} desc={t('secureDeleteDesc')}>
             <Toggle
@@ -508,7 +485,7 @@ function BackupFolderRow({
   const isCustom = path.length > 0
   const displayPath = isCustom
     ? path
-    : t('backupFolderDefaultLabel', 'Default (Documents/Kudu Backups)')
+    : t('backupFolderDefaultLabel', 'Default (Documents/Fabric Cleaner Backups)')
   return (
     <div className="space-y-3">
       <div>
@@ -518,7 +495,7 @@ function BackupFolderRow({
         <p className="mt-0.5 text-[12px]" style={{ color: 'var(--text-muted)' }}>
           {t(
             'backupFolderDesc',
-            'Where Kudu writes registry and shell-extension backups before making changes. Existing backups stay in their previous location when you switch folders.'
+            'Where Fabric Cleaner writes registry and shell-extension backups before making changes. Existing backups stay in their previous location when you switch folders.'
           )}
         </p>
       </div>

@@ -7,11 +7,11 @@ import type {
 import type { AppPrivacyCapability, AppPrivacyReport } from '../shared/app-privacy'
 import type { UninstallOptions } from '../shared/uninstall-policy'
 import type {
-  DiagnosticCapabilities,
-  DiagnosticSession,
-  DiagnosticSummary,
-  DiagnosticPreview
-} from '../shared/performance-diagnostics'
+  IntelligenceConnectionMode,
+  IntelligenceProviderId,
+  IntelligenceProviderUpdate,
+  IntelligencePublicConfig
+} from '../shared/intelligence'
 import { contextBridge, ipcRenderer } from 'electron'
 import { IPC } from '../shared/channels'
 import type {
@@ -31,7 +31,7 @@ import type {
   StartupBootTrace,
   DiskNode,
   DriveInfo,
-  KuduSettings,
+  FabricSettings,
   BloatwareApp,
   ScanHistoryEntry,
   DeletionLogPage,
@@ -74,8 +74,8 @@ import type {
   UpdateRequestItem,
   UpdateResult,
   FileTypeInfo,
-  CloudActionEntry,
   ThreatSnapshot,
+  LocalThreatMonitorStatus,
   DuplicateScanOptions,
   DuplicateScanResult,
   DuplicateScanProgress,
@@ -98,10 +98,7 @@ import type {
   GameModeDeactivateResult,
   GameModeStatus,
   GameModeProgress,
-  CvePageResult,
   StartupSafetyResult,
-  BreachMonitorResult,
-  BreachAcknowledgeResult,
   ContextMenuApplyProgress,
   ContextMenuApplyRequest,
   ContextMenuApplyResult,
@@ -386,8 +383,8 @@ const api = {
   onboardingSet: (value: boolean): Promise<void> => ipcRenderer.invoke(IPC.ONBOARDING_SET, value),
 
   // Settings
-  settingsGet: (): Promise<KuduSettings> => ipcRenderer.invoke(IPC.SETTINGS_GET),
-  settingsSet: (settings: Partial<KuduSettings>): Promise<void> =>
+  settingsGet: (): Promise<FabricSettings> => ipcRenderer.invoke(IPC.SETTINGS_GET),
+  settingsSet: (settings: Partial<FabricSettings>): Promise<void> =>
     ipcRenderer.invoke(IPC.SETTINGS_SET, settings),
   settingsSelectBackupDir: (): Promise<string | null> =>
     ipcRenderer.invoke(IPC.SETTINGS_SELECT_BACKUP_DIR),
@@ -395,7 +392,8 @@ const api = {
 
   // Elevation
   elevationCheck: (): Promise<boolean> => ipcRenderer.invoke(IPC.ELEVATION_CHECK),
-  elevationRelaunch: (): Promise<void> => ipcRenderer.invoke(IPC.ELEVATION_RELAUNCH),
+  elevationRelaunch: (): Promise<import('../shared/types').ElevationRelaunchResult> =>
+    ipcRenderer.invoke(IPC.ELEVATION_RELAUNCH),
 
   // System Restore Point
   createRestorePoint: (description: string): Promise<RestorePointResult> =>
@@ -473,10 +471,6 @@ const api = {
   deletionLogReveal: (): Promise<string> => ipcRenderer.invoke(IPC.DELETION_LOG_REVEAL),
   deletionLogClear: (): Promise<void> => ipcRenderer.invoke(IPC.DELETION_LOG_CLEAR),
 
-  // Cloud action history
-  cloudHistoryGet: (): Promise<CloudActionEntry[]> => ipcRenderer.invoke(IPC.CLOUD_HISTORY_GET),
-  cloudHistoryClear: (): Promise<void> => ipcRenderer.invoke(IPC.CLOUD_HISTORY_CLEAR),
-
   // History push events
   onHistoryChanged: (callback: () => void) => {
     const handler = () => callback()
@@ -485,14 +479,6 @@ const api = {
       ipcRenderer.removeListener(IPC.HISTORY_CHANGED, handler)
     }
   },
-  onCloudHistoryChanged: (callback: () => void) => {
-    const handler = () => callback()
-    ipcRenderer.on(IPC.CLOUD_HISTORY_CHANGED, handler)
-    return () => {
-      ipcRenderer.removeListener(IPC.CLOUD_HISTORY_CHANGED, handler)
-    }
-  },
-
   // Privacy Shield
   appPrivacyScan: (): Promise<AppPrivacyReport> => ipcRenderer.invoke(IPC.APP_PRIVACY_SCAN),
   appPrivacyOpenSettings: (capability: AppPrivacyCapability): Promise<void> =>
@@ -688,29 +674,6 @@ const api = {
     }
   },
 
-  // Cloud Agent
-  cloudLink: (apiKey: string): Promise<{ success: boolean; error?: string }> =>
-    ipcRenderer.invoke(IPC.CLOUD_LINK, apiKey),
-  cloudUnlink: (): Promise<void> => ipcRenderer.invoke(IPC.CLOUD_UNLINK),
-  cloudReconnect: (): Promise<void> => ipcRenderer.invoke(IPC.CLOUD_RECONNECT),
-  cloudGetStatus: (): Promise<{
-    status: string
-    maskedApiKey: string | null
-    deviceId: string | null
-    linkedAt: string | null
-    lastTelemetryAt: string | null
-    lastHealthReportAt: string | null
-    lastCommandAt: string | null
-    error: string | null
-    threatBlacklist: {
-      version: string
-      updatedAt: string
-      domains: number
-      ips: number
-      cidrs: number
-    } | null
-  }> => ipcRenderer.invoke(IPC.CLOUD_GET_STATUS),
-
   // Duplicate Finder
   duplicatesSelectDir: (): Promise<string | null> => ipcRenderer.invoke(IPC.DUPLICATES_SELECT_DIR),
   duplicatesScan: (options: DuplicateScanOptions): Promise<DuplicateScanResult> =>
@@ -791,7 +754,43 @@ const api = {
     }
   },
 
-  // Threat Monitor
+  // Threat Monitor (local blocklist only)
+  threatMonitorStatus: (): Promise<LocalThreatMonitorStatus> =>
+    ipcRenderer.invoke(IPC.THREAT_MONITOR_STATUS),
+  threatMonitorSetEnabled: (enabled: boolean): Promise<LocalThreatMonitorStatus> =>
+    ipcRenderer.invoke(IPC.THREAT_MONITOR_SET_ENABLED, enabled),
+  threatMonitorImportBlocklist: (): Promise<{
+    ok: boolean
+    canceled?: boolean
+    error?: string
+    status?: LocalThreatMonitorStatus
+  }> => ipcRenderer.invoke(IPC.THREAT_MONITOR_IMPORT_BLOCKLIST),
+  threatMonitorClearBlocklist: (): Promise<LocalThreatMonitorStatus> =>
+    ipcRenderer.invoke(IPC.THREAT_MONITOR_CLEAR_BLOCKLIST),
+
+  // Threat intelligence settings (VirusTotal, LeakRadar, HakTrak Gateway).
+  // Secrets are write-only from the renderer: they are never returned.
+  intelligenceGetConfig: (): Promise<IntelligencePublicConfig> =>
+    ipcRenderer.invoke(IPC.INTELLIGENCE_GET_CONFIG),
+  intelligenceSetProvider: (
+    id: IntelligenceProviderId,
+    update: IntelligenceProviderUpdate
+  ): Promise<IntelligencePublicConfig> =>
+    ipcRenderer.invoke(IPC.INTELLIGENCE_SET_PROVIDER, id, update),
+  intelligenceClearProvider: (id: IntelligenceProviderId): Promise<IntelligencePublicConfig> =>
+    ipcRenderer.invoke(IPC.INTELLIGENCE_CLEAR_PROVIDER, id),
+  intelligenceSetMode: (mode: IntelligenceConnectionMode): Promise<IntelligencePublicConfig> =>
+    ipcRenderer.invoke(IPC.INTELLIGENCE_SET_MODE, mode),
+  intelligenceSetGateway: (update: {
+    url?: string
+    token?: string
+    clearToken?: boolean
+  }): Promise<IntelligencePublicConfig> => ipcRenderer.invoke(IPC.INTELLIGENCE_SET_GATEWAY, update),
+  intelligenceProviderStatus: (
+    id: IntelligenceProviderId
+  ): Promise<{ configured: boolean; status: string; message?: string }> =>
+    ipcRenderer.invoke(IPC.INTELLIGENCE_PROVIDER_STATUS, id),
+
   threatMonitorGetSnapshot: (): Promise<ThreatSnapshot | null> =>
     ipcRenderer.invoke(IPC.THREAT_MONITOR_GET_SNAPSHOT),
   onThreatMonitorUpdated: (callback: (data: ThreatSnapshot) => void) => {
@@ -801,30 +800,6 @@ const api = {
       ipcRenderer.removeListener(IPC.THREAT_MONITOR_UPDATED, handler)
     }
   },
-
-  // CVE Scanner
-  cveFetch: (opts?: {
-    page?: number
-    severity?: string
-    search?: string
-  }): Promise<CvePageResult> => ipcRenderer.invoke(IPC.CVE_FETCH, opts),
-  onCveUpdated: (callback: (data: CvePageResult) => void) => {
-    const handler = (_event: Electron.IpcRendererEvent, data: CvePageResult) => callback(data)
-    ipcRenderer.on(IPC.CVE_UPDATED, handler)
-    return () => {
-      ipcRenderer.removeListener(IPC.CVE_UPDATED, handler)
-    }
-  },
-
-  // Breach Monitor
-  breachMonitorFetch: (): Promise<BreachMonitorResult> =>
-    ipcRenderer.invoke(IPC.BREACH_MONITOR_FETCH),
-  breachMonitorAdd: (emails: string[]): Promise<BreachMonitorResult> =>
-    ipcRenderer.invoke(IPC.BREACH_MONITOR_ADD, emails),
-  breachMonitorRemove: (email: string): Promise<void> =>
-    ipcRenderer.invoke(IPC.BREACH_MONITOR_REMOVE, email),
-  breachMonitorAcknowledge: (breachIds: string[]): Promise<BreachAcknowledgeResult> =>
-    ipcRenderer.invoke(IPC.BREACH_MONITOR_ACKNOWLEDGE, breachIds),
 
   // Progress events
   onScanProgress: (callback: (data: ProgressData) => void) => {
@@ -846,36 +821,6 @@ const api = {
       ipcRenderer.removeListener(IPC.REGISTRY_FIX_PROGRESS, handler)
     }
   },
-
-  diagnosticsCapabilities: (): Promise<DiagnosticCapabilities> =>
-    ipcRenderer.invoke(IPC.DIAGNOSTICS, 'capabilities'),
-  diagnosticsStatus: (): Promise<{
-    rows: DiagnosticSummary[]
-    activeId: string | null
-    elapsedMs: number
-    error: string | null
-  }> => ipcRenderer.invoke(IPC.DIAGNOSTICS, 'status'),
-  diagnosticsStart: (seconds: number, processes: boolean): Promise<string> =>
-    ipcRenderer.invoke(IPC.DIAGNOSTICS, 'start', seconds, processes),
-  diagnosticsStop: (): Promise<void> => ipcRenderer.invoke(IPC.DIAGNOSTICS, 'stop'),
-  diagnosticsGet: (id: string): Promise<DiagnosticSession> =>
-    ipcRenderer.invoke(IPC.DIAGNOSTICS, 'get', id),
-  diagnosticsEdit: (
-    id: string,
-    details: { title: string; notes: string; pinned: boolean }
-  ): Promise<void> => ipcRenderer.invoke(IPC.DIAGNOSTICS, 'edit', id, details),
-  diagnosticsPreview: (id: string, processes: boolean): Promise<DiagnosticPreview> =>
-    ipcRenderer.invoke(IPC.DIAGNOSTICS, 'preview', id, processes),
-  diagnosticsUpload: (token: string): Promise<DiagnosticSession> =>
-    ipcRenderer.invoke(IPC.DIAGNOSTICS, 'upload', token),
-  diagnosticsRefresh: (id: string): Promise<DiagnosticSession> =>
-    ipcRenderer.invoke(IPC.DIAGNOSTICS, 'refresh', id),
-  diagnosticsDeleteCloud: (id: string): Promise<void> =>
-    ipcRenderer.invoke(IPC.DIAGNOSTICS, 'deleteCloud', id),
-  diagnosticsRemove: (id: string): Promise<void> =>
-    ipcRenderer.invoke(IPC.DIAGNOSTICS, 'remove', id),
-  diagnosticsExport: (id: string): Promise<boolean> =>
-    ipcRenderer.invoke(IPC.DIAGNOSTICS, 'export', id),
 
   // Game Mode
   gameModeActivate: (config: GameModeConfig): Promise<GameModeActivateResult> =>
@@ -906,6 +851,6 @@ const api = {
   }
 }
 
-export type KuduAPI = typeof api
+export type FabricAPI = typeof api
 
-contextBridge.exposeInMainWorld('kudu', api)
+contextBridge.exposeInMainWorld('fabric', api)

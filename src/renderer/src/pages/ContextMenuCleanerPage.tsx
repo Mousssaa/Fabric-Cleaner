@@ -33,7 +33,7 @@ import type {
   ContextMenuStatus
 } from '@shared/types'
 
-const WIN11_NOTICE_KEY = 'kudu.contextMenu.win11Notice.dismissed'
+const WIN11_NOTICE_KEY = 'fabric-cleaner.contextMenu.win11Notice.dismissed'
 
 const SOURCE_PILL_COLOR: Record<ContextMenuSource, { bg: string; text: string }> = {
   '7-Zip': { bg: 'rgba(59,130,246,0.10)', text: '#60a5fa' },
@@ -44,7 +44,7 @@ const SOURCE_PILL_COLOR: Record<ContextMenuSource, { bg: string; text: string }>
   Defender: { bg: 'rgba(34,197,94,0.10)', text: '#22c55e' },
   Git: { bg: 'rgba(244,114,22,0.10)', text: '#fb923c' },
   Dropbox: { bg: 'rgba(59,130,246,0.10)', text: '#60a5fa' },
-  'Google Drive': { bg: 'rgba(245,158,11,0.10)', text: '#fbbf24' },
+  'Google Drive': { bg: 'rgba(34, 211, 238,0.10)', text: '#67e8f9' },
   PowerToys: { bg: 'rgba(168,85,247,0.10)', text: '#c084fc' },
   Microsoft: { bg: 'rgba(20,184,166,0.10)', text: '#2dd4bf' },
   Windows: { bg: 'rgba(20,184,166,0.10)', text: '#2dd4bf' },
@@ -63,7 +63,7 @@ const GROUP_PALETTE: ReadonlyArray<{ bg: string; text: string }> = [
   { bg: 'rgba(34,197,94,0.10)', text: '#4ade80' },
   { bg: 'rgba(99,102,241,0.10)', text: '#818cf8' },
   { bg: 'rgba(244,114,22,0.10)', text: '#fb923c' },
-  { bg: 'rgba(245,158,11,0.10)', text: '#fbbf24' },
+  { bg: 'rgba(34, 211, 238,0.10)', text: '#67e8f9' },
   { bg: 'rgba(20,184,166,0.10)', text: '#2dd4bf' }
 ]
 
@@ -132,7 +132,7 @@ function ContextMenuCleanerPageContent() {
 
   // Subscribe to apply-progress events from main.
   useEffect(() => {
-    const cleanup = window.kudu.onContextMenuApplyProgress((data) => {
+    const cleanup = window.fabric.onContextMenuApplyProgress((data) => {
       useContextMenuStore.getState().setApplyProgress(data)
     })
     cleanupRef.current = cleanup
@@ -147,7 +147,7 @@ function ContextMenuCleanerPageContent() {
     store.setApplyResult(null)
     store.setError(null)
     try {
-      const result = await window.kudu.contextMenuScan()
+      const result = await window.fabric.contextMenuScan()
       const sorted = [...(result.entries ?? [])].sort((a, b) => {
         if (a.source === b.source) return a.displayName.localeCompare(b.displayName)
         if (a.source === 'Unknown') return 1
@@ -166,7 +166,7 @@ function ContextMenuCleanerPageContent() {
 
   const handleScanCancel = useCallback(async () => {
     try {
-      await window.kudu.contextMenuScanCancel()
+      await window.fabric.contextMenuScanCancel()
     } catch {
       /* ignore */
     }
@@ -253,7 +253,7 @@ function ContextMenuCleanerPageContent() {
       store.setApplyResult(null)
       store.setApplyProgress({ current: 0, total: reqs.length, currentLabel: t('applyingTitle') })
       try {
-        const result = await window.kudu.contextMenuApply(reqs)
+        const result = await window.fabric.contextMenuApply(reqs)
         const s = useContextMenuStore.getState()
         s.setApplyResult(result)
         if (result.updates.length > 0) s.applyUpdates(result.updates)
@@ -376,7 +376,7 @@ function ContextMenuCleanerPageContent() {
               className="h-full rounded-full transition-all duration-200 ease-out"
               style={{
                 width: `${applyProg.total > 0 ? (applyProg.current / applyProg.total) * 100 : 0}%`,
-                background: 'linear-gradient(90deg, #f59e0b 0%, #d97706 100%)'
+                background: 'linear-gradient(90deg, #22d3ee 0%, #0891b2 100%)'
               }}
             />
           </div>
@@ -449,7 +449,7 @@ function ContextMenuCleanerPageContent() {
               disabled={applying}
               className="pulse-primary-action pulse-scan-action flex items-center gap-2 rounded-xl px-5 py-2.5 text-[13px] font-semibold transition-all disabled:opacity-40"
               style={{
-                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                background: 'linear-gradient(135deg, #22d3ee 0%, #0891b2 100%)',
                 color: 'var(--text-on-accent)'
               }}
             >
@@ -624,14 +624,17 @@ function ContextMenuCleanerPageContent() {
       {requiresAdminInSelection && selectedCount > 0 && !applying && (
         <div
           className="mb-3 flex items-center gap-2.5 rounded-xl px-4 py-2.5 text-[12px]"
-          style={{ background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.18)' }}
+          style={{
+            background: 'rgba(34, 211, 238,0.06)',
+            border: '1px solid rgba(34, 211, 238,0.18)'
+          }}
         >
           <AlertTriangle className="h-4 w-4 shrink-0 text-amber-400" strokeWidth={1.8} />
           <span className="flex-1 text-zinc-300">{t('elevationPrompt')}</span>
           <button
-            onClick={() => window.kudu.elevationRelaunch?.().catch(() => {})}
+            onClick={() => window.fabric.elevationRelaunch?.().catch(() => {})}
             className="rounded-md px-3 py-1 text-[11px] font-medium text-amber-400"
-            style={{ background: 'rgba(245,158,11,0.10)' }}
+            style={{ background: 'rgba(34, 211, 238,0.10)' }}
           >
             {t('elevationRelaunch')}
           </button>
@@ -730,7 +733,7 @@ function EntryRow({ entry, isLast, onToggle, onAction }: EntryRowProps) {
     <div
       className="flex items-center gap-3 px-5 py-3 transition-colors"
       style={{
-        background: entry.selected ? 'rgba(245,158,11,0.04)' : 'transparent',
+        background: entry.selected ? 'rgba(34, 211, 238,0.04)' : 'transparent',
         borderBottom: !isLast ? '1px solid var(--bg-subtle)' : 'none',
         opacity: entry.protected ? 0.7 : 1
       }}
@@ -776,7 +779,7 @@ function EntryRow({ entry, isLast, onToggle, onAction }: EntryRowProps) {
             <span
               title={t('adminTooltip')}
               className="rounded px-1.5 py-0.5 text-[10px] font-medium"
-              style={{ background: 'rgba(245,158,11,0.10)', color: '#f59e0b' }}
+              style={{ background: 'rgba(34, 211, 238,0.10)', color: '#22d3ee' }}
             >
               {t('adminBadge')}
             </span>

@@ -17,7 +17,6 @@
     "items": "已清理项目",
     "cleanups": "已完成清理",
     "tagline": "更少杂乱，为重要的内容腾出更多空间。",
-    "footer": "由 Kudu 清理 · 免费且开源",
     "privacy": "在本地生成。仅包含总计和大致分类——不包含文件路径或计算机标识信息。",
     "save": "保存 PNG",
     "copyImage": "复制图片",
@@ -26,12 +25,12 @@
     "copied": "已复制到剪贴板",
     "exportError": "无法导出图片。请尝试使用“保存 PNG”，而不是分享或复制。",
     "copyError": "无法复制文案。请检查剪贴板权限。",
-    "caption": "我使用 Kudu 恢复了 {{space}} 空间，并清理了 {{items}} 个项目。免费且开源。分享你的清理成果，帮助 Kudu 为我们所有人不断成长。https://usekudu.com",
-    "communityTitle": "帮助 Kudu 成长，为了我们所有人。",
-    "communityDescription": "分享你的清理成果，能让更多人发现 Kudu，并壮大这个免费开源清理工具背后的社区。每一次分享都很重要。",
+    "caption": "我使用 Fabric Cleaner 恢复了 {{space}} 空间，并清理了 {{items}} 个项目。免费且开源。分享你的清理成果，帮助 Fabric Cleaner 为我们所有人不断成长。https://github.com/Mousssaa/Fabric-Cleaner",
+    "communityTitle": "帮助 Fabric Cleaner 成长，为了我们所有人。",
+    "communityDescription": "分享你的清理成果，能让更多人发现 Fabric Cleaner，并壮大这个免费开源清理工具背后的社区。每一次分享都很重要。",
     "platforms": "分享到平台",
     "openPlatform": "在 {{platform}} 上分享（将在浏览器中打开）",
-    "postTitle": "我使用 Kudu 恢复了 {{space}} 空间，这是一款免费开源的清理工具",
+    "postTitle": "我使用 Fabric Cleaner 恢复了 {{space}} 空间，这是一款免费开源的清理工具",
     "discord": "复制用于 Discord",
     "discordCopied": "卡片和文案已复制。可粘贴到你的 Discord 聊天或频道中。",
     "destinations": "平台按钮会打开草稿或分享界面。使用“复制图片”粘贴卡片，或附加已保存的 PNG，然后在准备好后发布。",
@@ -77,6 +76,5 @@
   "close": "关闭",
   "dismiss": "忽略",
   "skipToMainContent": "跳转至主要内容",
-  "windowTitlebar": "Kudu 窗口标题栏",
-  "checkingCloudConnection": "正在检查 Kudu Cloud 连接…"
+  "windowTitlebar": "Fabric Cleaner 窗口标题栏"
 }

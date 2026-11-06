@@ -73,7 +73,7 @@ export const useStartupStore = create<StartupState>((set) => ({
   fetchSafetyRatings: async () => {
     set({ safetyLoading: true })
     try {
-      const result = await window.kudu.startupSafetyFetch()
+      const result = await window.fabric.startupSafetyFetch()
       const ratings = Array.isArray(result?.ratings) ? result.ratings : []
       set({
         safetyRatings: Object.fromEntries(ratings.map((r) => [r.name, r])),
@@ -102,11 +102,11 @@ export const useStartupStore = create<StartupState>((set) => ({
 let _safetyListenerRegistered = false
 if (
   typeof window !== 'undefined' &&
-  window.kudu?.onStartupSafetyUpdated &&
+  window.fabric?.onStartupSafetyUpdated &&
   !_safetyListenerRegistered
 ) {
   _safetyListenerRegistered = true
-  window.kudu.onStartupSafetyUpdated((result) => {
+  window.fabric.onStartupSafetyUpdated((result) => {
     const ratings = Array.isArray(result?.ratings) ? result.ratings : []
     useStartupStore.setState({
       safetyRatings: Object.fromEntries(ratings.map((r) => [r.name, r])),

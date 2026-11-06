@@ -61,8 +61,8 @@ export function DuplicateFinderPage() {
 
   // Subscribe to progress events
   useEffect(() => {
-    if (!window.kudu?.onDuplicatesProgress) return
-    return window.kudu.onDuplicatesProgress((data) => {
+    if (!window.fabric?.onDuplicatesProgress) return
+    return window.fabric.onDuplicatesProgress((data) => {
       useDuplicateStore.getState().setProgress(data)
     })
   }, [])
@@ -82,7 +82,7 @@ export function DuplicateFinderPage() {
   // ── Handlers ──
 
   const handleSelectDir = async () => {
-    const dir = await window.kudu?.duplicatesSelectDir?.()
+    const dir = await window.fabric?.duplicatesSelectDir?.()
     if (dir) store.setDirectory(dir)
   }
 
@@ -91,7 +91,7 @@ export function DuplicateFinderPage() {
     store.reset()
     store.setStatus('scanning')
     try {
-      const result = await window.kudu?.duplicatesScan?.({
+      const result = await window.fabric?.duplicatesScan?.({
         directory: store.directory,
         minFileSize: store.minFileSize,
         maxFileSize: store.maxFileSize,
@@ -112,7 +112,7 @@ export function DuplicateFinderPage() {
   }
 
   const handleCancel = async () => {
-    await window.kudu?.duplicatesCancel?.()
+    await window.fabric?.duplicatesCancel?.()
   }
 
   const handleDelete = async () => {
@@ -121,7 +121,7 @@ export function DuplicateFinderPage() {
     store.setStatus('deleting')
     try {
       const paths = Array.from(deletingPaths)
-      const result = await window.kudu?.duplicatesDelete?.(paths, store.deleteMode)
+      const result = await window.fabric?.duplicatesDelete?.(paths, store.deleteMode)
       if (result) {
         store.setDeleteResult(result)
         // Build the set of successfully deleted paths (remove failures)
@@ -265,7 +265,7 @@ export function DuplicateFinderPage() {
                     style={{
                       background:
                         store.minFileSize === p.value
-                          ? 'rgba(245,158,11,0.1)'
+                          ? 'rgba(34, 211, 238,0.1)'
                           : 'var(--bg-subtle-2)'
                     }}
                   >
@@ -294,7 +294,7 @@ export function DuplicateFinderPage() {
                   )}
                   style={{
                     background:
-                      store.maxFileSize === null ? 'rgba(245,158,11,0.1)' : 'var(--bg-subtle-2)'
+                      store.maxFileSize === null ? 'rgba(34, 211, 238,0.1)' : 'var(--bg-subtle-2)'
                   }}
                 >
                   {t('noLimit')}
@@ -311,7 +311,7 @@ export function DuplicateFinderPage() {
                     )}
                     style={{
                       background:
-                        store.maxFileSize === v ? 'rgba(245,158,11,0.1)' : 'var(--bg-subtle-2)'
+                        store.maxFileSize === v ? 'rgba(34, 211, 238,0.1)' : 'var(--bg-subtle-2)'
                     }}
                   >
                     {formatBytes(v, 0)}
@@ -343,7 +343,7 @@ export function DuplicateFinderPage() {
                     )}
                     style={{
                       background:
-                        activeExtPreset === preset ? 'rgba(245,158,11,0.1)' : 'var(--bg-subtle-2)'
+                        activeExtPreset === preset ? 'rgba(34, 211, 238,0.1)' : 'var(--bg-subtle-2)'
                     }}
                   >
                     {t(preset === 'all' ? 'allFiles' : preset)}
@@ -535,7 +535,7 @@ export function DuplicateFinderPage() {
                     )}
                     style={
                       store.deleteMode === 'recycle'
-                        ? { background: 'rgba(245,158,11,0.1)' }
+                        ? { background: 'rgba(34, 211, 238,0.1)' }
                         : undefined
                     }
                   >
@@ -576,8 +576,8 @@ export function DuplicateFinderPage() {
                       background:
                         store.deleteMode === 'permanent'
                           ? 'rgba(239,68,68,0.12)'
-                          : 'rgba(245,158,11,0.12)',
-                      color: store.deleteMode === 'permanent' ? '#ef4444' : '#f59e0b'
+                          : 'rgba(34, 211, 238,0.12)',
+                      color: store.deleteMode === 'permanent' ? '#ef4444' : '#22d3ee'
                     }}
                   >
                     <Trash2 className="h-4 w-4" />
@@ -701,7 +701,7 @@ export function DuplicateFinderPage() {
                                 <button
                                   onClick={(e) => {
                                     e.stopPropagation()
-                                    window.kudu?.duplicatesOpenLocation?.(file.path)
+                                    window.fabric?.duplicatesOpenLocation?.(file.path)
                                   }}
                                   className="shrink-0 text-zinc-600 hover:text-zinc-400"
                                   title={t('openLocation')}

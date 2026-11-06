@@ -5,7 +5,7 @@
   "scanning": "Analizowanie...",
   "refresh": "Odśwież analizę",
   "introTitle": "Twoje aplikacje i wyjaśnienie zajmowanego miejsca.",
-  "introDescription": "Porównaj zgłaszane rozmiary instalacji z plikami, które Kudu może udostępnić do przeglądu przed czyszczeniem. Znajdź największe możliwości odzyskania miejsca, zanim rozpoczniesz czyszczenie.",
+  "introDescription": "Porównaj zgłaszane rozmiary instalacji z plikami, które Fabric Cleaner może udostępnić do przeglądu przed czyszczeniem. Znajdź największe możliwości odzyskania miejsca, zanim rozpoczniesz czyszczenie.",
   "privacy": "Analiza pozostaje na tym urządzeniu. Podczas analizy nic nie jest usuwane.",
   "installed": "Rozmiar instalacji",
   "cache": "Pliki do przejrzenia",

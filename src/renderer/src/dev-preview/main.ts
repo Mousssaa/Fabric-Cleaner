@@ -9,12 +9,9 @@ import type { CustomFolder } from '@shared/custom-folders'
 const GB = 1024 ** 3
 const now = Date.now()
 const empty = new URLSearchParams(location.search).get('state') === 'empty'
-// Explicit sample access states for checking conversion and recovery flows.
-const cloudPreview = new URLSearchParams(location.search).get('cloud') ?? 'unlinked'
 const settings = structuredClone(defaultSettings)
-if (cloudPreview !== 'unlinked') settings.cloud.apiKey = 'preview-only'
 settings.dashboardView =
-  localStorage.getItem('kudu-preview-dashboard-view') === 'advanced' ? 'advanced' : 'simple'
+  localStorage.getItem('fc-preview-dashboard-view') === 'advanced' ? 'advanced' : 'simple'
 settings.theme = new URLSearchParams(location.search).get('theme') === 'light' ? 'light' : 'dark'
 settings.language = 'en'
 settings.schedules = empty
@@ -418,30 +415,11 @@ const reads: Record<string, (...args: any[]) => unknown> = {
     }))
   }),
   ...featureReads(empty),
-  diagnosticsCapabilities: () => {
-    if (cloudPreview === 'offline') throw new Error('Preview connection unavailable')
-    return {
-      available: cloudPreview === 'pro',
-      requiredPlan: 'Pro',
-      provider: 'OpenAI',
-      retentionDays: 7,
-      ...(cloudPreview === 'pro'
-        ? {}
-        : {
-            accessReason:
-              cloudPreview === 'unlinked'
-                ? 'unlinked'
-                : cloudPreview === 'authorization'
-                  ? 'authorization'
-                  : 'subscription'
-          })
-    }
-  },
   settingsGet: () => settings,
   settingsSet: (partial) => {
     Object.assign(settings, partial)
     if (partial.dashboardView)
-      localStorage.setItem('kudu-preview-dashboard-view', partial.dashboardView)
+      localStorage.setItem('fc-preview-dashboard-view', partial.dashboardView)
     return settings
   },
   onboardingGet: () => true,
@@ -452,15 +430,35 @@ const reads: Record<string, (...args: any[]) => unknown> = {
     history.unshift(entry)
     emit('onHistoryChanged', undefined)
   },
-  cloudHistoryGet: () => [],
-  cloudGetStatus: () => ({
-    status: cloudPreview === 'pro' || cloudPreview === 'basic' ? 'connected' : 'disconnected'
+  threatMonitorStatus: () => ({ running: false, blocklist: null }),
+  intelligenceGetConfig: () => ({
+    mode: 'disabled',
+    gateway: { url: '', hasToken: false, tokenHint: null },
+    providers: {
+      virustotal: {
+        id: 'virustotal',
+        enabled: false,
+        endpoint: '',
+        hasApiKey: false,
+        apiKeyHint: null,
+        state: 'local_mode'
+      },
+      leakradar: {
+        id: 'leakradar',
+        enabled: false,
+        endpoint: '',
+        hasApiKey: false,
+        apiKeyHint: null,
+        state: 'local_mode'
+      }
+    },
+    secureStorageAvailable: true
   }),
   threatMonitorGetSnapshot: () => null,
   startupList: () => startup,
   startupBootTrace: () => null,
-  startupSafetyFetch: () => ({}),
-  programSafetyFetch: () => ({}),
+  startupSafetyFetch: () => ({ ratings: [], pending: 0 }),
+  programSafetyFetch: () => ({ ratings: [], pending: 0 }),
   diskDrives: () => (empty ? [] : [drive]),
   diskTrimList: () =>
     empty
@@ -601,7 +599,7 @@ const reads: Record<string, (...args: any[]) => unknown> = {
   breachMonitorFetch: () => ({ emails: [], breaches: [] })
 }
 
-window.kudu = new Proxy(
+window.fabric = new Proxy(
   {},
   {
     get: (_, name: string) => {
@@ -621,7 +619,7 @@ window.kudu = new Proxy(
       }
     }
   }
-) as typeof window.kudu
+) as typeof window.fabric
 
 useSettingsStore.getState().setSettings(settings)
 

@@ -5,7 +5,7 @@
   "scanning": "正在分析...",
   "refresh": "刷新分析",
   "introTitle": "清晰了解您的应用及其空间占用。",
-  "introDescription": "比较报告的安装大小与 Kudu 可提供清理检查的文件。在清理前找出最值得处理的项目。",
+  "introDescription": "比较报告的安装大小与 Fabric Cleaner 可提供清理检查的文件。在清理前找出最值得处理的项目。",
   "privacy": "分析仅保留在此设备上。分析期间不会移除任何内容。",
   "installed": "安装大小",
   "cache": "可检查的文件",

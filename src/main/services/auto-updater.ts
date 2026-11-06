@@ -4,6 +4,7 @@ import { IPC } from '../../shared/channels'
 import { getSettings } from './settings-store'
 import { retargetAppImageLaunchers } from './appimage-launchers'
 import { isPortable } from './portable'
+import { isUpdateFeedEnabled, UPDATE_FEED_UNAVAILABLE_MESSAGE } from './update-feed'
 import type { UpdateStatus } from '../../shared/types'
 
 let status: UpdateStatus = { state: 'idle' }
@@ -41,6 +42,7 @@ interface InitOptions {
 
 /** electron-updater only supports AppImage on Linux and NSIS on Windows. */
 function shouldSkipUpdater(): boolean {
+  if (!isUpdateFeedEnabled()) return true
   if (process.platform === 'linux' && !process.env.APPIMAGE) return true
   if (isPortable()) return true
   return false
@@ -48,6 +50,7 @@ function shouldSkipUpdater(): boolean {
 
 function skipReason(): string {
   if (!app.isPackaged) return 'Updates are unavailable in development builds'
+  if (!isUpdateFeedEnabled()) return UPDATE_FEED_UNAVAILABLE_MESSAGE
   if (process.platform === 'linux' && !process.env.APPIMAGE) {
     return 'In-app updates require the AppImage build (deb/package installs use your package manager)'
   }
@@ -61,7 +64,7 @@ export function initAutoUpdater(opts: InitOptions = {}): void {
   if (!app.isPackaged) return
 
   if (shouldSkipUpdater()) {
-    console.log('Auto-updater: skipping (unsupported package format)')
+    console.log(`Auto-updater: background checks off (${skipReason()})`)
     return
   }
 

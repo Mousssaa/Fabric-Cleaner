@@ -378,7 +378,9 @@ describe('App Space IPC safety', () => {
     expect(mocks.remove.mock.calls[0][0]).toHaveLength(250001)
     expect(mocks.remove.mock.calls[0][0][0]).toMatch(/^large-/)
     expect(mocks.remove.mock.calls[0][0]).not.toContain('replacement')
-  })
+    // Builds and hashes 250001 items: ~1.4s on a fast machine, but over the
+    // 5s default on GitHub's macos-15-intel runner.
+  }, 30_000)
   it('rejects concurrent native review scans to bound pending generations', async () => {
     let complete!: (value: ScanResult) => void
     mocks.scan.mockImplementationOnce(

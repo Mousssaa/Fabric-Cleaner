@@ -12,12 +12,12 @@ export const useAppUpdateStore = create<AppUpdateStore>((set) => ({
   setStatus: (status) => set({ status }),
   init: () => {
     // Fetch current status
-    window.kudu
+    window.fabric
       ?.updaterGetStatus?.()
       .then((s) => set({ status: s }))
       .catch(() => {})
     // Listen for live updates
-    const unsub = window.kudu?.onUpdaterStatus?.((s) => set({ status: s }))
+    const unsub = window.fabric?.onUpdaterStatus?.((s) => set({ status: s }))
     return () => unsub?.()
   }
 }))

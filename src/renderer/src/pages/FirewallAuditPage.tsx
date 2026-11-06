@@ -41,10 +41,10 @@ const RISK_COLORS: Record<
     text: '#ef4444'
   },
   medium: {
-    dot: '#f59e0b',
-    bg: 'rgba(245,158,11,0.10)',
-    border: 'rgba(245,158,11,0.20)',
-    text: '#f59e0b'
+    dot: '#22d3ee',
+    bg: 'rgba(34, 211, 238,0.10)',
+    border: 'rgba(34, 211, 238,0.20)',
+    text: '#22d3ee'
   },
   low: {
     dot: '#22c55e',
@@ -87,7 +87,7 @@ export function FirewallAuditPage() {
   const isBusy = scanning || applying
 
   useEffect(() => {
-    const cleanup = window.kudu?.onFirewallProgress?.((data: FirewallScanProgress) => {
+    const cleanup = window.fabric?.onFirewallProgress?.((data: FirewallScanProgress) => {
       useFirewallStore.getState().setScanProgress(data)
     })
     return () => {
@@ -105,7 +105,7 @@ export function FirewallAuditPage() {
     store.setTruncated(false)
 
     try {
-      const result = await window.kudu.firewallScan()
+      const result = await window.fabric.firewallScan()
       const s = useFirewallStore.getState()
       s.setRules(result.rules)
       s.setTruncated(!!result.truncated)
@@ -138,7 +138,7 @@ export function FirewallAuditPage() {
       store.setError(null)
 
       try {
-        const result = await window.kudu.firewallApply(
+        const result = await window.fabric.firewallApply(
           selected.map((r) => ({ name: r.name, action }))
         )
         useFirewallStore.getState().setApplyResult(result)
@@ -284,7 +284,7 @@ export function FirewallAuditPage() {
               disabled={isBusy || selectedCount === 0}
               className="flex items-center gap-2 rounded-lg px-4 py-2.5 text-[13px] font-semibold text-white transition-all"
               style={{
-                background: selectedCount > 0 && !isBusy ? '#f59e0b' : '#27272a',
+                background: selectedCount > 0 && !isBusy ? '#22d3ee' : '#27272a',
                 opacity: isBusy || selectedCount === 0 ? 0.5 : 1
               }}
             >
@@ -326,7 +326,7 @@ export function FirewallAuditPage() {
             label={t('statUnsigned')}
             value={unsignedCount}
             icon={FileWarning}
-            color="#f59e0b"
+            color="#22d3ee"
           />
           <StatBox
             label={t('statBroadScope')}
@@ -351,13 +351,13 @@ export function FirewallAuditPage() {
         <div
           className="mb-5 flex items-start gap-2.5 rounded-xl p-3.5"
           style={{
-            background: 'rgba(245, 158, 11, 0.08)',
-            border: '1px solid rgba(245, 158, 11, 0.3)'
+            background: 'rgba(34, 211, 238, 0.08)',
+            border: '1px solid rgba(34, 211, 238, 0.3)'
           }}
         >
           <AlertTriangle
             className="mt-px h-4 w-4 shrink-0"
-            style={{ color: '#f59e0b' }}
+            style={{ color: '#22d3ee' }}
             strokeWidth={2}
           />
           <span className="text-[12.5px]" style={{ color: 'var(--text-secondary)' }}>
@@ -406,13 +406,13 @@ export function FirewallAuditPage() {
         <div
           className="mb-5 rounded-xl p-4"
           style={{
-            background: applyResult.failed > 0 ? 'rgba(245,158,11,0.06)' : 'rgba(34,197,94,0.06)',
-            border: `1px solid ${applyResult.failed > 0 ? 'rgba(245,158,11,0.15)' : 'rgba(34,197,94,0.15)'}`
+            background: applyResult.failed > 0 ? 'rgba(34, 211, 238,0.06)' : 'rgba(34,197,94,0.06)',
+            border: `1px solid ${applyResult.failed > 0 ? 'rgba(34, 211, 238,0.15)' : 'rgba(34,197,94,0.15)'}`
           }}
         >
           <div className="flex items-center gap-2">
             {applyResult.failed > 0 ? (
-              <AlertTriangle className="h-4 w-4" style={{ color: '#f59e0b' }} />
+              <AlertTriangle className="h-4 w-4" style={{ color: '#22d3ee' }} />
             ) : (
               <CheckCircle2 className="h-4 w-4" style={{ color: '#22c55e' }} />
             )}
@@ -443,7 +443,7 @@ export function FirewallAuditPage() {
               onClick={handleScan}
               className="pulse-primary-action pulse-scan-action flex items-center gap-2 rounded-xl px-5 py-2.5 text-[13px] font-semibold transition-all"
               style={{
-                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                background: 'linear-gradient(135deg, #22d3ee 0%, #0891b2 100%)',
                 color: 'var(--text-on-accent)'
               }}
             >

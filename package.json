@@ -1,7 +1,8 @@
 {
-  "name": "kudu",
+  "name": "fabric-cleaner",
+  "productName": "Fabric Cleaner",
   "version": "3.11.0",
-  "description": "A modern, open-source system cleaner for Windows, macOS, and Linux",
+  "description": "Fabric Cleaner by HakTrak Networks: a local-first system cleaner and security toolkit for Windows, macOS and Linux",
   "main": "./out/main/index.js",
   "scripts": {
     "dev": "electron-vite dev",
@@ -42,8 +43,8 @@
     "optimization"
   ],
   "author": {
-    "name": "Kudu Contributors",
-    "email": "kudu@users.noreply.github.com"
+    "name": "HakTrak Networks",
+    "email": "noreply@haktrak.invalid"
   },
   "license": "MIT",
   "engines": {
@@ -51,11 +52,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/adventdevinc/kudu.git"
+    "url": "https://github.com/Mousssaa/Fabric-Cleaner.git"
   },
-  "homepage": "https://usekudu.com",
+  "homepage": "https://github.com/Mousssaa/Fabric-Cleaner",
   "bugs": {
-    "url": "https://github.com/adventdevinc/kudu/issues"
+    "url": "https://github.com/Mousssaa/Fabric-Cleaner/issues"
   },
   "devDependencies": {
     "@axe-core/react": "^4.14.0",

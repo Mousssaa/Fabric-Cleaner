@@ -1,12 +1,12 @@
 {
-  "trayTooltip": "Kudu",
-  "openKudu": "Відкрити Kudu",
+  "trayTooltip": "Fabric Cleaner",
+  "openKudu": "Відкрити Fabric Cleaner",
   "quit": "Вийти",
-  "scheduledTaskNotificationTitle": "Kudu - Заплановане завдання",
+  "scheduledTaskNotificationTitle": "Fabric Cleaner - Заплановане завдання",
   "scheduledTaskNotificationBody": "Виконується \"{{name}}\"...",
-  "scanCompleteNotificationTitle": "Kudu - Сканування завершено",
+  "scanCompleteNotificationTitle": "Fabric Cleaner - Сканування завершено",
   "scanCompleteNotificationBody": "Знайдено {{itemCount}} елементів ({{sizeMB}} МБ), які можна очистити.",
   "scheduledScanName": "Заплановане сканування",
-  "rendererStartupFailureTitle": "Не вдалося запустити Kudu",
-  "rendererStartupFailureMessage": "Kudu не вдалося запустити інтерфейс, і програма має закритися. Повідомляючи про цю проблему, додайте вказаний нижче файл журналу."
+  "rendererStartupFailureTitle": "Не вдалося запустити Fabric Cleaner",
+  "rendererStartupFailureMessage": "Fabric Cleaner не вдалося запустити інтерфейс, і програма має закритися. Повідомляючи про цю проблему, додайте вказаний нижче файл журналу."
 }

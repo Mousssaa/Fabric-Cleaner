@@ -281,8 +281,8 @@ export function CleanerPage() {
   const cleanTotalRef = useRef(1)
 
   useEffect(() => {
-    if (!window.kudu?.onScanProgress) return
-    return window.kudu.onScanProgress((data) => {
+    if (!window.fabric?.onScanProgress) return
+    return window.fabric.onScanProgress((data) => {
       // Each cleaner reports 0-100% independently. Scale to overall progress
       // based on which category we're currently processing.
       if (data.phase === 'cleaning') {
@@ -322,7 +322,7 @@ export function CleanerPage() {
       store.status !== ScanStatus.Complete ||
       store.cleanSummary ||
       store.selectedItems.size === 0 ||
-      !window.kudu?.cleanerBlockers
+      !window.fabric?.cleanerBlockers
     ) {
       setBlockers([])
       setCheckingBlockers(false)
@@ -334,7 +334,7 @@ export function CleanerPage() {
     setCheckingBlockers(true)
     const timer = window.setTimeout(async () => {
       try {
-        const result = await window.kudu.cleanerBlockers([...store.selectedItems])
+        const result = await window.fabric.cleanerBlockers([...store.selectedItems])
         if (!cancelled && blockerRequestRef.current === requestId) setBlockers(result)
       } catch {
         if (!cancelled && blockerRequestRef.current === requestId) setBlockers([])
@@ -350,7 +350,7 @@ export function CleanerPage() {
   }, [platform, store.status, store.cleanSummary])
 
   const handleRelaunch = useCallback(() => {
-    window.kudu.elevationRelaunch()
+    window.fabric.elevationRelaunch()
   }, [])
 
   const handleScan = useCallback(async () => {
@@ -366,15 +366,15 @@ export function CleanerPage() {
     const skippedForElevation: string[] = []
     try {
       const scanFns: Partial<Record<CleanerType, () => Promise<ScanResult[]>>> = {
-        [CleanerType.System]: () => window.kudu.systemScan(),
-        [CleanerType.Browser]: () => window.kudu.browserScan(),
-        [CleanerType.App]: () => window.kudu.appScan(),
-        [CleanerType.Gaming]: () => window.kudu.gamingScan(),
-        [CleanerType.RecycleBin]: () => window.kudu.recycleBinScan(),
-        [CleanerType.Shortcut]: () => window.kudu.shortcutScan(),
-        [CleanerType.Environment]: () => window.kudu.environmentScan(),
-        [CleanerType.Database]: () => window.kudu.databaseScan(),
-        [CleanerType.PrivacyTraces]: () => window.kudu.privacyTracesScan()
+        [CleanerType.System]: () => window.fabric.systemScan(),
+        [CleanerType.Browser]: () => window.fabric.browserScan(),
+        [CleanerType.App]: () => window.fabric.appScan(),
+        [CleanerType.Gaming]: () => window.fabric.gamingScan(),
+        [CleanerType.RecycleBin]: () => window.fabric.recycleBinScan(),
+        [CleanerType.Shortcut]: () => window.fabric.shortcutScan(),
+        [CleanerType.Environment]: () => window.fabric.environmentScan(),
+        [CleanerType.Database]: () => window.fabric.databaseScan(),
+        [CleanerType.PrivacyTraces]: () => window.fabric.privacyTracesScan()
       }
       for (let ci = 0; ci < scannableCategories.length; ci++) {
         const cat = scannableCategories[ci]
@@ -419,8 +419,8 @@ export function CleanerPage() {
       const requestId = ++requestRef.current
       let latest: CleanerBlocker[] = []
       try {
-        if (platform === 'win32' && window.kudu?.cleanerBlockers) {
-          latest = await window.kudu.cleanerBlockers(selectedIds)
+        if (platform === 'win32' && window.fabric?.cleanerBlockers) {
+          latest = await window.fabric.cleanerBlockers(selectedIds)
         }
       } catch {
         // Advisory preflight failures must not prevent the confirmation dialog.
@@ -454,8 +454,8 @@ export function CleanerPage() {
       // Create a system restore point before cleaning if enabled
       if (createRestorePointEnabled) {
         try {
-          const rpResult = await window.kudu.createRestorePoint(
-            `Kudu clean — ${new Date().toLocaleString()}`
+          const rpResult = await window.fabric.createRestorePoint(
+            `Fabric Cleaner clean — ${new Date().toLocaleString()}`
           )
           if (rpResult.success) {
             toast.success(t('toastRestorePointCreated'))
@@ -473,15 +473,15 @@ export function CleanerPage() {
       setScopedClean(null)
       const selectedIdSet = new Set(selectedIds)
       const cleanFns: Partial<Record<CleanerType, (ids: string[]) => Promise<any>>> = {
-        [CleanerType.System]: (ids) => window.kudu.systemClean(ids),
-        [CleanerType.Browser]: (ids) => window.kudu.browserClean(ids, true),
-        [CleanerType.App]: (ids) => window.kudu.appClean(ids),
-        [CleanerType.Gaming]: (ids) => window.kudu.gamingClean(ids),
-        [CleanerType.RecycleBin]: () => window.kudu.recycleBinClean(),
-        [CleanerType.Shortcut]: (ids) => window.kudu.shortcutClean(ids),
-        [CleanerType.Environment]: (ids) => window.kudu.environmentClean(ids),
-        [CleanerType.Database]: (ids) => window.kudu.databaseClean(ids),
-        [CleanerType.PrivacyTraces]: (ids) => window.kudu.privacyTracesClean(ids)
+        [CleanerType.System]: (ids) => window.fabric.systemClean(ids),
+        [CleanerType.Browser]: (ids) => window.fabric.browserClean(ids, true),
+        [CleanerType.App]: (ids) => window.fabric.appClean(ids),
+        [CleanerType.Gaming]: (ids) => window.fabric.gamingClean(ids),
+        [CleanerType.RecycleBin]: () => window.fabric.recycleBinClean(),
+        [CleanerType.Shortcut]: (ids) => window.fabric.shortcutClean(ids),
+        [CleanerType.Environment]: (ids) => window.fabric.environmentClean(ids),
+        [CleanerType.Database]: (ids) => window.fabric.databaseClean(ids),
+        [CleanerType.PrivacyTraces]: (ids) => window.fabric.privacyTracesClean(ids)
       }
       let totalCleaned = 0,
         totalFiles = 0,
@@ -797,9 +797,9 @@ export function CleanerPage() {
               }
               className="pulse-primary-action flex items-center gap-2 rounded-xl px-5 py-2.5 text-[13px] font-semibold transition-all disabled:opacity-30"
               style={{
-                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                background: 'linear-gradient(135deg, #22d3ee 0%, #0891b2 100%)',
                 color: 'var(--text-on-accent)',
-                boxShadow: hasResults ? '0 4px 20px rgba(245,158,11,0.2)' : 'none'
+                boxShadow: hasResults ? '0 4px 20px rgba(34, 211, 238,0.2)' : 'none'
               }}
             >
               {preparingClean ? (
@@ -913,7 +913,7 @@ export function CleanerPage() {
               className="mb-5 flex items-center gap-3 rounded-2xl px-4 py-3"
               style={{
                 background: 'var(--accent-muted-bg)',
-                border: '1px solid rgba(245,158,11,0.12)'
+                border: '1px solid rgba(34, 211, 238,0.12)'
               }}
             >
               <AlertTriangle className="h-4 w-4 shrink-0 text-amber-400" strokeWidth={1.8} />
@@ -956,7 +956,7 @@ export function CleanerPage() {
                   <button
                     onClick={handleRelaunch}
                     className="shrink-0 rounded-lg px-3 py-1.5 text-[12px] font-medium text-amber-400 transition-colors hover:bg-amber-500/15"
-                    style={{ border: '1px solid rgba(245,158,11,0.2)' }}
+                    style={{ border: '1px solid rgba(34, 211, 238,0.2)' }}
                   >
                     {t('relaunchAsAdmin')}
                   </button>
@@ -1042,7 +1042,7 @@ export function CleanerPage() {
                   disabled={isCleaning || preparingClean}
                   className="pulse-primary-action pulse-scan-action flex items-center gap-2 rounded-xl px-5 py-2.5 text-[13px] font-semibold transition-all disabled:opacity-40"
                   style={{
-                    background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                    background: 'linear-gradient(135deg, #22d3ee 0%, #0891b2 100%)',
                     color: 'var(--text-on-accent)'
                   }}
                 >
@@ -1459,7 +1459,7 @@ export function CleanerPage() {
                                   className="shrink-0 p-1 rounded transition-colors hover:bg-[var(--bg-hover-2)]"
                                   onClick={(e) => {
                                     e.stopPropagation()
-                                    window.kudu?.cleanerOpenLocation?.(result.items[0].path)
+                                    window.fabric?.cleanerOpenLocation?.(result.items[0].path)
                                   }}
                                 >
                                   <FolderOpen
@@ -1483,17 +1483,17 @@ export function CleanerPage() {
                                       className="flex items-center gap-3 px-4 py-2 pl-14 cursor-pointer transition-colors"
                                       style={{
                                         background: checked
-                                          ? 'rgba(245,158,11,0.03)'
+                                          ? 'rgba(34, 211, 238,0.03)'
                                           : 'transparent'
                                       }}
                                       onMouseEnter={(e) => {
                                         e.currentTarget.style.background = checked
-                                          ? 'rgba(245,158,11,0.05)'
+                                          ? 'rgba(34, 211, 238,0.05)'
                                           : 'var(--bg-subtle)'
                                       }}
                                       onMouseLeave={(e) => {
                                         e.currentTarget.style.background = checked
-                                          ? 'rgba(245,158,11,0.03)'
+                                          ? 'rgba(34, 211, 238,0.03)'
                                           : 'transparent'
                                       }}
                                     >
@@ -1597,7 +1597,7 @@ export function CleanerPage() {
                                           onClick={(e) => {
                                             e.preventDefault()
                                             e.stopPropagation()
-                                            window.kudu?.cleanerOpenLocation?.(item.path)
+                                            window.fabric?.cleanerOpenLocation?.(item.path)
                                           }}
                                         >
                                           <FolderOpen

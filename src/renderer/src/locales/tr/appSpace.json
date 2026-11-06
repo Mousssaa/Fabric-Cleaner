@@ -5,7 +5,7 @@
   "scanning": "Analiz ediliyor...",
   "refresh": "Analizi yenile",
   "introTitle": "Uygulamalarınız ve kapladıkları alanın açıklaması.",
-  "introDescription": "Bildirilen kurulum boyutlarını, Kudu'nun temizleme incelemesi için sunabildiği dosyalarla karşılaştırın. Temizlemeden önce en büyük fırsatları bulun.",
+  "introDescription": "Bildirilen kurulum boyutlarını, Fabric Cleaner'nun temizleme incelemesi için sunabildiği dosyalarla karşılaştırın. Temizlemeden önce en büyük fırsatları bulun.",
   "privacy": "Analiz bu cihazda kalır. Analiz sırasında hiçbir şey kaldırılmaz.",
   "installed": "Yüklü boyut",
   "cache": "İncelenebilir dosyalar",

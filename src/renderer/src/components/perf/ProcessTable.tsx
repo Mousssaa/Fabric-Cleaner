@@ -45,7 +45,10 @@ export function ProcessTable() {
     if (!killTarget) return
     setKilling(true)
     try {
-      const result = await window.kudu.perfKillProcess(killTarget.pid, killTarget.birthToken || '')
+      const result = await window.fabric.perfKillProcess(
+        killTarget.pid,
+        killTarget.birthToken || ''
+      )
       if (result.success) {
         toast.success(t('endProcessSuccessToast', { name: killTarget.name, pid: killTarget.pid }))
       } else {
@@ -83,7 +86,7 @@ export function ProcessTable() {
 
   function cpuBarColor(pct: number): string {
     if (pct >= 50) return '#ef4444'
-    if (pct >= 20) return '#f59e0b'
+    if (pct >= 20) return '#22d3ee'
     return '#22c55e'
   }
 

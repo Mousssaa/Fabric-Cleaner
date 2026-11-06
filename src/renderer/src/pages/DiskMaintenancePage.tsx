@@ -63,7 +63,7 @@ function StatusPill({ status, reason }: { status: TrimStatus; reason: string }) 
   const styles: Record<TrimStatus, { bg: string; color: string; label: string }> = {
     'recently-trimmed': { bg: 'rgba(34,197,94,0.12)', color: '#22c55e', label: 'Recently trimmed' },
     ok: { bg: 'rgba(63,63,70,0.4)', color: 'var(--text-muted)', label: 'OK' },
-    recommended: { bg: 'rgba(245,158,11,0.12)', color: '#f59e0b', label: 'Recommended' },
+    recommended: { bg: 'rgba(34, 211, 238,0.12)', color: '#22d3ee', label: 'Recommended' },
     'not-applicable': {
       bg: 'rgba(63,63,70,0.4)',
       color: 'var(--text-muted)',
@@ -102,8 +102,8 @@ export function DiskMaintenancePage() {
 
   // Listen for trim progress events
   useEffect(() => {
-    if (!window.kudu?.onDiskTrimProgress) return
-    return window.kudu.onDiskTrimProgress((data) => store.setProgress(data))
+    if (!window.fabric?.onDiskTrimProgress) return
+    return window.fabric.onDiskTrimProgress((data) => store.setProgress(data))
   }, [])
 
   // Initial load
@@ -116,7 +116,7 @@ export function DiskMaintenancePage() {
     store.setLoading(true)
     store.setError(null)
     try {
-      const list = await window.kudu.diskTrimList()
+      const list = await window.fabric.diskTrimList()
       store.setDrives(list)
     } catch (err) {
       console.error('Failed to list trim drives:', err)
@@ -154,7 +154,7 @@ export function DiskMaintenancePage() {
       store.setRunState(id, 'running')
     }
     try {
-      const results = await window.kudu.diskTrimRun(selectableSelected)
+      const results = await window.fabric.diskTrimRun(selectableSelected)
       let needsAdmin = false
       let throttled = 0
       let success = 0
@@ -275,7 +275,7 @@ export function DiskMaintenancePage() {
             disabled={selectableSelected.length === 0 || batchRunning || loading || !!error}
             className="flex items-center gap-2 rounded-xl px-5 py-2.5 text-[13px] font-semibold transition-all disabled:opacity-40"
             style={{
-              background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+              background: 'linear-gradient(135deg, #22d3ee 0%, #0891b2 100%)',
               color: 'var(--text-on-accent)'
             }}
           >
@@ -380,7 +380,7 @@ function DriveRow({
         />
         <div
           className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
-          style={{ background: 'rgba(245,158,11,0.1)' }}
+          style={{ background: 'rgba(34, 211, 238,0.1)' }}
         >
           <MediaIcon type={drive.mediaType} />
         </div>

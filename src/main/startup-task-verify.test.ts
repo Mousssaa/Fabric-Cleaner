@@ -43,7 +43,7 @@ function registeredTaskMatches(taskXml: string, exePath: string, expectedArgs: s
   return args === expectedArgs.trim()
 }
 
-const EXE = 'C:\\Program Files\\Kudu\\Kudu.exe'
+const EXE = 'C:\\Program Files\\Fabric Cleaner\\Fabric Cleaner.exe'
 const ARGS = '--startup'
 
 /** Wrap raw action XML in the surrounding task document. */
@@ -73,9 +73,13 @@ describe('registeredTaskMatches', () => {
   })
 
   it('accepts a path whose ampersand came back XML-escaped', () => {
-    const exe = 'C:\\Tools\\R&D\\Kudu.exe'
+    const exe = 'C:\\Tools\\R&D\\Fabric Cleaner.exe'
     expect(
-      registeredTaskMatches(withActions(execAction('C:\\Tools\\R&amp;D\\Kudu.exe')), exe, ARGS)
+      registeredTaskMatches(
+        withActions(execAction('C:\\Tools\\R&amp;D\\Fabric Cleaner.exe')),
+        exe,
+        ARGS
+      )
     ).toBe(true)
   })
 

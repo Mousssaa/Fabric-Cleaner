@@ -66,7 +66,7 @@ function shellEscape(arg: string): string {
 // macOS falls back to "osascript wants to make changes", which looks
 // suspicious to non-technical users who don't recognize the binary name.
 const ELEVATION_PROMPT =
-  'Kudu needs your administrator password to apply system hardening settings.'
+  'Fabric Cleaner needs your administrator password to apply system hardening settings.'
 
 async function elevatedExec(cmd: string, args: string[]): Promise<string> {
   if (isRoot()) {
@@ -99,12 +99,12 @@ async function elevatedBatch(commands: Array<{ cmd: string; args: string[] }>): 
 
 // A symlinked config file is usually maintained by configuration management;
 // replacing the link (mv) would destroy it and writing through it would edit
-// someone else's source of truth, so Kudu leaves such files alone entirely.
+// someone else's source of truth, so Fabric Cleaner leaves such files alone entirely.
 async function assertNotSymlink(filePath: string): Promise<void> {
   try {
     if ((await lstat(filePath)).isSymbolicLink())
       throw new Error(
-        `${filePath} is a symbolic link, probably managed by configuration management. Kudu won't modify it; change the setting there instead.`
+        `${filePath} is a symbolic link, probably managed by configuration management. Fabric Cleaner won't modify it; change the setting there instead.`
       )
   } catch (error: any) {
     if (error?.code !== 'ENOENT') throw error
@@ -113,9 +113,9 @@ async function assertNotSymlink(filePath: string): Promise<void> {
 
 // Moving a user-written temp file into place would make the user its owner,
 // letting any unprivileged process rewrite sshd or kernel config. Always hand
-// it to root:wheel — older Kudu builds left these files user-owned, so the
+// it to root:wheel — older Fabric Cleaner builds left these files user-owned, so the
 // current owner isn't worth keeping — but keep the mode it already has (a
-// restrictive 0600 stays 0600) minus group/other write; a file Kudu creates
+// restrictive 0600 stays 0600) minus group/other write; a file Fabric Cleaner creates
 // gets 0644. Runs in the same elevation as the mv.
 //
 // The temp file is written owner-only (writeTempFile) and given its final
@@ -137,7 +137,7 @@ async function installFileCommands(tmp: string, filePath: string): Promise<Comma
 }
 
 async function writeTempFile(content: string): Promise<string> {
-  const tmp = join(tmpdir(), `kudu-${randomUUID()}.tmp`)
+  const tmp = join(tmpdir(), `fc-${randomUUID()}.tmp`)
   await writeFile(tmp, content, { encoding: 'utf8', mode: 0o600 })
   return tmp
 }
@@ -328,7 +328,7 @@ const SSHD_ENABLE_SCRIPT = [
 // Each setting lists the pieces of system state its apply() changes. apply()
 // first captures what they hold now (privacy-state.ts) and revert writes
 // exactly that back — the user's own state, not an assumed default. Only when
-// nothing was captured (applied by an older Kudu, or protected before Kudu
+// nothing was captured (applied by an older Fabric Cleaner, or protected before Fabric Cleaner
 // touched it) does revert use a part's `fallback`: the macOS default, given
 // only where that default is certain. Without one the setting stays
 // non-reversible rather than guessing.
@@ -339,7 +339,7 @@ const SSHD_ENABLE_SCRIPT = [
 //     Spotlight LookupSuggestionsDisabled: key unset. macOS ships them unset,
 //     and unset is the unprotected behaviour.
 //   - Chrome / Firefox managed policies: no policy key (an unmanaged Mac has
-//     none); the plist's mode is left as Kudu set it.
+//     none); the plist's mode is left as Fabric Cleaner set it.
 //   - Application Firewall off, stealth mode off, automatically allow built-in
 //     and downloaded signed software on.
 //   - kern.coredump=1 with no line in /etc/sysctl.conf.
@@ -347,7 +347,7 @@ const SSHD_ENABLE_SCRIPT = [
 // (Siri, analytics, dictation), varies by hardware (wake on network), already
 // is the protected state (Gatekeeper, guest account, remote login and Apple
 // events, IP forwarding, keys the checks treat unset as protected), or can't
-// be known (the auto-login user, which sshd_config lines were Kudu's).
+// be known (the auto-login user, which sshd_config lines were Fabric Cleaner's).
 
 interface Command {
   cmd: string
@@ -384,8 +384,8 @@ interface StatePart<S> {
    */
   shared?: boolean
   /**
-   * Only the last sharing setting Kudu applied to be reverted restores it
-   * (e.g. a plist's mode, so a policy Kudu still has applied stays readable).
+   * Only the last sharing setting Fabric Cleaner applied to be reverted restores it
+   * (e.g. a plist's mode, so a policy Fabric Cleaner still has applied stays readable).
    */
   lastRevertOnly?: boolean
   /** Whether two states are the same; defaults to exact (JSON) equality */
@@ -404,7 +404,7 @@ interface DarwinPrivacySetting extends PrivacySettingDef {
 }
 
 const NOT_CAPTURED =
-  "Kudu has no record of this setting's previous state and macOS's default isn't certain, so it can't be reverted safely. Change it in System Settings instead."
+  "Fabric Cleaner has no record of this setting's previous state and macOS's default isn't certain, so it can't be reverted safely. Change it in System Settings instead."
 
 const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b)
 const partEqual = (part: StatePart<any>, a: unknown, b: unknown) =>
@@ -429,11 +429,11 @@ async function captureState(
       current = await part.read()
     } catch (error) {
       throw new Error(
-        `Kudu couldn't record the current state, so nothing was changed: ${error instanceof Error ? error.message : error}`,
+        `Fabric Cleaner couldn't record the current state, so nothing was changed: ${error instanceof Error ? error.message : error}`,
         { cause: error }
       )
     }
-    // An earlier capture still stands while the part holds exactly what Kudu
+    // An earlier capture still stands while the part holds exactly what Fabric Cleaner
     // wrote (e.g. retrying a half-finished apply); anything else means the
     // user changed it since, so what's there now is theirs.
     const kept = earlier?.[part.id]
@@ -518,7 +518,7 @@ async function elevatedGroups(groups: Command[][]): Promise<(string | undefined)
           return `{ if ${met}; then ${line}; fi; }`
         })
         .join(' && ')
-      return `(${chain}) 1>&2; s${i}=$?; echo kudu-group:${i}:$s${i}`
+      return `(${chain}) 1>&2; s${i}=$?; echo fc-group:${i}:$s${i}`
     })
     .join('; ')
   let stdout: string
@@ -537,7 +537,7 @@ async function elevatedGroups(groups: Command[][]): Promise<(string | undefined)
     return groups.map(() => reason)
   }
   const status = new Map(
-    [...stdout.matchAll(/kudu-group:(\d+):(\d+)/g)].map((m) => [Number(m[1]), Number(m[2])])
+    [...stdout.matchAll(/fc-group:(\d+):(\d+)/g)].map((m) => [Number(m[1]), Number(m[2])])
   )
   return groups.map((_, i) =>
     status.get(i) === 0
@@ -597,8 +597,8 @@ async function revertSettings(
         const needs: number[] = []
         for (const other of settings) {
           if (other === setting || !other.state.some((p) => p.id === part.id)) continue
-          // Only a recorded Kudu apply matters; a policy that was already in
-          // place before Kudu doesn't hold the user's mode back.
+          // Only a recorded Fabric Cleaner apply matters; a policy that was already in
+          // place before Fabric Cleaner doesn't hold the user's mode back.
           if ((await loadPriorState(other.id)) === undefined) continue
           const at = ids.indexOf(other.id)
           // Still applied, reverted later in this batch, or its revert already
@@ -691,7 +691,7 @@ async function revertSettings(
     if (!restored) {
       fail(
         setting,
-        "macOS didn't report the previous state after reverting. Kudu kept its record so you can try again."
+        "macOS didn't report the previous state after reverting. Fabric Cleaner kept its record so you can try again."
       )
       continue
     }
@@ -899,7 +899,7 @@ const REMOVE_IF_EMPTY =
  * A managed-preferences plist's existence and mode. managedPrefWrite creates
  * it if needed and makes it 0644 so the policy is readable; revert puts back
  * the mode the user had (e.g. 0600, which keeps other policies private), or
- * removes a plist Kudu created once it is empty again. Without a capture the
+ * removes a plist Fabric Cleaner created once it is empty again. Without a capture the
  * file is left as it is.
  */
 function managedPlistPart(domain: string): StatePart<{ mode: string } | null> {
@@ -924,7 +924,7 @@ function managedPlistPart(domain: string): StatePart<{ mode: string } | null> {
     optional: true,
     shared: true,
     lastRevertOnly: true,
-    // A plist Kudu created may still hold someone else's policies; then it stays
+    // A plist Fabric Cleaner created may still hold someone else's policies; then it stays
     restored: (current, prior) => prior === null || same(current, prior),
     restore: (prior) => [
       prior === null
@@ -973,7 +973,7 @@ function sysctlParts(param: string, value: string, fallback?: string): StatePart
     valid: (v): v is string | null =>
       v === null || (typeof v === 'string' && !v.includes('\n') && sysctlLine(v, param) === v),
     applied: () => `${param}=${value}`,
-    // With the kernel default restored, Kudu's line is simply dropped
+    // With the kernel default restored, Fabric Cleaner's line is simply dropped
     fallback: fallback === undefined ? undefined : null,
     restore: (prior) => [
       { path: SYSCTL_CONF, edit: (content) => restoreSysctlLine(content, param, prior) }
@@ -983,8 +983,8 @@ function sysctlParts(param: string, value: string, fallback?: string): StatePart
 }
 
 // Whether /etc/sysctl.conf existed, and its exact text if it was blank —
-// updateSysctlConfig writes Kudu's header into a missing or blank file. Once
-// only that header is left, revert deletes a file Kudu created or puts the
+// updateSysctlConfig writes Fabric Cleaner's header into a missing or blank file. Once
+// only that header is left, revert deletes a file Fabric Cleaner created or puts the
 // blank text back; a file that has gained other lines stays. Without a
 // capture the file is left alone.
 type SysctlFileState = null | string | true // absent | blank text | has content
@@ -1029,9 +1029,9 @@ function sshdLines(content: string, directive: string): string[] {
  * An sshd_config directive set by applySshdDirective. The prior state is every
  * line for the directive (active or commented). Revert maps them back one to
  * one — undoing the commenting-out and dropping the appended line — but only
- * while those lines are exactly as Kudu left them; otherwise it refuses
+ * while those lines are exactly as Fabric Cleaner left them; otherwise it refuses
  * rather than overwrite someone else's edit. No fallback: without a capture
- * there's no telling which lines were Kudu's.
+ * there's no telling which lines were Fabric Cleaner's.
  */
 function sshdPart(directive: string, value: string): StatePart<string[]> {
   const applied = (prior: string[]) =>
@@ -1073,7 +1073,7 @@ function sshdPart(directive: string, value: string): StatePart<string[]> {
             )
           )
             throw new Error(
-              `${SSHD_CONFIG} was edited after Kudu changed it, so Kudu won't overwrite it. Restore ${directive} by hand.`
+              `${SSHD_CONFIG} was edited after Fabric Cleaner changed it, so Fabric Cleaner won't overwrite it. Restore ${directive} by hand.`
             )
           prior.forEach((line, n) => (lines[at[n]] = line))
           if (expected.length > prior.length) lines.splice(at[at.length - 1], 1)

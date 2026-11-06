@@ -17,7 +17,6 @@
     "items": "kohdetta puhdistettu",
     "cleanups": "puhdistusta suoritettu",
     "tagline": "Vähemmän turhaa. Enemmän tilaa tärkeälle.",
-    "footer": "Puhdistettu Kudu-ohjelmalla · Ilmainen ja avoimen lähdekoodin",
     "privacy": "Luotu paikallisesti. Mukana ovat vain yhteenvedot ja yleiset luokat — ei tiedostopolkuja tai tietokoneen tunnistetietoja.",
     "save": "Tallenna PNG",
     "copyImage": "Kopioi kuva",
@@ -26,12 +25,12 @@
     "copied": "Kopioitu leikepöydälle",
     "exportError": "Kuvan vieminen ei onnistunut. Kokeile jakamisen tai kopioinnin sijaan vaihtoehtoa Tallenna PNG.",
     "copyError": "Kuvatekstin kopiointi ei onnistunut. Tarkista leikepöydän käyttöoikeudet.",
-    "caption": "Vapautin {{space}} tallennustilaa ja puhdistin {{items}} kohdetta Kudu-ohjelmalla. Ilmainen ja avoimen lähdekoodin. Jaa tuloksesi ja auta Kudu-yhteisöä kasvamaan meidän kaikkien hyväksi. https://usekudu.com",
-    "communityTitle": "Auta Kudu-yhteisöä kasvamaan meidän kaikkien hyväksi.",
-    "communityDescription": "Kun jaat puhdistuksesi, yhä useampi löytää Kudu-ohjelman ja ilmaisen, avoimen lähdekoodin puhdistustyökalun taustalla oleva yhteisö kasvaa. Jokainen jako merkitsee.",
+    "caption": "Vapautin {{space}} tallennustilaa ja puhdistin {{items}} kohdetta Fabric-Cleaner-ohjelmalla. Ilmainen ja avoimen lähdekoodin. Jaa tuloksesi ja auta Fabric-Cleaner-yhteisöä kasvamaan meidän kaikkien hyväksi. https://github.com/Mousssaa/Fabric-Cleaner",
+    "communityTitle": "Auta Fabric-Cleaner-yhteisöä kasvamaan meidän kaikkien hyväksi.",
+    "communityDescription": "Kun jaat puhdistuksesi, yhä useampi löytää Fabric-Cleaner-ohjelman ja ilmaisen, avoimen lähdekoodin puhdistustyökalun taustalla oleva yhteisö kasvaa. Jokainen jako merkitsee.",
     "platforms": "Jaa alustalle",
     "openPlatform": "Jaa palvelussa {{platform}} (avautuu selaimessa)",
-    "postTitle": "Vapautin {{space}} tallennustilaa Kudu-ohjelmalla, joka on ilmainen ja avoimen lähdekoodin puhdistustyökalu",
+    "postTitle": "Vapautin {{space}} tallennustilaa Fabric-Cleaner-ohjelmalla, joka on ilmainen ja avoimen lähdekoodin puhdistustyökalu",
     "discord": "Kopioi Discordia varten",
     "discordCopied": "Kortti ja kuvateksti kopioitu. Liitä ne Discord-keskusteluun tai -kanavalle.",
     "destinations": "Alustapainikkeet avaavat luonnoksen tai jakonäkymän. Liitä kortti toiminnolla Kopioi kuva tai liitä tallennettu PNG-tiedosto ja julkaise, kun olet valmis.",
@@ -77,6 +76,5 @@
   "close": "Sulje",
   "dismiss": "Hylkää",
   "skipToMainContent": "Siirry pääsisältöön",
-  "windowTitlebar": "Kudu-ikkunan otsikkopalkki",
-  "checkingCloudConnection": "Tarkistetaan Kudu Cloud -yhteyttä…"
+  "windowTitlebar": "Fabric-Cleaner-ikkunan otsikkopalkki"
 }

@@ -113,7 +113,7 @@ export function ServiceManagerPage({ embedded }: { embedded?: boolean }) {
 
   // Listen for progress events
   useEffect(() => {
-    const cleanup = window.kudu?.onServiceProgress?.((data: ServiceScanProgress) => {
+    const cleanup = window.fabric?.onServiceProgress?.((data: ServiceScanProgress) => {
       useServiceStore.getState().setScanProgress(data)
     })
     return () => {
@@ -131,7 +131,7 @@ export function ServiceManagerPage({ embedded }: { embedded?: boolean }) {
     store.setScanProgress(null)
 
     try {
-      const result = await window.kudu.serviceScan()
+      const result = await window.fabric.serviceScan()
       const s = useServiceStore.getState()
       s.setServices(result.services)
       s.setHasScanned(true)
@@ -172,7 +172,7 @@ export function ServiceManagerPage({ embedded }: { embedded?: boolean }) {
       }))
 
       try {
-        const result = await window.kudu.serviceApply(changes)
+        const result = await window.fabric.serviceApply(changes)
         useServiceStore.getState().setApplyResult(result)
         if (result.succeeded > 0) {
           const key =
@@ -196,7 +196,7 @@ export function ServiceManagerPage({ embedded }: { embedded?: boolean }) {
           )
 
         // Re-scan to refresh state
-        const scanResult = await window.kudu.serviceScan()
+        const scanResult = await window.fabric.serviceScan()
         useServiceStore.getState().setServices(scanResult.services)
 
         // Log to history
@@ -495,13 +495,13 @@ export function ServiceManagerPage({ embedded }: { embedded?: boolean }) {
         <div
           className="mb-5 rounded-xl p-4"
           style={{
-            background: applyResult.failed > 0 ? 'rgba(245,158,11,0.06)' : 'rgba(34,197,94,0.06)',
-            border: `1px solid ${applyResult.failed > 0 ? 'rgba(245,158,11,0.15)' : 'rgba(34,197,94,0.15)'}`
+            background: applyResult.failed > 0 ? 'rgba(34, 211, 238,0.06)' : 'rgba(34,197,94,0.06)',
+            border: `1px solid ${applyResult.failed > 0 ? 'rgba(34, 211, 238,0.15)' : 'rgba(34,197,94,0.15)'}`
           }}
         >
           <div className="flex items-center gap-2">
             {applyResult.failed > 0 ? (
-              <AlertTriangle className="h-4 w-4" style={{ color: '#f59e0b' }} />
+              <AlertTriangle className="h-4 w-4" style={{ color: '#22d3ee' }} />
             ) : (
               <CheckCircle2 className="h-4 w-4" style={{ color: '#22c55e' }} />
             )}
@@ -543,7 +543,7 @@ export function ServiceManagerPage({ embedded }: { embedded?: boolean }) {
               onClick={handleScan}
               className="pulse-primary-action pulse-scan-action flex items-center gap-2 rounded-xl px-5 py-2.5 text-[13px] font-semibold transition-all"
               style={{
-                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                background: 'linear-gradient(135deg, #22d3ee 0%, #0891b2 100%)',
                 color: 'var(--text-on-accent)'
               }}
             >

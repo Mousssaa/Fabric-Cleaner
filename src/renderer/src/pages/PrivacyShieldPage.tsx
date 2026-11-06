@@ -54,9 +54,9 @@ const categories: CategoryDef[] = [
     labelKey: 'privacyCategories.adsLabel',
     descriptionKey: 'privacyCategories.adsDescription',
     icon: Megaphone,
-    color: '#f59e0b',
-    bg: 'rgba(245,158,11,0.08)',
-    border: 'rgba(245,158,11,0.15)'
+    color: '#22d3ee',
+    bg: 'rgba(34, 211, 238,0.08)',
+    border: 'rgba(34, 211, 238,0.15)'
   },
   {
     id: 'search',
@@ -145,7 +145,7 @@ function ScoreRing({ score, size = 80 }: { score: number; size?: number }) {
   const r = (size - 6) / 2
   const circumference = 2 * Math.PI * r
   const offset = circumference - (score / 100) * circumference
-  const color = score >= 80 ? '#22c55e' : score >= 50 ? '#f59e0b' : '#ef4444'
+  const color = score >= 80 ? '#22c55e' : score >= 50 ? '#22d3ee' : '#ef4444'
 
   return (
     <div
@@ -258,12 +258,12 @@ function PrivacySettingsPanel({ embedded }: { embedded?: boolean }) {
     // Listen for progress
     progressCleanupRef.current?.()
     progressCleanupRef.current =
-      window.kudu.onPrivacyProgress?.((data) => {
+      window.fabric.onPrivacyProgress?.((data) => {
         usePrivacyStore.getState().setProgress(data)
       }) ?? null
 
     try {
-      const result = await window.kudu.privacyScan()
+      const result = await window.fabric.privacyScan()
       usePrivacyStore.getState().setState(result)
       // Auto-expand categories with unprotected settings
       const unprotected = new Set<string>()
@@ -293,10 +293,10 @@ function PrivacySettingsPanel({ embedded }: { embedded?: boolean }) {
     store.setStatus('applying')
     store.setApplyResult(null)
     try {
-      const result = await window.kudu.privacyApply(unprotectedIds)
+      const result = await window.fabric.privacyApply(unprotectedIds)
       usePrivacyStore.getState().setApplyResult(result)
       // Re-scan to get updated state
-      const updated = await window.kudu.privacyScan()
+      const updated = await window.fabric.privacyScan()
       usePrivacyStore.getState().setState(updated)
       usePrivacyStore.getState().setStatus('done')
 
@@ -360,9 +360,9 @@ function PrivacySettingsPanel({ embedded }: { embedded?: boolean }) {
       store.setStatus('applying')
       store.setApplyResult(null)
       try {
-        const result = await window.kudu.privacyApply(ids)
+        const result = await window.fabric.privacyApply(ids)
         usePrivacyStore.getState().setApplyResult(result)
-        const updated = await window.kudu.privacyScan()
+        const updated = await window.fabric.privacyScan()
         usePrivacyStore.getState().setState(updated)
         usePrivacyStore.getState().setStatus('done')
         if (result.succeeded > 0)
@@ -429,9 +429,9 @@ function PrivacySettingsPanel({ embedded }: { embedded?: boolean }) {
       store.setStatus('applying')
       try {
         const result = isEnabling
-          ? await window.kudu.privacyApply([settingId])
-          : await window.kudu.privacyRevert([settingId])
-        const updated = await window.kudu.privacyScan()
+          ? await window.fabric.privacyApply([settingId])
+          : await window.fabric.privacyRevert([settingId])
+        const updated = await window.fabric.privacyScan()
         usePrivacyStore.getState().setState(updated)
         usePrivacyStore.getState().setStatus('done')
 
@@ -564,7 +564,7 @@ function PrivacySettingsPanel({ embedded }: { embedded?: boolean }) {
                   style={{
                     width: `${(state.protected / state.total) * 100}%`,
                     background:
-                      state.score >= 80 ? '#22c55e' : state.score >= 50 ? '#f59e0b' : '#ef4444'
+                      state.score >= 80 ? '#22c55e' : state.score >= 50 ? '#22d3ee' : '#ef4444'
                   }}
                 />
               </div>
@@ -712,8 +712,8 @@ function PrivacySettingsPanel({ embedded }: { embedded?: boolean }) {
         <div
           className="mb-5 rounded-2xl p-4"
           style={{
-            background: applyResult.failed > 0 ? 'rgba(245,158,11,0.04)' : 'rgba(34,197,94,0.06)',
-            border: `1px solid ${applyResult.failed > 0 ? 'rgba(245,158,11,0.1)' : 'rgba(34,197,94,0.1)'}`
+            background: applyResult.failed > 0 ? 'rgba(34, 211, 238,0.04)' : 'rgba(34,197,94,0.06)',
+            border: `1px solid ${applyResult.failed > 0 ? 'rgba(34, 211, 238,0.1)' : 'rgba(34,197,94,0.1)'}`
           }}
         >
           <div className="flex items-center gap-3">
@@ -945,7 +945,7 @@ function PrivacySettingsPanel({ embedded }: { embedded?: boolean }) {
         <div
           className="mt-4 flex items-start gap-3 rounded-2xl px-5 py-3"
           style={{
-            background: 'rgba(245,158,11,0.04)',
+            background: 'rgba(34, 211, 238,0.04)',
             border: '1px solid var(--accent-muted-bg)'
           }}
         >

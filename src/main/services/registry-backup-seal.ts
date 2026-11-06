@@ -5,23 +5,23 @@ import { isAdmin } from './elevation'
 import { execNativeUtf8, execTracked, psUtf8 } from './exec-utf8'
 
 /**
- * Integrity seals for the registry backups Kudu may later import.
+ * Integrity seals for the registry backups Fabric Cleaner may later import.
  *
  * Packaged Windows builds run elevated, but the backup folder defaults to the
  * user's Documents, which any unelevated process of that user can write. A
  * backup is only restorable when the SHA-256 of its exact bytes matches the one
- * Kudu recorded when writing it, in a key only administrators can change:
- * `HKLM\SOFTWARE\Kudu\RegistryBackupSeals\<folder id>` (value name = backup file
+ * Fabric Cleaner recorded when writing it, in a key only administrators can change:
+ * `HKLM\SOFTWARE\Fabric Cleaner\RegistryBackupSeals\<folder id>` (value name = backup file
  * name). The folder id is derived from the backup folder's real path, so each
  * folder has its own seals: switching the backup folder never makes the seals
  * of backups left in the previous one look orphaned.
  *
  * Seals are read from HKLM only, never from the backup folder or userData.
  * Sealing needs elevation; when it is not possible the backup is still written
- * but cannot be restored from inside Kudu. Nothing here throws into the caller.
+ * but cannot be restored from inside Fabric Cleaner. Nothing here throws into the caller.
  */
 
-const SEAL_ROOT = 'HKLM\\SOFTWARE\\Kudu\\RegistryBackupSeals'
+const SEAL_ROOT = 'HKLM\\SOFTWARE\\Fabric Cleaner\\RegistryBackupSeals'
 /** File names only: no separators, no `..`, nothing cmd.exe or reg.exe would reinterpret. */
 const SEALABLE_NAME = /^[A-Za-z0-9_-][A-Za-z0-9_.-]{0,199}\.reg$/
 const SHA256_HEX = /^[0-9a-f]{64}$/
@@ -150,11 +150,11 @@ export async function removeSeals(dir: string, fileNames: string[]): Promise<voi
 /**
  * Drop every seal of `dir` whose backup file no longer exists there. `seals` is
  * `readSeals(dir)`, and `present` the lower-cased names of the regular files in
- * `dir`, listed *after* `seals` was read: Kudu always writes a backup before
+ * `dir`, listed *after* `seals` was read: Fabric Cleaner always writes a backup before
  * sealing it, so a seal read earlier than the listing can never belong to a file
  * not yet written. Other folders' seals are never touched.
  *
- * Without this, a backup deleted outside Kudu (or whose seal removal failed)
+ * Without this, a backup deleted outside Fabric Cleaner (or whose seal removal failed)
  * could be put back later, byte for byte, by an unelevated process and be
  * verified again. Returns the seals that remain. Needs elevation to remove.
  */
@@ -175,7 +175,7 @@ export async function sweepSeals(
  * Create an empty directory that only Administrators and SYSTEM can modify, for
  * the `reg export` parts a sealed backup is assembled from and the copy `reg
  * import` reads. The user's %TEMP% will not do: an unelevated process could
- * rewrite a file there between Kudu writing (or hashing) it and reading it.
+ * rewrite a file there between Fabric Cleaner writing (or hashing) it and reading it.
  *
  * The directory lives in the Windows temp folder, where standard users cannot
  * delete or rename other users' entries, has an unguessable name, is created

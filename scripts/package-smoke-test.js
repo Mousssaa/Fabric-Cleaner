@@ -39,8 +39,8 @@ if (process.argv[2] === '--native') {
     db.close()
   }
   const scanner = packagedRequire('@litko/yara-x').create()
-  scanner.addRuleSource('rule PackagedSmoke { strings: $a = "kudu_package_probe" condition: $a }')
-  assert.equal(scanner.scan(Buffer.from('kudu_package_probe'))[0]?.ruleIdentifier, 'PackagedSmoke')
+  scanner.addRuleSource('rule PackagedSmoke { strings: $a = "fabric_cleaner_package_probe" condition: $a }')
+  assert.equal(scanner.scan(Buffer.from('fabric_cleaner_package_probe'))[0]?.ruleIdentifier, 'PackagedSmoke')
   assert.equal(scanner.scan(Buffer.from('clean data')).length, 0)
   console.log('Packaged resources, SQLite, and YARA passed')
 } else {
@@ -53,12 +53,17 @@ if (process.argv[2] === '--native') {
 async function runPackagedSmoke() {
   assert(process.argv[2], 'Usage: node scripts/package-smoke-test.js <packaged executable>')
   const executable = path.resolve(process.argv[2])
-  const resources = path.join(path.dirname(executable), 'resources')
+  // macOS bundles keep resources in <App>.app/Contents/Resources, next to
+  // Contents/MacOS/<executable>; Windows and Linux keep them beside the binary.
+  const resources =
+    process.platform === 'darwin'
+      ? path.join(path.dirname(executable), '..', 'Resources')
+      : path.join(path.dirname(executable), 'resources')
   assert(existsSync(executable), `Packaged executable missing: ${executable}`)
   for (const file of ['app.asar', 'icon.ico', 'icon.png']) {
     assert(existsSync(path.join(resources, file)), `Packaged resource missing: ${file}`)
   }
-  const temporary = mkdtempSync(path.join(tmpdir(), 'kudu-package-smoke-'))
+  const temporary = mkdtempSync(path.join(tmpdir(), 'fc-package-smoke-'))
   const env = { ...process.env }
   delete env.ELECTRON_RUN_AS_NODE
   delete env.ELECTRON_NO_ASAR
@@ -93,8 +98,8 @@ async function runPackagedSmoke() {
         ? ['--no-sandbox', '--disable-gpu', '--ozone-platform=headless']
         : []
     // Keep all CLI state in a disposable directory, including on developer machines.
-    const cli = (...args) => run([...flags, `--kudu-data-dir=${temporary}`, '--cli', ...args])
-    assert.match(cli('--version'), /Kudu v\d+\.\d+\.\d+/)
+    const cli = (...args) => run([...flags, `--fc-data-dir=${temporary}`, '--cli', ...args])
+    assert.match(cli('--version'), /Fabric Cleaner v\d+\.\d+\.\d+/)
     assert.match(cli('--help'), /usage/i)
     JSON.parse(cli('config', '--json', 'get'))
     JSON.parse(cli('history', '--json', 'list'))

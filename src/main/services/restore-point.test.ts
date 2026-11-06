@@ -64,10 +64,10 @@ describe('createRestorePoint', () => {
       }
     )
 
-    await createRestorePoint("Kudu's cleanup")
+    await createRestorePoint("Fabric Cleaner's cleanup")
     const script = mockExecFile.mock.calls[0][1][3]
     // PowerShell escape: single quote -> double single quote
-    expect(script).toContain("Kudu''s cleanup")
+    expect(script).toContain("Fabric Cleaner''s cleanup")
   })
 
   it('returns friendly error when Windows throttles (24h limit)', async () => {
@@ -150,7 +150,9 @@ describe('buildRestorePointScript', () => {
   })
 
   it('still escapes single quotes in the description', () => {
-    expect(buildRestorePointScript("Kudu's cleanup")).toContain("Kudu''s cleanup")
+    expect(buildRestorePointScript("Fabric Cleaner's cleanup")).toContain(
+      "Fabric Cleaner''s cleanup"
+    )
   })
 })
 

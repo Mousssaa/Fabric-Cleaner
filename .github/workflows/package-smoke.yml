@@ -17,8 +17,6 @@ on:
       - 'patches/**'
       - 'scripts/**'
       - '.github/workflows/**'
-  schedule:
-    - cron: '30 5 * * 2'
   workflow_dispatch:
   workflow_call:
     inputs:
@@ -45,15 +43,15 @@ jobs:
         include:
           - os: windows-latest
             # The smoke executable must start unattended without a UAC prompt.
-            # This override applies only to this unpublished test package.
-            args: --win --x64 -c.win.requestedExecutionLevel=asInvoker -c.nsis.runAfterFinish=false -c.nsis.createDesktopShortcut=false -c.nsis.createStartMenuShortcut=false -c.appId=com.kudu.package-smoke
-            executable: dist/win-unpacked/Kudu.exe
-          - os: windows-11-arm
-            args: --win --config electron-builder.arm64.yml -c.win.requestedExecutionLevel=asInvoker -c.nsis.runAfterFinish=false -c.nsis.createDesktopShortcut=false -c.nsis.createStartMenuShortcut=false -c.appId=com.kudu.package-smoke
-            executable: dist/win-arm64-unpacked/Kudu.exe
-          - os: ubuntu-24.04-arm
-            args: --dir --linux --arm64
-            executable: dist/linux-arm64-unpacked/kudu
+            args: --win --x64 -c.nsis.runAfterFinish=false -c.nsis.createDesktopShortcut=false -c.nsis.createStartMenuShortcut=false -c.appId=com.haktrak.fabric-cleaner.package-smoke
+            executable: dist/win-unpacked/Fabric Cleaner.exe
+          - os: ubuntu-latest
+            args: --dir --linux --x64
+            executable: dist/linux-unpacked/fabric-cleaner
+          # Intel runner: the arm64 macOS pool did not pick up jobs (see ci.yml).
+          - os: macos-15-intel
+            args: --mac dir --x64 -c.mac.notarize=false -c.mac.identity=null
+            executable: dist/mac/Fabric Cleaner.app/Contents/MacOS/Fabric Cleaner
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7

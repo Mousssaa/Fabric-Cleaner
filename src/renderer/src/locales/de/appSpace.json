@@ -5,7 +5,7 @@
   "scanning": "Wird analysiert...",
   "refresh": "Analyse aktualisieren",
   "introTitle": "Ihre Apps – mit verständlicher Speicherplatzübersicht.",
-  "introDescription": "Vergleichen Sie die gemeldeten Installationsgrößen mit den Dateien, die Kudu zur Bereinigungsprüfung anbieten kann. Finden Sie die größten Einsparmöglichkeiten, bevor Sie bereinigen.",
+  "introDescription": "Vergleichen Sie die gemeldeten Installationsgrößen mit den Dateien, die Fabric Cleaner zur Bereinigungsprüfung anbieten kann. Finden Sie die größten Einsparmöglichkeiten, bevor Sie bereinigen.",
   "privacy": "Die Analyse bleibt auf diesem Gerät. Während der Analyse wird nichts entfernt.",
   "installed": "Installationsgröße",
   "cache": "Prüfbare Dateien",

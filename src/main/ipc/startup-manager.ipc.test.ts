@@ -65,7 +65,7 @@ vi.mock('electron', () => ({
   app: {
     isPackaged: false,
     getPath: (name: string) => {
-      if (name === 'userData') return 'C:\\Users\\Test\\AppData\\Roaming\\Kudu'
+      if (name === 'userData') return 'C:\\Users\\Test\\AppData\\Roaming\\Fabric Cleaner'
       if (name === 'appData') return 'C:\\Users\\Test\\AppData\\Roaming'
       return 'C:\\mock'
     }

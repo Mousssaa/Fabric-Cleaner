@@ -2,13 +2,13 @@ import { describe, it, expect } from 'vitest'
 import { rewriteDesktopExec } from './appimage-launchers'
 
 describe('rewriteDesktopExec', () => {
-  const oldPath = '/home/u/.local/bin/Kudu-2.7.0-x86_64.AppImage'
-  const newPath = '/home/u/.local/bin/Kudu-x86_64.AppImage'
+  const oldPath = '/home/u/.local/bin/Fabric-Cleaner-2.7.0-x86_64.AppImage'
+  const newPath = '/home/u/.local/bin/Fabric-Cleaner-x86_64.AppImage'
 
   it('rewrites Exec lines that reference the old AppImage path', () => {
     const desktop = [
       '[Desktop Entry]',
-      'Name=Kudu',
+      'Name=Fabric Cleaner',
       `Exec=${oldPath}`,
       `TryExec=${oldPath}`,
       'Type=Application',

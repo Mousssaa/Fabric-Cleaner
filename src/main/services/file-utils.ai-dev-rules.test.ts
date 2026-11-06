@@ -21,7 +21,7 @@ let root: string
 let variables: Record<string, string>
 
 beforeEach(async () => {
-  root = await mkdtemp(join(tmpdir(), 'kudu-ai-dev-rules-'))
+  root = await mkdtemp(join(tmpdir(), 'fc-ai-dev-rules-'))
   state.exclusions = []
   variables = {
     HOME: root,

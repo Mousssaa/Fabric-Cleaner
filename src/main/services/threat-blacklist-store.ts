@@ -1,17 +1,18 @@
-import { readFileSync, writeFileSync, renameSync, existsSync, mkdirSync } from 'fs'
+import { readFileSync, writeFileSync, renameSync, existsSync, mkdirSync, unlinkSync } from 'fs'
 import { join } from 'path'
 import { app } from 'electron'
-import type { ThreatBlacklist } from './cloud-agent-types'
+import type { ThreatBlacklist } from './security-posture-types'
 
 const MAX_ENTRIES_PER_ARRAY = 500_000
-const MAX_DOWNLOAD_BYTES = 50 * 1024 * 1024 // 50 MB
-const DOWNLOAD_TIMEOUT_MS = 60_000
+const MAX_IMPORT_BYTES = 50 * 1024 * 1024 // 50 MB
 
 let _dataDir: string | null = null
 
 function getDataDir(): string {
   if (!_dataDir) {
-    _dataDir = app.isPackaged ? app.getPath('userData') : join(app.getPath('userData'), 'Kudu-Dev')
+    _dataDir = app.isPackaged
+      ? app.getPath('userData')
+      : join(app.getPath('userData'), 'FabricCleaner-Dev')
   }
   return _dataDir
 }
@@ -70,64 +71,54 @@ export function saveBlacklist(bl: ThreatBlacklist): void {
   renameSync(tmpPath, path)
 }
 
-export async function downloadAndUpdateBlacklist(url: string): Promise<{
-  success: boolean
-  error?: string
-  stats?: { domains: number; ips: number; cidrs: number }
-}> {
-  try {
-    const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), DOWNLOAD_TIMEOUT_MS)
+const IPV4 = /^(25[0-5]|2[0-4]\d|1?\d?\d)(\.(25[0-5]|2[0-4]\d|1?\d?\d)){3}$/
+const DOMAIN = /^(?=.{1,253}$)([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/i
 
-    let response: Response
+/**
+ * Parse a user-supplied local blocklist. Fabric Cleaner never downloads
+ * blocklists; the user imports one from disk. Two formats are accepted:
+ *  - the JSON shape `{ version, updatedAt, domains, ips, cidrs }`, or
+ *  - plain text, one domain / IP / CIDR per line (`#` starts a comment).
+ */
+export function parseLocalBlocklist(text: string, sourceName: string): ThreatBlacklist | null {
+  if (text.length > MAX_IMPORT_BYTES) return null
+  const trimmed = text.trim()
+  if (trimmed.startsWith('{')) {
     try {
-      response = await fetch(url, {
-        signal: controller.signal,
-        headers: { Accept: 'application/json' }
-      })
-    } finally {
-      clearTimeout(timeout)
-    }
-
-    if (!response.ok) {
-      return { success: false, error: `Download failed: HTTP ${response.status}` }
-    }
-
-    // Check content-length if available
-    const contentLength = response.headers.get('content-length')
-    if (contentLength && parseInt(contentLength, 10) > MAX_DOWNLOAD_BYTES) {
-      return { success: false, error: 'Blacklist too large (exceeds 50 MB)' }
-    }
-
-    const text = await response.text()
-    if (text.length > MAX_DOWNLOAD_BYTES) {
-      return { success: false, error: 'Blacklist too large (exceeds 50 MB)' }
-    }
-
-    let parsed: unknown
-    try {
-      parsed = JSON.parse(text)
+      return validateBlacklist(JSON.parse(trimmed))
     } catch {
-      return { success: false, error: 'Invalid blacklist format: JSON parse error' }
+      return null
     }
-
-    const blacklist = validateBlacklist(parsed)
-    if (!blacklist) {
-      return { success: false, error: 'Invalid blacklist format: validation failed' }
-    }
-
-    saveBlacklist(blacklist)
-
-    return {
-      success: true,
-      stats: {
-        domains: blacklist.domains.length,
-        ips: blacklist.ips.length,
-        cidrs: blacklist.cidrs.length
-      }
-    }
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : 'Unknown error'
-    return { success: false, error: `Download failed: ${msg}`.slice(0, 200) }
   }
+  const domains = new Set<string>()
+  const ips = new Set<string>()
+  const cidrs = new Set<string>()
+  for (const rawLine of trimmed.split(/\r?\n/)) {
+    const line = rawLine.replace(/#.*/, '').trim().toLowerCase()
+    if (!line) continue
+    // Accept hosts-file style lines such as "0.0.0.0 bad.example".
+    const token = line.split(/\s+/).pop() as string
+    if (token.includes('/')) {
+      const [addr, bits] = token.split('/')
+      const n = Number(bits)
+      if ((IPV4.test(addr) && n >= 0 && n <= 32) || (addr.includes(':') && n >= 0 && n <= 128))
+        cidrs.add(token)
+    } else if (IPV4.test(token) || (token.includes(':') && /^[0-9a-f:]+$/.test(token))) {
+      ips.add(token)
+    } else if (DOMAIN.test(token)) {
+      domains.add(token)
+    }
+  }
+  return validateBlacklist({
+    version: `local:${sourceName}`.slice(0, 100),
+    updatedAt: new Date().toISOString(),
+    domains: [...domains],
+    ips: [...ips],
+    cidrs: [...cidrs]
+  })
+}
+
+export function clearBlacklist(): void {
+  const path = getBlacklistPath()
+  if (existsSync(path)) unlinkSync(path)
 }

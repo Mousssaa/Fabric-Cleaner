@@ -21,7 +21,7 @@ let root: string
 let variables: Record<string, string>
 
 beforeEach(async () => {
-  root = await mkdtemp(join(tmpdir(), 'kudu-media-rules-'))
+  root = await mkdtemp(join(tmpdir(), 'fc-media-rules-'))
   state.exclusions = []
   variables = {
     HOME: root,
@@ -105,7 +105,9 @@ describe.each(platforms)('%s media and design cleaner rules', (platform) => {
           : join(variables.APP_SUPPORT, 'CapCut')
 
       // Protected draft project
-      await file(join(capcutBase, 'Projects', 'com.lveditor.draft', 'draft_001', 'draft_content.json'))
+      await file(
+        join(capcutBase, 'Projects', 'com.lveditor.draft', 'draft_001', 'draft_content.json')
+      )
 
       // Cache and log files
       const oldCache =
@@ -127,7 +129,10 @@ describe.each(platforms)('%s media and design cleaner rules', (platform) => {
       const rawApp = await rule(platform, 'adobe-cameraraw')
       const rawCache =
         platform === 'win32'
-          ? await file(join(variables.LOCALAPPDATA, 'Adobe', 'CameraRaw', 'Cache2', 'entry.dat'), 10)
+          ? await file(
+              join(variables.LOCALAPPDATA, 'Adobe', 'CameraRaw', 'Cache2', 'entry.dat'),
+              10
+            )
           : await file(join(variables.CACHES, 'Adobe', 'CameraRaw', 'Cache2', 'entry.dat'), 10)
 
       expect(rawApp.cacheReset).toBe(true)
@@ -152,7 +157,6 @@ describe.each(platforms)('%s media and design cleaner rules', (platform) => {
     })
   }
 })
-
 
 describe('Linux Figma cache boundaries', () => {
   it('preserves recent cache and persistent Electron state', async () => {

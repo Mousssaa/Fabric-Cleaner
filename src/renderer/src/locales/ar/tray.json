@@ -1,12 +1,12 @@
 {
-  "trayTooltip": "Kudu",
-  "openKudu": "فتح Kudu",
+  "trayTooltip": "Fabric Cleaner",
+  "openKudu": "فتح Fabric Cleaner",
   "quit": "إنهاء",
-  "scheduledTaskNotificationTitle": "Kudu - مهمة مجدولة",
+  "scheduledTaskNotificationTitle": "Fabric Cleaner - مهمة مجدولة",
   "scheduledTaskNotificationBody": "جارٍ تشغيل \"{{name}}\"...",
-  "scanCompleteNotificationTitle": "Kudu - اكتمل الفحص",
+  "scanCompleteNotificationTitle": "Fabric Cleaner - اكتمل الفحص",
   "scanCompleteNotificationBody": "تم العثور على {{itemCount}} عنصرًا ({{sizeMB}} ميجابايت) يمكن تنظيفها.",
   "scheduledScanName": "فحص مجدول",
-  "rendererStartupFailureTitle": "تعذر بدء Kudu",
-  "rendererStartupFailureMessage": "تعذر على Kudu بدء واجهته ويجب إغلاقه. يرجى إرفاق ملف السجل الموضح أدناه عند الإبلاغ عن هذه المشكلة."
+  "rendererStartupFailureTitle": "تعذر بدء Fabric Cleaner",
+  "rendererStartupFailureMessage": "تعذر على Fabric Cleaner بدء واجهته ويجب إغلاقه. يرجى إرفاق ملف السجل الموضح أدناه عند الإبلاغ عن هذه المشكلة."
 }

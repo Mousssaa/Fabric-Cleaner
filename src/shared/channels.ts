@@ -251,33 +251,25 @@ export const IPC = {
   SOFTWARE_UPDATE_RUN: 'software-update:run',
   SOFTWARE_UPDATE_PROGRESS: 'software-update:progress',
 
-  // Cloud Agent
-  CLOUD_LINK: 'cloud:link',
-  CLOUD_UNLINK: 'cloud:unlink',
-  CLOUD_GET_STATUS: 'cloud:get-status',
-  CLOUD_RECONNECT: 'cloud:reconnect',
-
   // Threat Monitor
   THREAT_MONITOR_GET_SNAPSHOT: 'threat-monitor:get-snapshot',
   THREAT_MONITOR_UPDATED: 'threat-monitor:updated',
+  THREAT_MONITOR_STATUS: 'threat-monitor:status',
+  THREAT_MONITOR_SET_ENABLED: 'threat-monitor:set-enabled',
+  THREAT_MONITOR_IMPORT_BLOCKLIST: 'threat-monitor:import-blocklist',
+  THREAT_MONITOR_CLEAR_BLOCKLIST: 'threat-monitor:clear-blocklist',
 
-  // CVE Scanner
-  CVE_FETCH: 'cve:fetch',
-  CVE_UPDATED: 'cve:updated',
-
-  // Breach Monitor
-  BREACH_MONITOR_FETCH: 'breach-monitor:fetch',
-  BREACH_MONITOR_ADD: 'breach-monitor:add',
-  BREACH_MONITOR_REMOVE: 'breach-monitor:remove',
-  BREACH_MONITOR_ACKNOWLEDGE: 'breach-monitor:acknowledge',
-
-  // Cloud Action History
-  CLOUD_HISTORY_GET: 'cloud:history:get',
-  CLOUD_HISTORY_CLEAR: 'cloud:history:clear',
+  // Threat intelligence providers (VirusTotal, LeakRadar, HakTrak Gateway).
+  // Settings plumbing only: no provider makes network calls yet.
+  INTELLIGENCE_GET_CONFIG: 'intelligence:get-config',
+  INTELLIGENCE_SET_PROVIDER: 'intelligence:set-provider',
+  INTELLIGENCE_CLEAR_PROVIDER: 'intelligence:clear-provider',
+  INTELLIGENCE_SET_MODE: 'intelligence:set-mode',
+  INTELLIGENCE_SET_GATEWAY: 'intelligence:set-gateway',
+  INTELLIGENCE_PROVIDER_STATUS: 'intelligence:provider-status',
 
   // History push events (main -> renderer)
   HISTORY_CHANGED: 'history:changed',
-  CLOUD_HISTORY_CHANGED: 'cloud:history:changed',
 
   // Large File Finder
   LARGE_FILES_SCAN: 'large-files:scan',
@@ -310,8 +302,6 @@ export const IPC = {
   GAME_MODE_DISCARD_PENDING: 'game-mode:discard-pending',
   GAME_MODE_PROGRESS: 'game-mode:progress',
   GAME_MODE_AUTO_EVENT: 'game-mode:auto-event',
-
-  DIAGNOSTICS: 'performance:diagnostics',
 
   // Downloads Review
   DOWNLOADS_SCAN: 'downloads:scan',

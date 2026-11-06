@@ -12,15 +12,15 @@ function releaseVersion(tag) {
 
 function manifestTargets(version) {
   return {
-    'latest.yml': [`Kudu-Setup-${version}.exe`],
-    'latest-arm64.yml': [`Kudu-Setup-${version}-arm64.exe`],
+    'latest.yml': [`Fabric-Cleaner-Setup-${version}.exe`],
+    'latest-arm64.yml': [`Fabric-Cleaner-Setup-${version}-arm64.exe`],
     'latest-mac.yml': ['x64', 'arm64'].flatMap((arch) => [
-      `Kudu-${version}-${arch}.dmg`,
-      `Kudu-${version}-${arch}.zip`
+      `Fabric-Cleaner-${version}-${arch}.dmg`,
+      `Fabric-Cleaner-${version}-${arch}.zip`
     ]),
     // Our pinned electron-builder includes DEBs in Linux update metadata too.
-    'latest-linux.yml': ['Kudu-x86_64.AppImage', `Kudu-${version}-amd64.deb`],
-    'latest-linux-arm64.yml': ['Kudu-arm64.AppImage', `Kudu-${version}-arm64.deb`]
+    'latest-linux.yml': ['Fabric-Cleaner-x86_64.AppImage', `Fabric-Cleaner-${version}-amd64.deb`],
+    'latest-linux-arm64.yml': ['Fabric-Cleaner-arm64.AppImage', `Fabric-Cleaner-${version}-arm64.deb`]
   }
 }
 
@@ -30,10 +30,10 @@ function expectedAssetNames(tag) {
   const installers = Object.values(manifests).flat()
   return [
     ...installers,
-    `Kudu-Portable-${version}.exe`,
-    `Kudu-Portable-${version}-x64.zip`,
-    `Kudu-Portable-${version}-arm64.exe`,
-    `Kudu-Portable-${version}-arm64.zip`,
+    `Fabric-Cleaner-Portable-${version}.exe`,
+    `Fabric-Cleaner-Portable-${version}-x64.zip`,
+    `Fabric-Cleaner-Portable-${version}-arm64.exe`,
+    `Fabric-Cleaner-Portable-${version}-arm64.zip`,
     ...installers.filter((name) => /\.(exe|dmg|zip)$/.test(name)).map((name) => `${name}.blockmap`),
     ...Object.keys(manifests)
   ]
@@ -75,8 +75,8 @@ async function verifyReleaseArtifacts(directory, tag) {
   // Optional external AppImage blockmaps vary with electron-builder versions.
   const allowed = new Set([
     ...expected,
-    'Kudu-x86_64.AppImage.blockmap',
-    'Kudu-arm64.AppImage.blockmap'
+    'Fabric-Cleaner-x86_64.AppImage.blockmap',
+    'Fabric-Cleaner-arm64.AppImage.blockmap'
   ])
   for (const name of assets.keys())
     assert(allowed.has(name), `Unexpected release artifact: ${name}`)

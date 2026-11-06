@@ -7,11 +7,11 @@ describe('draft release lookup', () => {
     const gh = vi.fn(() =>
       [JSON.stringify({ tag_name: 'v2.9.0' }), JSON.stringify(draft), ''].join('\n')
     )
-    expect(findRelease(gh, 'AdventDevInc/kudu', 'v3.0.0')).toEqual(draft)
+    expect(findRelease(gh, 'AdventDevInc/fabric-cleaner', 'v3.0.0')).toEqual(draft)
     expect(gh).toHaveBeenCalledExactlyOnceWith(
       'api',
       '--paginate',
-      'repos/AdventDevInc/kudu/releases?per_page=100',
+      'repos/AdventDevInc/fabric-cleaner/releases?per_page=100',
       '--jq',
       '.[] | {id, tag_name, draft} | @json'
     )

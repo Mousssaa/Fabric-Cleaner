@@ -1,12 +1,12 @@
 {
-  "trayTooltip": "Kudu",
-  "openKudu": "Öppna Kudu",
+  "trayTooltip": "Fabric Cleaner",
+  "openKudu": "Öppna Fabric Cleaner",
   "quit": "Avsluta",
-  "scheduledTaskNotificationTitle": "Kudu - Schemalagd aktivitet",
+  "scheduledTaskNotificationTitle": "Fabric Cleaner - Schemalagd aktivitet",
   "scheduledTaskNotificationBody": "Kör \"{{name}}\"...",
-  "scanCompleteNotificationTitle": "Kudu - Genomsökning slutförd",
+  "scanCompleteNotificationTitle": "Fabric Cleaner - Genomsökning slutförd",
   "scanCompleteNotificationBody": "Hittade {{itemCount}} objekt ({{sizeMB}} MB) som kan rensas.",
   "scheduledScanName": "Schemalagd genomsökning",
-  "rendererStartupFailureTitle": "Kudu kunde inte starta",
-  "rendererStartupFailureMessage": "Kudu kunde inte starta sitt gränssnitt och måste stängas. Bifoga loggfilen som visas nedan när du rapporterar problemet."
+  "rendererStartupFailureTitle": "Fabric Cleaner kunde inte starta",
+  "rendererStartupFailureMessage": "Fabric Cleaner kunde inte starta sitt gränssnitt och måste stängas. Bifoga loggfilen som visas nedan när du rapporterar problemet."
 }

@@ -1,13 +1,11 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
-import { Radar, ShieldCheck, Globe, Wifi, CloudOff, Clock } from 'lucide-react'
+import { Radar, ShieldCheck, Globe, Wifi, Clock, FileUp, Play, Square, Trash2 } from 'lucide-react'
+import { toast } from 'sonner'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { EmptyState } from '@/components/shared/EmptyState'
 import { useThreatMonitorStore } from '@/stores/threat-monitor-store'
-import { useSettingsStore } from '@/stores/settings-store'
-import { useCloudConnection } from '@/hooks/useCloudConnection'
-import type { FlaggedConnection, FlaggedDnsEntry } from '@shared/types'
+import type { FlaggedConnection, FlaggedDnsEntry, LocalThreatMonitorStatus } from '@shared/types'
 
 function formatTime(iso: string): string {
   try {
@@ -19,17 +17,24 @@ function formatTime(iso: string): string {
 
 export function ThreatMonitorPage() {
   const { t } = useTranslation('threatMonitor')
-  const navigate = useNavigate()
   const snapshot = useThreatMonitorStore((s) => s.snapshot)
   const loaded = useThreatMonitorStore((s) => s.loaded)
   const load = useThreatMonitorStore((s) => s.load)
-  const settings = useSettingsStore((s) => s.settings)
-  const hasCloudKey = !!settings.cloud.apiKey
-  const cloudConnection = useCloudConnection(hasCloudKey)
+  const [status, setStatus] = useState<LocalThreatMonitorStatus | null>(null)
+  const [busy, setBusy] = useState(false)
+
+  const refreshStatus = useCallback(async () => {
+    try {
+      setStatus(await window.fabric.threatMonitorStatus())
+    } catch {
+      setStatus({ running: false, blocklist: null })
+    }
+  }, [])
 
   useEffect(() => {
+    refreshStatus()
     if (!loaded) load()
-  }, [loaded, load])
+  }, [loaded, load, refreshStatus])
 
   // Poll for fresh snapshot while the page is visible so the "last scanned"
   // timestamps stay current even when no new threats are detected.
@@ -38,66 +43,79 @@ export function ThreatMonitorPage() {
     return () => clearInterval(id)
   }, [load])
 
-  if (cloudConnection === 'checking') {
-    return (
-      <div className="p-8">
-        <PageHeader title={t('pageTitle')} description={t('pageDescription')} />
-        <div
-          className="flex items-center justify-center py-20 text-[13px]"
-          style={{ color: 'var(--text-muted)' }}
-        >
-          {t('checkingConnection')}
-        </div>
-      </div>
-    )
+  const run = async (work: () => Promise<void>) => {
+    setBusy(true)
+    try {
+      await work()
+    } finally {
+      setBusy(false)
+      await load()
+    }
   }
 
-  if (cloudConnection === 'subscription-required') {
-    return (
-      <div className="p-8">
-        <PageHeader title={t('pageTitle')} description={t('pageDescription')} />
-        <EmptyState
-          icon={CloudOff}
-          title={t('planRequired.title')}
-          description={t('planRequired.description')}
-          action={
-            <CloudAction
-              label={t('planRequired.action')}
-              onClick={() =>
-                window.open('https://cloud.usekudu.com/organisation/billing', '_blank')
-              }
-            />
-          }
-        />
-      </div>
-    )
-  }
+  const importBlocklist = () =>
+    run(async () => {
+      const result = await window.fabric.threatMonitorImportBlocklist()
+      if (result.canceled) return
+      if (!result.ok) {
+        toast.error(result.error ?? t('local.importFailed'))
+        return
+      }
+      if (result.status) setStatus(result.status)
+      toast.success(t('local.importSuccess'))
+    })
 
-  // Cloud not configured or the saved connection needs attention
-  if (cloudConnection !== 'connected') {
-    const needsAttention = cloudConnection === 'authorization-error'
-    return (
-      <div className="p-8">
-        <PageHeader title={t('pageTitle')} description={t('pageDescription')} />
-        <EmptyState
-          icon={CloudOff}
-          title={needsAttention ? t('connectionError.title') : t('cloudNotConfigured.title')}
-          description={
-            needsAttention ? t('connectionError.description') : t('cloudNotConfigured.description')
-          }
-          action={
-            <CloudAction
-              label={needsAttention ? t('connectionError.action') : t('cloudNotConfigured.action')}
-              onClick={() => navigate('/cloud')}
-            />
-          }
-        />
+  const setEnabled = (enabled: boolean) =>
+    run(async () => setStatus(await window.fabric.threatMonitorSetEnabled(enabled)))
+
+  const clearBlocklist = () =>
+    run(async () => setStatus(await window.fabric.threatMonitorClearBlocklist()))
+
+  const controls = (
+    <div className="threat-local-controls">
+      <div className="threat-local-status">
+        <span className={`status-badge ${status?.running ? 'is-active' : 'is-idle'}`}>
+          {status?.running ? t('local.running') : t('local.stopped')}
+        </span>
+        <span style={{ color: 'var(--text-muted)' }}>
+          {status?.blocklist
+            ? t('local.blocklistSummary', {
+                domains: status.blocklist.domains,
+                ips: status.blocklist.ips,
+                cidrs: status.blocklist.cidrs
+              })
+            : t('local.noBlocklist')}
+        </span>
       </div>
-    )
-  }
+      <div className="threat-local-actions">
+        <button type="button" className="fc-button" disabled={busy} onClick={importBlocklist}>
+          <FileUp size={15} />
+          {t('local.import')}
+        </button>
+        {status?.blocklist && (
+          <>
+            <button
+              type="button"
+              className="fc-button fc-button-primary"
+              disabled={busy}
+              onClick={() => setEnabled(!status.running)}
+            >
+              {status.running ? <Square size={15} /> : <Play size={15} />}
+              {status.running ? t('local.stop') : t('local.start')}
+            </button>
+            <button type="button" className="fc-button" disabled={busy} onClick={clearBlocklist}>
+              <Trash2 size={15} />
+              {t('local.clear')}
+            </button>
+          </>
+        )}
+      </div>
+      <p className="threat-local-note">{t('local.privacyNote')}</p>
+    </div>
+  )
 
   // Loading
-  if (!loaded) {
+  if (!loaded || !status) {
     return (
       <div className="p-8">
         <PageHeader title={t('pageTitle')} description={t('pageDescription')} />
@@ -110,23 +128,16 @@ export function ThreatMonitorPage() {
     )
   }
 
-  // No snapshot (threat monitor not active — no blacklist loaded)
-  if (!snapshot) {
+  // Not running or no blocklist yet
+  if (!snapshot || !status.running) {
     return (
       <div className="p-8">
         <PageHeader title={t('pageTitle')} description={t('pageDescription')} />
+        {controls}
         <EmptyState
           icon={Radar}
-          title={t('inactive.title')}
-          description={t('inactive.description')}
-          action={
-            <CloudAction
-              label={t('inactive.action')}
-              onClick={() =>
-                window.open('https://cloud.usekudu.com/organisation/billing', '_blank')
-              }
-            />
-          }
+          title={status.blocklist ? t('local.readyTitle') : t('inactive.title')}
+          description={status.blocklist ? t('local.readyDescription') : t('inactive.description')}
         />
       </div>
     )
@@ -139,6 +150,7 @@ export function ThreatMonitorPage() {
   return (
     <div className="p-8 select-text">
       <PageHeader title={t('pageTitle')} description={t('pageDescription')} />
+      {controls}
 
       {/* Status bar */}
       <div
@@ -148,7 +160,7 @@ export function ThreatMonitorPage() {
         {blacklistVersion && (
           <span style={{ color: 'var(--text-muted)' }}>
             {t('statusBar.blacklistVersion')}{' '}
-            <span className="font-medium text-zinc-400">v{blacklistVersion}</span>
+            <span className="font-medium text-zinc-400">{blacklistVersion}</span>
           </span>
         )}
         {lastConnectionScanAt && (
@@ -226,19 +238,6 @@ export function ThreatMonitorPage() {
         </section>
       )}
     </div>
-  )
-}
-
-function CloudAction({ label, onClick }: { label: string; onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="rounded-xl px-5 py-2.5 text-[13px] font-semibold"
-      style={{ background: 'var(--accent)', color: 'var(--text-on-accent)' }}
-    >
-      {label}
-    </button>
   )
 }
 

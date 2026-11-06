@@ -12,10 +12,10 @@ win:
         - arm64
 
 nsis:
-  artifactName: Kudu-Setup-${version}-arm64.${ext}
+  artifactName: Fabric-Cleaner-Setup-${version}-arm64.${ext}
 
 portable:
-  artifactName: Kudu-Portable-${version}-arm64.${ext}
+  artifactName: Fabric-Cleaner-Portable-${version}-arm64.${ext}
 
 publish:
   provider: github

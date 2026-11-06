@@ -1,12 +1,12 @@
 {
-  "trayTooltip": "Kudu",
-  "openKudu": "Avaa Kudu",
+  "trayTooltip": "Fabric Cleaner",
+  "openKudu": "Avaa Fabric Cleaner",
   "quit": "Lopeta",
-  "scheduledTaskNotificationTitle": "Kudu - Ajastettu tehtävä",
+  "scheduledTaskNotificationTitle": "Fabric Cleaner - Ajastettu tehtävä",
   "scheduledTaskNotificationBody": "Suoritetaan \"{{name}}\"...",
-  "scanCompleteNotificationTitle": "Kudu - Tarkistus valmis",
+  "scanCompleteNotificationTitle": "Fabric Cleaner - Tarkistus valmis",
   "scanCompleteNotificationBody": "Löytyi {{itemCount}} kohdetta ({{sizeMB}} MB), jotka voidaan puhdistaa.",
   "scheduledScanName": "Ajastettu tarkistus",
-  "rendererStartupFailureTitle": "Kudu ei käynnistynyt",
-  "rendererStartupFailureMessage": "Kudu ei voinut käynnistää käyttöliittymäänsä, ja se on suljettava. Liitä alla mainittu lokitiedosto mukaan, kun ilmoitat tästä ongelmasta."
+  "rendererStartupFailureTitle": "Fabric Cleaner ei käynnistynyt",
+  "rendererStartupFailureMessage": "Fabric Cleaner ei voinut käynnistää käyttöliittymäänsä, ja se on suljettava. Liitä alla mainittu lokitiedosto mukaan, kun ilmoitat tästä ongelmasta."
 }
