@@ -53,7 +53,12 @@ if (process.argv[2] === '--native') {
 async function runPackagedSmoke() {
   assert(process.argv[2], 'Usage: node scripts/package-smoke-test.js <packaged executable>')
   const executable = path.resolve(process.argv[2])
-  const resources = path.join(path.dirname(executable), 'resources')
+  // macOS bundles keep resources in <App>.app/Contents/Resources, next to
+  // Contents/MacOS/<executable>; Windows and Linux keep them beside the binary.
+  const resources =
+    process.platform === 'darwin'
+      ? path.join(path.dirname(executable), '..', 'Resources')
+      : path.join(path.dirname(executable), 'resources')
   assert(existsSync(executable), `Packaged executable missing: ${executable}`)
   for (const file of ['app.asar', 'icon.ico', 'icon.png']) {
     assert(existsSync(path.join(resources, file)), `Packaged resource missing: ${file}`)
