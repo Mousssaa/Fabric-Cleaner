@@ -61,7 +61,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
+        # macos-15-intel: GitHub's arm64 macOS pool repeatedly failed to pick
+        # up jobs for this private repo ("not acquired by Runner"); the Intel
+        # pool is a standard hosted runner and matches the macOS Intel dev host.
+        os: [windows-latest, macos-15-intel, ubuntu-latest]
 
     runs-on: ${{ matrix.os }}
     timeout-minutes: 25

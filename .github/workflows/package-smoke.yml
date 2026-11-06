@@ -48,9 +48,10 @@ jobs:
           - os: ubuntu-latest
             args: --dir --linux --x64
             executable: dist/linux-unpacked/fabric-cleaner
-          - os: macos-latest
-            args: --mac dir --arm64 -c.mac.notarize=false -c.mac.identity=null
-            executable: dist/mac-arm64/Fabric Cleaner.app/Contents/MacOS/Fabric Cleaner
+          # Intel runner: the arm64 macOS pool did not pick up jobs (see ci.yml).
+          - os: macos-15-intel
+            args: --mac dir --x64 -c.mac.notarize=false -c.mac.identity=null
+            executable: dist/mac/Fabric Cleaner.app/Contents/MacOS/Fabric Cleaner
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
