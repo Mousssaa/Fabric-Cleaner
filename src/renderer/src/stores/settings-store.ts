@@ -16,7 +16,7 @@ export const defaultSettings: FabricSettings = {
   showNotificationOnComplete: true,
   showThreatNotifications: true,
   runAtStartup: false,
-  autoUpdate: true,
+  autoUpdate: false,
   autoRestart: true,
   updateCheckIntervalHours: 4,
   softwareUpdaterNotifications: true,

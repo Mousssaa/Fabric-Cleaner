@@ -53,7 +53,8 @@ const defaults: StoreData = {
     showNotificationOnComplete: true,
     showThreatNotifications: true,
     runAtStartup: false,
-    autoUpdate: true,
+    // Off until Fabric Cleaner has a public release feed (see update-feed.ts).
+    autoUpdate: false,
     autoRestart: true,
     updateCheckIntervalHours: 4,
     softwareUpdaterNotifications: true,
