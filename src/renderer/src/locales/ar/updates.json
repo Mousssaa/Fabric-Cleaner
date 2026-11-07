@@ -185,6 +185,14 @@
     "installFailedError": "فشل تثبيت تحديثات برامج التشغيل. امتيازات المسؤول مطلوبة.",
     "cleanFailedToast": "فشل تنظيف برامج التشغيل",
     "cleanFailedDescription": "امتيازات المسؤول مطلوبة",
-    "cleanFailedError": "فشل إزالة حزم برامج التشغيل. امتيازات المسؤول مطلوبة."
+    "cleanFailedError": "فشل إزالة حزم برامج التشغيل. امتيازات المسؤول مطلوبة.",
+    "selectedUpdates_few": "{{count}} تحديثات",
+    "selectedUpdates_many": "{{count}} تحديثات",
+    "selectedUpdates_two": "{{count}} تحديثات",
+    "selectedUpdates_zero": "{{count}} تحديثات",
+    "selectedPackages_few": "{{count}} حزم قديمة",
+    "selectedPackages_many": "{{count}} حزم قديمة",
+    "selectedPackages_two": "{{count}} حزم قديمة",
+    "selectedPackages_zero": "{{count}} حزم قديمة"
   }
 }

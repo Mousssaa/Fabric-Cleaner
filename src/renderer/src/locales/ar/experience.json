@@ -29,7 +29,11 @@
         "count_one": "طريقة واحدة لتوفير مساحة {{count}}",
         "count_other": "{{count}} طرق لتوفير مساحة",
         "heading": "لنوفّر بعض المساحة.",
-        "guidance": "ابدأ بالملفات المؤقتة وذاكرة التخزين المؤقت، ثم استكشف مجلداتك إذا كنت بحاجة إلى مساحة إضافية."
+        "guidance": "ابدأ بالملفات المؤقتة وذاكرة التخزين المؤقت، ثم استكشف مجلداتك إذا كنت بحاجة إلى مساحة إضافية.",
+        "count_few": "{{count}} طرق لتوفير مساحة",
+        "count_many": "{{count}} طرق لتوفير مساحة",
+        "count_two": "{{count}} طرق لتوفير مساحة",
+        "count_zero": "{{count}} طرق لتوفير مساحة"
       },
       "speed": {
         "title": "يبدو بطيئًا بعض الشيء",
@@ -37,7 +41,11 @@
         "count_one": "أداة أداء واحدة {{count}}",
         "count_other": "{{count}} أدوات أداء",
         "heading": "لنعثر على سبب البطء.",
-        "guidance": "اطّلع على ما يستهلك مواردك، ثم اختر المجال الذي تريد فحصه."
+        "guidance": "اطّلع على ما يستهلك مواردك، ثم اختر المجال الذي تريد فحصه.",
+        "count_few": "{{count}} أدوات أداء",
+        "count_many": "{{count}} أدوات أداء",
+        "count_two": "{{count}} أدوات أداء",
+        "count_zero": "{{count}} أدوات أداء"
       },
       "protection": {
         "title": "أريد راحة البال",
@@ -45,7 +53,11 @@
         "count_one": "أداة حماية واحدة {{count}}",
         "count_other": "{{count}} أدوات حماية",
         "heading": "المزيد من راحة البال.",
-        "guidance": "ابدأ بفحص البرامج الضارة، ثم راجع إعدادات الخصوصية وأدوات الحماية الأخرى."
+        "guidance": "ابدأ بفحص البرامج الضارة، ثم راجع إعدادات الخصوصية وأدوات الحماية الأخرى.",
+        "count_few": "{{count}} أدوات حماية",
+        "count_many": "{{count}} أدوات حماية",
+        "count_two": "{{count}} أدوات حماية",
+        "count_zero": "{{count}} أدوات حماية"
       }
     }
   },
@@ -244,7 +256,11 @@
     "upcoming": "القادم",
     "enabled_one": "روتين نشط واحد {{count}}",
     "enabled_other": "{{count}} إجراءات روتينية نشطة",
-    "conditions": "أوقات مخططة. قد تؤجل شروط التشغيل تنفيذ المهمة."
+    "conditions": "أوقات مخططة. قد تؤجل شروط التشغيل تنفيذ المهمة.",
+    "enabled_few": "{{count}} إجراءات روتينية نشطة",
+    "enabled_many": "{{count}} إجراءات روتينية نشطة",
+    "enabled_two": "{{count}} إجراءات روتينية نشطة",
+    "enabled_zero": "{{count}} إجراءات روتينية نشطة"
   },
   "recovery": {
     "recorded": "التغييرات المسجلة",
@@ -289,7 +305,11 @@
       "junk": {
         "title": "ملفات النظام غير الضرورية",
         "detail_one": "عنصر واحد جاهز للتنظيف",
-        "detail_other": "{{count}} عنصرًا جاهزًا للتنظيف"
+        "detail_other": "{{count}} عنصرًا جاهزًا للتنظيف",
+        "detail_few": "{{count}} عنصرًا جاهزًا للتنظيف",
+        "detail_many": "{{count}} عنصرًا جاهزًا للتنظيف",
+        "detail_two": "{{count}} عنصرًا جاهزًا للتنظيف",
+        "detail_zero": "{{count}} عنصرًا جاهزًا للتنظيف"
       },
       "protection": {
         "title": "الحماية",
@@ -299,20 +319,40 @@
         "threats_other": "{{count}} تهديدات نشطة",
         "privacy_one": "YARA-X على هذا الجهاز · إعداد خصوصية واحد للمراجعة",
         "privacy_other": "YARA-X على هذا الجهاز · {{count}} إعدادات خصوصية للمراجعة",
-        "privacyUnknown": "YARA-X على هذا الجهاز · حالة الخصوصية غير متاحة"
+        "privacyUnknown": "YARA-X على هذا الجهاز · حالة الخصوصية غير متاحة",
+        "threats_few": "{{count}} تهديدات نشطة",
+        "threats_many": "{{count}} تهديدات نشطة",
+        "threats_two": "{{count}} تهديدات نشطة",
+        "threats_zero": "{{count}} تهديدات نشطة",
+        "privacy_few": "YARA-X على هذا الجهاز · {{count}} إعدادات خصوصية للمراجعة",
+        "privacy_many": "YARA-X على هذا الجهاز · {{count}} إعدادات خصوصية للمراجعة",
+        "privacy_two": "YARA-X على هذا الجهاز · {{count}} إعدادات خصوصية للمراجعة",
+        "privacy_zero": "YARA-X على هذا الجهاز · {{count}} إعدادات خصوصية للمراجعة"
       },
       "performance": {
         "title": "الأداء",
         "value_one": "عنصر بدء تشغيل ثقيل واحد",
         "value_other": "{{count}} عناصر بدء تشغيل ثقيلة",
         "detail_one": "تطبيق واحد يبدأ مع جهازك",
-        "detail_other": "{{count}} تطبيقات تبدأ مع جهازك"
+        "detail_other": "{{count}} تطبيقات تبدأ مع جهازك",
+        "value_few": "{{count}} عناصر بدء تشغيل ثقيلة",
+        "value_many": "{{count}} عناصر بدء تشغيل ثقيلة",
+        "value_two": "{{count}} عناصر بدء تشغيل ثقيلة",
+        "value_zero": "{{count}} عناصر بدء تشغيل ثقيلة",
+        "detail_few": "{{count}} تطبيقات تبدأ مع جهازك",
+        "detail_many": "{{count}} تطبيقات تبدأ مع جهازك",
+        "detail_two": "{{count}} تطبيقات تبدأ مع جهازك",
+        "detail_zero": "{{count}} تطبيقات تبدأ مع جهازك"
       },
       "applications": {
         "title": "التطبيقات",
         "value_one": "تحديث واحد متاح",
         "value_other": "{{count}} تحديثات متاحة",
-        "detail": "التحديثات وإلغاء التثبيت والبقايا"
+        "detail": "التحديثات وإلغاء التثبيت والبقايا",
+        "value_few": "{{count}} تحديثات متاحة",
+        "value_many": "{{count}} تحديثات متاحة",
+        "value_two": "{{count}} تحديثات متاحة",
+        "value_zero": "{{count}} تحديثات متاحة"
       },
       "storage": {
         "title": "التخزين والفوضى",
@@ -344,7 +384,15 @@
       "ram": "الذاكرة",
       "disk": "القرص",
       "local": "النواة المحلية نشطة"
-    }
+    },
+    "confirmCleanDescription_few": "سيزيل Fabric Cleaner {{count}} عنصرًا ({{size}}). الفئات المستثناة لن تُمس.",
+    "confirmCleanDescription_many": "سيزيل Fabric Cleaner {{count}} عنصرًا ({{size}}). الفئات المستثناة لن تُمس.",
+    "confirmCleanDescription_two": "سيزيل Fabric Cleaner {{count}} عنصرًا ({{size}}). الفئات المستثناة لن تُمس.",
+    "confirmCleanDescription_zero": "سيزيل Fabric Cleaner {{count}} عنصرًا ({{size}}). الفئات المستثناة لن تُمس.",
+    "doneDescription_few": "أُزيل {{count}} ملفًا. شغّل العناية الذكية مجددًا في أي وقت.",
+    "doneDescription_many": "أُزيل {{count}} ملفًا. شغّل العناية الذكية مجددًا في أي وقت.",
+    "doneDescription_two": "أُزيل {{count}} ملفًا. شغّل العناية الذكية مجددًا في أي وقت.",
+    "doneDescription_zero": "أُزيل {{count}} ملفًا. شغّل العناية الذكية مجددًا في أي وقت."
   },
   "stages": {
     "cleanup": {

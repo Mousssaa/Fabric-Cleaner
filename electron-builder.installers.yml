@@ -1,0 +1,31 @@
+# Owner-facing installers built by .github/workflows/build-installers.yml:
+#   Windows: Fabric-Cleaner-Setup-<version>-win-x64.exe (NSIS, x64)
+#   macOS:   Fabric-Cleaner-<version>-mac-intel-x64.dmg (Intel x64)
+# The release pipeline (release.yml) keeps using electron-builder.yml and its
+# auto-update file names unchanged.
+extends: ./electron-builder.yml
+
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+
+nsis:
+  artifactName: Fabric-Cleaner-Setup-${version}-win-x64.${ext}
+
+mac:
+  target:
+    - target: dmg
+      arch:
+        - x64
+  # No Apple Developer ID yet: sign ad-hoc so the bundle has a valid, sealed
+  # signature without a certificate. Hardened runtime is off because, under
+  # ad-hoc signing, its library validation can reject the bundled Electron
+  # frameworks. Re-enable both with a Developer ID and notarization.
+  identity: '-'
+  hardenedRuntime: false
+  notarize: false
+
+dmg:
+  artifactName: Fabric-Cleaner-${version}-mac-intel-x64.${ext}
