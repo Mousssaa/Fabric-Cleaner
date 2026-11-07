@@ -1,0 +1,243 @@
+name: Build Installers
+
+# Builds the two owner-facing installers natively, verifies each one on its own
+# OS, and uploads each as its own artifact:
+#   Fabric-Cleaner-Windows-x64-exe      -> Fabric-Cleaner-Setup-<version>-win-x64.exe
+#   Fabric-Cleaner-macOS-Intel-x64-dmg  -> Fabric-Cleaner-<version>-mac-intel-x64.dmg
+# Nothing is published, released, or tagged: downloads come from the run page.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    paths:
+      - 'package.json'
+      - 'package-lock.json'
+      - '.nvmrc'
+      - 'electron-builder*.yml'
+      - 'electron.vite.config.ts'
+      - 'src/**'
+      - 'rules/**'
+      - 'resources/**'
+      - 'patches/**'
+      - 'scripts/**'
+      - '.github/workflows/build-installers.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-installers-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+
+jobs:
+  windows:
+    name: Windows x64 .exe
+    runs-on: windows-latest
+    timeout-minutes: 45
+    outputs:
+      file: ${{ steps.meta.outputs.file }}
+      size: ${{ steps.meta.outputs.size }}
+      sha256: ${{ steps.meta.outputs.sha256 }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Lint
+        run: npm run lint
+      - name: Validate rules
+        run: npm run validate:rules
+      - name: Build
+        run: npm run build
+      - name: Package NSIS installer (x64)
+        run: npx electron-builder --config electron-builder.installers.yml --win nsis --x64 --publish never
+      - name: Verify installer file
+        id: meta
+        run: |
+          version=$(node -p "require('./package.json').version")
+          file="Fabric-Cleaner-Setup-${version}-win-x64.exe"
+          test -s "dist/$file" || { echo "::error::dist/$file missing or empty"; ls -la dist; exit 1; }
+          size=$(stat -c %s "dist/$file")
+          sha=$(sha256sum "dist/$file" | cut -d' ' -f1)
+          echo "file=$file" >> "$GITHUB_OUTPUT"
+          echo "size=$size" >> "$GITHUB_OUTPUT"
+          echo "sha256=$sha" >> "$GITHUB_OUTPUT"
+          echo "$file  $size bytes  sha256=$sha"
+      - name: Verify native binaries are win32-x64
+        run: node scripts/verify-native-binaries.js "dist/win-unpacked/Fabric Cleaner.exe" dist/win-unpacked/resources win32 x64
+      - name: Smoke test packaged runtime, SQLite, YARA-X, and CLI
+        run: node scripts/package-smoke-test.js "dist/win-unpacked/Fabric Cleaner.exe"
+        timeout-minutes: 5
+      - name: Smoke test packaged GUI (file:// IPC guard, preload, every page, en + ar)
+        run: node scripts/package-ui-smoke-test.js "dist/win-unpacked/Fabric Cleaner.exe" ui-smoke-windows.json
+        timeout-minutes: 15
+      - name: Install silently, smoke test the installed app, uninstall
+        timeout-minutes: 15
+        env:
+          # Keep Git Bash from rewriting NSIS switches such as /S into paths.
+          MSYS_NO_PATHCONV: '1'
+        run: |
+          target="$RUNNER_TEMP\\fc-install"
+          "dist/${{ steps.meta.outputs.file }}" /S "/D=$target"
+          test -f "$target/Fabric Cleaner.exe"
+          node scripts/package-smoke-test.js "$target/Fabric Cleaner.exe"
+          node scripts/package-ui-smoke-test.js "$target/Fabric Cleaner.exe"
+          "$target/Uninstall Fabric Cleaner.exe" /S "_?=$target"
+      - name: Upload Windows installer
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: Fabric-Cleaner-Windows-x64-exe
+          path: dist/${{ steps.meta.outputs.file }}
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+      - name: Upload smoke report
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: smoke-report-windows
+          path: ui-smoke-windows.json
+          if-no-files-found: ignore
+
+  macos:
+    name: macOS Intel x64 .dmg
+    runs-on: macos-15-intel
+    timeout-minutes: 45
+    outputs:
+      file: ${{ steps.meta.outputs.file }}
+      size: ${{ steps.meta.outputs.size }}
+      sha256: ${{ steps.meta.outputs.sha256 }}
+      arch: ${{ steps.dmg.outputs.arch }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Lint
+        run: npm run lint
+      - name: Validate rules
+        run: npm run validate:rules
+      - name: Build
+        run: npm run build
+      - name: Package DMG (Intel x64, ad-hoc signed)
+        run: npx electron-builder --config electron-builder.installers.yml --mac dmg --x64 --publish never
+      - name: Verify DMG file
+        id: meta
+        run: |
+          version=$(node -p "require('./package.json').version")
+          file="Fabric-Cleaner-${version}-mac-intel-x64.dmg"
+          test -s "dist/$file" || { echo "::error::dist/$file missing or empty"; ls -la dist; exit 1; }
+          size=$(stat -f %z "dist/$file")
+          sha=$(shasum -a 256 "dist/$file" | cut -d' ' -f1)
+          echo "file=$file" >> "$GITHUB_OUTPUT"
+          echo "size=$size" >> "$GITHUB_OUTPUT"
+          echo "sha256=$sha" >> "$GITHUB_OUTPUT"
+          echo "$file  $size bytes  sha256=$sha"
+          hdiutil verify "dist/$file"
+      - name: Mount DMG and verify the app inside is x86_64
+        id: dmg
+        run: |
+          mount="$RUNNER_TEMP/fc-dmg"
+          mkdir -p "$mount"
+          hdiutil attach "dist/${{ steps.meta.outputs.file }}" -nobrowse -readonly -mountpoint "$mount"
+          ls -la "$mount"
+          test -d "$mount/Fabric Cleaner.app"
+          test -L "$mount/Applications"
+          bin="$mount/Fabric Cleaner.app/Contents/MacOS/Fabric Cleaner"
+          file "$bin" | tee "$RUNNER_TEMP/file.txt"
+          grep -q "Mach-O 64-bit executable x86_64" "$RUNNER_TEMP/file.txt"
+          lipo -archs "$bin"
+          codesign --verify --deep --strict --verbose=2 "$mount/Fabric Cleaner.app"
+          codesign -dv "$mount/Fabric Cleaner.app" 2>&1 | grep -E "Signature=adhoc|flags="
+          plutil -p "$mount/Fabric Cleaner.app/Contents/Info.plist" | grep -E "CFBundleIdentifier|CFBundleShortVersionString|CFBundleIconFile|LSMinimumSystemVersion"
+          echo "arch=$(lipo -archs "$bin")" >> "$GITHUB_OUTPUT"
+          # Copy out of the read-only image and smoke test that copy, as a user would.
+          rm -rf "$RUNNER_TEMP/installed"
+          mkdir -p "$RUNNER_TEMP/installed"
+          ditto "$mount/Fabric Cleaner.app" "$RUNNER_TEMP/installed/Fabric Cleaner.app"
+          hdiutil detach "$mount"
+          test ! -d "$mount/Fabric Cleaner.app"
+      - name: Verify native binaries are darwin-x64
+        run: node scripts/verify-native-binaries.js "dist/mac/Fabric Cleaner.app/Contents/MacOS/Fabric Cleaner" "dist/mac/Fabric Cleaner.app/Contents/Resources" darwin x64
+      - name: Smoke test packaged runtime, SQLite, YARA-X, and CLI
+        run: node scripts/package-smoke-test.js "dist/mac/Fabric Cleaner.app/Contents/MacOS/Fabric Cleaner"
+        timeout-minutes: 5
+      - name: Smoke test packaged GUI (file:// IPC guard, preload, every page, en + ar)
+        run: node scripts/package-ui-smoke-test.js "dist/mac/Fabric Cleaner.app/Contents/MacOS/Fabric Cleaner" ui-smoke-macos.json
+        timeout-minutes: 15
+      - name: Smoke test the app copied out of the DMG
+        run: node scripts/package-ui-smoke-test.js "$RUNNER_TEMP/installed/Fabric Cleaner.app/Contents/MacOS/Fabric Cleaner"
+        timeout-minutes: 15
+      - name: Upload macOS installer
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: Fabric-Cleaner-macOS-Intel-x64-dmg
+          path: dist/${{ steps.meta.outputs.file }}
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
+      - name: Upload smoke report
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: smoke-report-macos
+          path: ui-smoke-macos.json
+          if-no-files-found: ignore
+
+  summary:
+    name: Delivery summary
+    needs: [windows, macos]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Write run summary with download links
+        env:
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          WIN_FILE: ${{ needs.windows.outputs.file }}
+          WIN_SIZE: ${{ needs.windows.outputs.size }}
+          WIN_SHA: ${{ needs.windows.outputs.sha256 }}
+          MAC_FILE: ${{ needs.macos.outputs.file }}
+          MAC_SIZE: ${{ needs.macos.outputs.size }}
+          MAC_SHA: ${{ needs.macos.outputs.sha256 }}
+          MAC_ARCH: ${{ needs.macos.outputs.arch }}
+        run: |
+          mb() { awk -v b="$1" 'BEGIN { printf "%.1f MB", b / 1048576 }'; }
+          {
+            echo "## Fabric Cleaner installers (verified)"
+            echo
+            echo "| Installer | Size | SHA-256 | Artifact |"
+            echo "|---|---|---|---|"
+            echo "| \`$WIN_FILE\` (Windows x64, NSIS) | $(mb "$WIN_SIZE") | \`$WIN_SHA\` | [Fabric-Cleaner-Windows-x64-exe]($RUN_URL#artifacts) |"
+            echo "| \`$MAC_FILE\` (macOS Intel, $MAC_ARCH) | $(mb "$MAC_SIZE") | \`$MAC_SHA\` | [Fabric-Cleaner-macOS-Intel-x64-dmg]($RUN_URL#artifacts) |"
+            echo
+            echo "GitHub delivers each artifact as a .zip that contains only the installer."
+            echo "The macOS app is ad-hoc signed and not notarized: Right-click → Open on first launch, or run"
+            echo "\`xattr -cr \"/Applications/Fabric Cleaner.app\"\`."
+          } >> "$GITHUB_STEP_SUMMARY"

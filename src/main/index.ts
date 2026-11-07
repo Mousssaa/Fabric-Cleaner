@@ -37,6 +37,7 @@ import {
 } from './services/scheduler'
 import { initAutoUpdater } from './services/auto-updater'
 import { attachRendererDiagnostics } from './services/renderer-diagnostics'
+import { attachPackagedUiSmoke, getSmokeResultPath } from './services/package-ui-smoke'
 import { attachCopyContextMenu } from './services/copy-context-menu'
 import {
   shouldDisableGpu,
@@ -130,6 +131,8 @@ function initGui(): void {
     join(__dirname, '../renderer')
   )
   installIpcSenderGuard(trustedRendererUrl)
+  // CI-only packaged UI smoke test (see services/package-ui-smoke.ts).
+  const smokeResultPath = getSmokeResultPath()
 
   // Prevent multiple instances — if another is already running, focus it and quit this one
   // Development previews can run alongside an installed Fabric Cleaner copy. Packaged
@@ -525,6 +528,7 @@ function initGui(): void {
       (process.platform === 'darwin' && app.getLoginItemSettings().wasOpenedAtLogin)
 
     attachRendererDiagnostics(mainWindow, webPreferences)
+    if (smokeResultPath) attachPackagedUiSmoke(mainWindow, trustedRendererUrl, smokeResultPath)
     attachCopyContextMenu(mainWindow)
 
     mainWindow.on('ready-to-show', () => {

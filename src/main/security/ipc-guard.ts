@@ -28,8 +28,32 @@ export function resolveTrustedRendererUrl(
   return pathToFileURL(join(rendererDir, 'index.html'))
 }
 
+/**
+ * Canonical form of a file: URL's location, so two spellings of the same file
+ * compare equal. Node's pathToFileURL and Chromium's loadFile URL can encode
+ * the same path differently (percent-encoding of spaces, non-ASCII or reserved
+ * characters such as "#" in a user name), and Windows paths are
+ * case-insensitive (drive letter, "Program Files"). Only file: URLs reach this.
+ */
+function canonicalFileLocation(url: URL, platform: NodeJS.Platform): string | null {
+  let path: string
+  try {
+    path = decodeURIComponent(url.pathname)
+  } catch {
+    return null
+  }
+  // A literal "/" or "\" smuggled in as %2F / %5C would otherwise alias another path.
+  if (/%2f|%5c/i.test(url.pathname)) return null
+  const location = `${url.host}${path}`
+  return platform === 'win32' ? location.toLowerCase() : location
+}
+
 /** True when `frameUrl` is the app's own renderer document (ignoring hash/query). */
-export function isTrustedRendererUrl(frameUrl: string, trusted: URL): boolean {
+export function isTrustedRendererUrl(
+  frameUrl: string,
+  trusted: URL,
+  platform: NodeJS.Platform = process.platform
+): boolean {
   let url: URL
   try {
     url = new URL(frameUrl)
@@ -37,7 +61,9 @@ export function isTrustedRendererUrl(frameUrl: string, trusted: URL): boolean {
     return false
   }
   if (trusted.protocol === 'file:') {
-    return url.protocol === 'file:' && url.pathname === trusted.pathname
+    if (url.protocol !== 'file:') return false
+    const actual = canonicalFileLocation(url, platform)
+    return actual !== null && actual === canonicalFileLocation(trusted, platform)
   }
   return url.origin === trusted.origin
 }

@@ -9,4 +9,4 @@ Thumbs.db
 cloud/
 CLOUD-COMMANDS.md
 manifests/
-resources/yara-rules/
+# resources/yara-rules/ is the bundled, version-controlled local rule pack (not ignored).
